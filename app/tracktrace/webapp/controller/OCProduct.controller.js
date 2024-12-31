@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, MessageToast,Fragment,JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "external/PDF"
+], function (Controller, MessageToast,Fragment,JSONModel,PDF) {
     "use strict";
     return Controller.extend("tracktrace.controller.OCProduct", {
         onInit: function () {
@@ -14,7 +15,7 @@ sap.ui.define([
                   
                   "Packaging2": "IC1",
                   "Packaging3": "BOX1",
-                  "ProductCode": 890,
+                  "ProductCode": "P890",
                   "BatchId": 80051,
                   "StartDate": "2024-12-01",
                   "EndDate": "2024-12-10",
@@ -26,7 +27,7 @@ sap.ui.define([
                   
                   "Packaging2": "IC1",
                   "Packaging3": "BOX2",
-                  "ProductCode": 890,
+                  "ProductCode": "P890",
                   "BatchId": 80051,
                   "StartDate": "2024-12-05",
                   "EndDate": "2024-12-15",
@@ -38,7 +39,7 @@ sap.ui.define([
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX3",
-                  "ProductCode": 891,
+                  "ProductCode": "P891",
                   "BatchId": 80052,
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
@@ -50,7 +51,7 @@ sap.ui.define([
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX4",
-                  "ProductCode": 891,
+                  "ProductCode": "P891",
                   "BatchId": 80052,
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
@@ -62,7 +63,7 @@ sap.ui.define([
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX5",
-                  "ProductCode": 891,
+                  "ProductCode": "P891",
                   "BatchId": 80052,
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
@@ -72,15 +73,20 @@ sap.ui.define([
                 }
               ]
             };
-          
+            var uniqueProductCodes = [...new Set(oProductionOrders.ProductionOrders.map(item => item.BatchId))];
+            var uniqueData = uniqueProductCodes.map(code => ({ BatchId: code }));
+            var oUniqueModel = new sap.ui.model.json.JSONModel({ products: uniqueData });
+            this.getView().setModel(oUniqueModel, "uniqueProductModel");
+            console.log("model data",this.getView().getModel("uniqueProductModel").getData())
+
             var oModel = new sap.ui.model.json.JSONModel(oProductionOrders);
             this.getView().setModel(oModel, "productionOrdersModel");
-            var oTable = this.byId('ICProductTable');
+            var oTable = this.byId('OCproduct_ProductTable');
              oTable._getSelectAllCheckbox().setVisible(false);
           },
 
           onSelectionChange: function (oEvent) {
-            let oTable = this.byId("ICProductTable");
+            let oTable = this.byId("OCproduct_ProductTable");
             let oSelectedItem = oEvent.getParameter("listItem");
             let bSelected = oEvent.getParameter("selected");
         
@@ -99,11 +105,38 @@ sap.ui.define([
                     }
                 }
             });
-        },                  
+        },   
         
+        onOCValueConfirmItem:async function(oEvent){
+          const oSelectedItem = oEvent.getParameter("selectedItem");
+          // let tableLayout = this.byId("boxProduct_BlockLayoutRow2")
+          let batchInput = this.byId("OCproduct_productOrder")
+          if (oSelectedItem) {
+              const sSelectedValue = oSelectedItem.getTitle();
+              await batchInput.setValue(sSelectedValue);
+              await this.getBindServices(sSelectedValue);
+              // tableLayout.setVisible(true)
+
+          }
+        },
+        
+        getBindServices: async function (value) {
+          try {
+              debugger
+              let oModel = this.getView().getModel("materialModel");
+              let modelData = oModel.getData().materials
+              let filterData = modelData.filter(item=>{
+                  return item.BatchId === value
+              })
+              let dataModel = new JSONModel({materials:filterData})
+              this.getView().setModel(dataModel,"materialDataModel")
+          } catch (error) {
+              console.error("Error fetching bid details:", error.message);
+          }
+      },
 
         onGenerateOCQRPress : function(){
-             let oTable = this.byId("ICProductTable");
+             let oTable = this.byId("OCproduct_ProductTable");
              let aSelectedItems = oTable.getSelectedItems()
              let oModel = this.getView().getModel("productionOrdersModel")
              if(aSelectedItems.length === 0){
@@ -151,35 +184,46 @@ sap.ui.define([
               MessageToast.show("No QR Code available!");
               return;
           }            
-          let oDialog = this.byId("qrCodeDialog2");
-          let oImage = this.byId("qrCodeDialogImage2");
+          let oDialog = this.byId("OCproduct_qrCodeDialog");
+          let oImage = this.byId("OCproduct_qrCodeDialogImage");
           oImage.setSrc(qrCodeUrl);
           oDialog.open();
       },
 
       onCloseDialog: function () {
-        this.byId("qrCodeDialog2").close();
+        this.byId("OCproduct_qrCodeDialog").close();
     }, 
 
+    onServiceRequestNumber: function(oEvent) {
+      const oView = this.getView();
+      this._oInputField = oEvent.getSource();        
+      if (!this.requestNoFragment) {
+          Fragment.load({
+              id: oView.getId(),
+              name: "tracktrace.fragments.ocProductValueHelp",
+              controller: this
+          }).then(oDialog => {
+              this.requestNoFragment = oDialog;                    
+              oView.addDependent(this.requestNoFragment);        
+              this.requestNoFragment.open();
+          });
+      } else {
+          this.requestNoFragment.open();
+      }
+  },
+
     onPrintQR: function () {
-      var oImage = this.byId("qrCodeDialogImage2");
-
+      var oImage = this.byId("OCproduct_qrCodeDialogImage");
       var qrImageSrc = oImage.getSrc();
-
       if (!qrImageSrc) {
           sap.m.MessageBox.error("QR Code is not available.");
           return;
       }
-
       var { jsPDF } = window.jspdf;
       var doc = new jsPDF();
-
       var startX = 40;
       var startY = 40;
-
-
       doc.addImage(qrImageSrc, 'PNG', startX, startY, 50, 50);
-
       doc.save("ICQRCode.pdf");
   },
      

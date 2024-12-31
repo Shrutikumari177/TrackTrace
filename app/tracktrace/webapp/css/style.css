@@ -1,11 +1,15 @@
-/* Enter your custom styles here */
-
 .dashboardTable th{
     border: 1px solid #ddd;
     background-color: #e9f6f7;
 }
+.borderedTable{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
 .dashboardTable td{
     border: 1px solid #ddd;
+}
+.sapMTableTH {  
+    border-top: 1px solid #e5e5e5;
 }
 .borderedTable .borderedRow .sapMListTblCell,.OCborderedTable .borderedRow .sapMListTblCell {
     border-left: 1px solid #ddd;
@@ -15,7 +19,6 @@
 .borderedTable .sapUiSizeCompact .sapMListTblNavCol, .sapUiSizeCompact .sapMListTblSelCol,.OCborderedTable .sapUiSizeCompact .sapMListTblNavCol, .sapUiSizeCompact .sapMListTblSelCol{
     border-left: 1px solid #ddd;
 }
-
 .borderedTable .sapMListTblHeaderCell,.OCborderedTable .sapMListTblHeaderCell {
     border: 1px solid #ddd;
     background-color: #f9f9f9;
@@ -24,11 +27,9 @@
     display: flex;
     justify-content: end;
 }
-
 .qrImage{
     margin: 88px;
 }
-
 
 .tableBorder {
     border-collapse: separate; 
@@ -36,5 +37,9 @@
     border-radius: 8px; 
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  }
+}
 
+.generateQr_area{
+    display: flex;
+    justify-content: end;
+}

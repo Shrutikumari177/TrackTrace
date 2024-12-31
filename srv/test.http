@@ -2,15 +2,55 @@
 GET http://localhost:4004/odata/v4/trackservice/$metadata
 
 ###
-POST http://localhost:4004/odata/v4/trackservice/PerfumeBottles
+POST http://localhost:4004/odata/v4/trackservice/BoxLineItem
 Content-Type: application/json
 
 {
-                    "productCode" : "P0001",
-                    "batchId"         : "B0001",
-                    "qrCode"          : " https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=%7B%22productCode%22%3A%22P001%22%2C%22batchId%22%3A%22B001%22%2C%22manufacturingDate%22%3A%222024-01-01%22%2C%22expiryDate%22%3A%222025-01-01%22%2C%22qrCode%22%3A%22%22%2C%22productionId%22%3A%22PR001%22%7D",
-                    "productionId"      : "PI001"
+    "productCode" : "P0004",
+    "QrCode"      : "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=%7B%22productCode%22%3A%22P002%22%2C%22batchId%22%3A%22B002%22%2C%22manufacturingDate%22%3A%222024-03-01%22%2C%22expiryDate%22%3A%222025-03-01%22%2C%22qrCode%22%3A%22%22%2C%22productionId%22%3A%22PR004%22%7D",
+    "BatchId"     : "BT3",
+    "CreationDate":"2024-08-01"
 }
 
 
 ###
+
+POST http://localhost:4004/odata/v4/trackservice/InnerContainer
+Content-Type: application/json
+
+{
+  "innerContainerId": "IC001",
+  "qrCode": "QRCode_IC001",
+  "creationDate": "2024-12-30T10:00:00Z",
+  "PerfumeBottles": [
+    {
+      "productCode": "P001",
+      "batchId": "B001",
+      "manufacturedDate": "2024-12-20",
+      "qrCode": "QRCode_P001"
+    },
+    {
+      "productCode": "P002",
+      "batchId": "B001",
+      "manufacturedDate": "2024-12-21",
+      "qrCode": "QRCode_P002"
+    }
+  ]
+}
+
+
+
+###
+GET http://localhost:4004/odata/v4/trackservice/BoxLineItem
+
+###
+POST http://localhost:4004/odata/v4/trackservice/PerfumeBottles
+Content-Type: application/json
+
+{
+      "productCode": "P001",
+      "batchId": "B001",
+      "manufacturedDate": "2024-12-20",
+      "qrCode": "QRCode_P001",
+      "innerContainerId_innerContainerId": ""
+}

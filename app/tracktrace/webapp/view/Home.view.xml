@@ -39,7 +39,7 @@
             <GenericTile
                 id="_IDGenGenericTile1"
                 class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
-                header="Production QR"
+                header="Box QR Generator"
                 press="onPressOnBoxQrTile"
             >
                 <TileContent id="_IDGenTileContent1">
@@ -53,7 +53,7 @@
              <GenericTile
                 id="_IDGenGenericTile4"
                 class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
-                header="IC QR"
+                header="IC QR Generator" 
                 press="onPressOnIcQrTile"
             >
                 <TileContent id="_IDGenTileContent4">
@@ -67,7 +67,7 @@
             <GenericTile
                 id="_IDGenGenericTile2"
                 class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
-                header="OC QR"
+                header="OC QR Generator"
                 press="onPressOnOcQrTile"
             >
                 <TileContent id="_IDGenTileContent2">

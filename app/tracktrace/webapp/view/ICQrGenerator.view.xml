@@ -15,7 +15,6 @@
     >
         <tnt:ToolHeader
             id="shellLikeToolHeaderOnlyMandatoryControls"
-            class="sapUiTinyMargin"
         >
             <Image
                 id="_IDGenImage"
@@ -77,7 +76,7 @@
                                 id="_IDGenLabel1"
                                 class="sapUiTinyMarginTop"
                                 design="Bold"
-                                text="Production Order No"
+                                text="Batch ID"
                             />
                             <Input
                                 id="productReqNo"
@@ -120,6 +119,16 @@
                            
                         >
                             <columns>
+                                <Column
+                                    id="_IDGeolu10"
+                                    width="70px"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_enLabel0"
+                                        text="Seq No"
+                                    />
+                                </Column>
                                 <Column
                                     id="_IDGenColu10"
                                     width="70px"
@@ -215,6 +224,13 @@
                                 
                             >
                                 <cells  >
+                                    <Text
+                                        id="_IDGenTex5"
+                                        class="inputItem"
+                                        text="{materialDataModel>hjf}"
+
+                                        
+                                    />
                                     <Text
                                         id="_IDGenText25"
                                         class="inputItem"
