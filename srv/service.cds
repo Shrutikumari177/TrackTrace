@@ -1,7 +1,35 @@
 using {track} from '../db/Schema';
+using ZTRACK_TRACE_SRV from './external/ZTRACK_TRACE_SRV.cds';
+
 
 service trackservice {
-    entity BoxLineItem as projection on track.BoxLineItem;
-    entity BoxCollection as projection on track.BoxCollection;
+
+     function getBatchIDRelevantData(BatchNo : String, ) returns array of {
+        BatchNo : String;
+        SerialNo:String;
+        Material:String;
+        ManufactureDt:DateTime;
+        ExpiryDt:DateTime;
+        ProductionOrder:Int64;
+        BoxQRCodeURL      : String(255);
+        BoxQRCode: String;
+         
+    };
+   
+    
+   entity zbatchdetails_Track as projection on ZTRACK_TRACE_SRV.zbatchdetails_Track
+    {        key BatchNo, key SerialNo, Material, aufnr, ManufactureDt, ExpiryDt, ProductionOrder, OrderList     }    
+;
+    
+    entity zbatchno_track as projection on ZTRACK_TRACE_SRV.zbatchno_track
+    {        key BatchNo     }    
+;
+    entity MaterialBox as projection on track.MaterialBox;
     entity InnerContainer as projection on track.InnerContainer;
+
+    entity OuterContainer as projection on track.OuterContainer;
+
+
 }
+
+

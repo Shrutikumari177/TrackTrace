@@ -1,40 +1,32 @@
 namespace track;
 using {managed,cuid} from '@sap/cds/common';
 
-entity BoxLineItem{
-    key ProdcuctID : String;
-    productCode : String;
-    QrCode : String; 
-    QrCodeId : String;
-    BatchId : String;
-    CreationDate: DateTime; 
+
+entity MaterialBox {
+   
+  key SerialNo:   String;
+  key BoxQRCode: String(255);
+  BoxID          : String ;
+  BoxQRCodeURL      : String(255);
+  BatchID           : String(50);
+  IC                : Association to InnerContainer; 
 }
-
-
 entity InnerContainer {
-    key innerContainerId: String;   
-    qrCode: String;                 
-    creationDate: DateTime;        
-    PerfumeBottles: Composition of many BoxCollection on PerfumeBottles.innerContainerId = $self;
-}
-entity BoxCollection {
-    key productCode: String;            
-    batchId: String;                
-    manufacturedDate: Date;         
-    qrCode: String;                 
-    innerContainerId: Association to InnerContainer;
+   key ICID         : String;
+   ICQRCodeURL      : String(255); 
+   BatchID          : String(50);
+   ICQRCode         : String;
+   Boxes            : Composition of many MaterialBox on Boxes.IC = $self; 
+   OC               : Association to OuterContainer;  
 }
 
-entity outerContainer{
-     OcCode : String;
-     QrCode : String;
-     QrCodeId : String;
-     SeqNo : String
+entity OuterContainer {
+  key OCID           : String ;
+    OCQRCodeURL        : String(255); 
+    BatchID          : String(50);
+    OCQRCode:String;
+   status :String;
+    ICs                : Composition of many InnerContainer on ICs.OC = $self; 
 }
-entity OC_innerIC{
-     IcCode : String;
-     QrCode : String;
-     QrCodeId : String;
-     SeqNo : String
-}
+
 

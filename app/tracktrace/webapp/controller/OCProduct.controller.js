@@ -15,61 +15,66 @@ sap.ui.define([
                   
                   "Packaging2": "IC1",
                   "Packaging3": "BOX1",
-                  "ProductCode": "P890",
-                  "BatchId": 80051,
+                  "ProductCode": "P001",
+                  "BatchId": "B001",
                   "StartDate": "2024-12-01",
                   "EndDate": "2024-12-10",
-                  "SeqNo": "0001",
+                  "SeqNo": "001",
                   "qrCode":"",
-                  "OCCode":""
+                  "OCCode":"",
+                  "productionCode": "PR001"
                 },
                 {
                   
                   "Packaging2": "IC1",
                   "Packaging3": "BOX2",
-                  "ProductCode": "P890",
-                  "BatchId": 80051,
+                  "ProductCode": "P001",
+                  "BatchId": "B001",
                   "StartDate": "2024-12-05",
                   "EndDate": "2024-12-15",
-                  "SeqNo": "0002",
+                  "SeqNo": "002",
                   "qrCode":"",
-                  "OCCode":""
+                  "OCCode":"",
+                   "productionCode": "PR001"
                 },
                 {
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX3",
-                  "ProductCode": "P891",
-                  "BatchId": 80052,
+                  "ProductCode": "P001",
+                  "BatchId": "B001",
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
-                  "SeqNo": "0003",
+                  "SeqNo": "003",
                   "qrCode":"",
-                  "OCCode":""
+                  "OCCode":"",
+                   "productionCode": "PR001"
                 },
                 {
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX4",
-                  "ProductCode": "P891",
-                  "BatchId": 80052,
+                  "ProductCode": "P001",
+                  "BatchId": "B001",
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
-                  "SeqNo": "0004",
+                  "SeqNo": "004",
                   "qrCode":"",
-                  "OCCode":""
+                  "OCCode":"",
+                   "productionCode": "PR001"
                 },
                 {
                   
                   "Packaging2": "IC2",
                   "Packaging3": "BOX5",
-                  "ProductCode": "P891",
-                  "BatchId": 80052,
+                  "ProductCode": "P001",
+                  "BatchId": "B001",
                   "StartDate": "2024-12-10",
                   "EndDate": "2024-12-20",
-                  "SeqNo": "0004",
+                  "SeqNo": "004",
                   "qrCode":"",
-                  "OCCode":""
+                  "OCCode":"",
+                   "productionCode": "PR001"
                 }
               ]
             };
@@ -107,22 +112,35 @@ sap.ui.define([
             });
         },   
         
-        onOCValueConfirmItem:async function(oEvent){
+        onOCValueConfirmItem1:async function(oEvent){
           const oSelectedItem = oEvent.getParameter("selectedItem");
-          // let tableLayout = this.byId("boxProduct_BlockLayoutRow2")
+          let tableLayout = this.byId("boxProduct_BlockLayoutRow2")
           let batchInput = this.byId("OCproduct_productOrder")
           if (oSelectedItem) {
               const sSelectedValue = oSelectedItem.getTitle();
               await batchInput.setValue(sSelectedValue);
               await this.getBindServices(sSelectedValue);
-              // tableLayout.setVisible(true)
+              tableLayout.setVisible(true)
 
           }
         },
+        onOCValueConfirmItem: async function (oEvent) {
+          const oSelectedItem = oEvent.getParameter("selectedItem");
+          if (oSelectedItem) {
+              const sSelectedValue = oSelectedItem.getTitle();
+              this._oInputField.setValue(sSelectedValue);
+
+
+              await this.getBindServices(sSelectedValue);
+
+              let tableLayout = this.byId("OCproduct_BlockLayoutRow2");
+              tableLayout.setVisible(true);
+          }
+      },
         
         getBindServices: async function (value) {
           try {
-              debugger
+             
               let oModel = this.getView().getModel("materialModel");
               let modelData = oModel.getData().materials
               let filterData = modelData.filter(item=>{

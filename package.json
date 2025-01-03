@@ -7,6 +7,8 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^1",
+    "@sap-cloud-sdk/http-client": "^3.25.0",
+    "@sap-cloud-sdk/resilience": "^3.25.0",
     "@sap/cds": "^8",
     "express": "^4",
     "jspdf": "^2.5.2",
@@ -29,6 +31,26 @@
   "cds": {
     "sql": {
       "native_hana_associations": false
+    },
+    "requires": {
+      "ZTRACK_TRACE_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZTRACK_TRACE_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/sap/ZTRACK_TRACE_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/sap/ZTRACK_TRACE_SRV"
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
+      }
     }
   }
 }

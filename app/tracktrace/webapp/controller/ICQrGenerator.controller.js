@@ -9,27 +9,31 @@ sap.ui.define([
     "use strict";
     return Controller.extend("tracktrace.controller.ICQrGenerator", {
         onInit: function () {
+            var oTable = this.byId('createTypeTable');
+            oTable._getSelectAllCheckbox().setVisible(false);
 
             var oData = {
                 materials: [
-                    { packaging: "BOX1", productCode: "P001", batchId: "B001", manufacturingDate: "2024-01-01", expiryDate: "2025-01-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX2", productCode: "P001", batchId: "B001", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX3", productCode: "P001", batchId: "B001", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX4", productCode: "P001", batchId: "B001", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX5", productCode: "P002", batchId: "B002", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX6", productCode: "P002", batchId: "B002", manufacturingDate: "2024-01-01", expiryDate: "2025-01-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX7", productCode: "P002", batchId: "B002", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX8", productCode: "P002", batchId: "B002", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX9", productCode: "P003", batchId: "B003", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" },
-                    { packaging: "BOX10", productCode: "P003", batchId: "B003", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" }
+                    { seqNo:"001", packaging: "BOX1", productCode: "P001", batchId: "B001", manufacturingDate: "2024-01-01", expiryDate: "2025-01-01", qrCode: "", productionCode: "PR001", ICCode: "" },
+                    {seqNo:"002", packaging: "BOX2", productCode: "P001", batchId: "B001", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
+                    {seqNo:"003", packaging: "BOX3", productCode: "P001", batchId: "B001", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionCode: "PR001", ICCode: "" },
+                    {seqNo:"004", packaging: "BOX4", productCode: "P001", batchId: "B001", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" },
+                    {seqNo:"005", packaging: "BOX5", productCode: "P001", batchId: "B001", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionCode: "PR001", ICCode: "" }
+                   
                 ]
             };
+            var uniqueProductCodes = [...new Set(oData.materials.map(item => item.batchId))];
+
+             var uniqueData = uniqueProductCodes.map(code => ({ batchId: code }));
+             var oUniqueModel = new sap.ui.model.json.JSONModel({ products: uniqueData });
+             this.getView().setModel(oUniqueModel, "uniqueProductModel");
+            
 
             var oModel = new sap.ui.model.json.JSONModel(oData);
             this.getView().setModel(oModel, "materialModel");
         },
 
-        onValueHelpClosevoy: async function (oEvent) {
+        onValueHelpSelectItem: async function (oEvent) {
             const oSelectedItem = oEvent.getParameter("selectedItem");
             if (oSelectedItem) {
                 const sSelectedValue = oSelectedItem.getTitle();
@@ -51,7 +55,7 @@ sap.ui.define([
                 let oModel = this.getView().getModel("materialModel");
                 let modelData = oModel.getData().materials
                 let filterData = modelData.filter(item => {
-                    return item.productionCode === value
+                    return item.batchId === value
                 })
                 let dataModel = new JSONModel({ materials: filterData })
                 this.getView().setModel(dataModel, "materialDataModel")
@@ -146,14 +150,8 @@ sap.ui.define([
             sap.m.MessageToast.show("QR Codes and IC Code generated successfully!");
         },
       
-        
-        
-        
-      
-        
 
-
-        onPrintQR1: function () {
+        onPrintQR: function () {
             var oImage = this.byId("qrImage");
             var sImageSrc = oImage.getSrc();
 
@@ -185,7 +183,7 @@ sap.ui.define([
                 sap.m.MessageToast.show("QR Code is not available for printing.");
             }
         },
-        onPrintQR: function () {
+        onPrintQR1: function () {
             var oImage = this.byId("qrImage");
 
             var qrImageSrc = oImage.getSrc();
@@ -234,6 +232,9 @@ sap.ui.define([
                 }
             });
         },
+        
+       
+        
 
 
 

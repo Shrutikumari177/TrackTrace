@@ -13,48 +13,22 @@
         vertical="true"
         height="100%"
     >
-        <tnt:ToolHeader
-            id="shellLikeToolHeaderOnlyMandatoryControls"
-        >
-            <Image
-                id="_IDGenImage"
-                src="test-resources/sap/tnt/images/SAP_Logo.png"
-                decorative="false"
-                press="onLogoPressed"
-                tooltip="SAP Logo"
-            >
+       <tnt:ToolHeader  id="ICCode_ProductTableshellLikeToolHeaderOnlyMandatoryControls" class="sapUiTinyMargin">
+          
+            <Title id="ICCode_Title" textAlign="Center" text="IC QR Generator" wrapping="false">
                 <layoutData>
-                    <OverflowToolbarLayoutData
-                        id="_IDGenOverflowToolbarLayoutData"
-                        priority="NeverOverflow"
-                    />
-                </layoutData>
-            </Image>
-            <Title
-                id="_IDGenTitle"
-                text="IC QR Generator"
-                wrapping="false"
-            >
-                <layoutData>
-                    <OverflowToolbarLayoutData
-                        id="_IDGenOverflowToolbarLayoutData1"
-                        priority="Disappear"
-                    />
+                    <OverflowToolbarLayoutData id="ICCode_OverflowToolbarLayoutData" priority="Disappear"/>
                 </layoutData>
             </Title>
-            <ToolbarSpacer id="_IDGenToolbarSpacer" />
-            <Avatar
-                id="_IDGenAvatar"
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png"
-                displaySize="XS"
-                press=".onAvatarPressed"
-                tooltip="Profile"
-            >
+            <ToolbarSpacer id="ICCode_ToolbarSpacer" />
+            <Avatar 
+                id="ICCode_Avatar" 
+                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
+                displaySize="XS" 
+                press=".onAvatarPressed" 
+                tooltip="Profile">
                 <layoutData>
-                    <OverflowToolbarLayoutData
-                        id="_IDGenOverflowToolbarLayoutData2"
-                        priority="NeverOverflow"
-                    />
+                    <OverflowToolbarLayoutData id="ICCode_OverflowToolbarLayoutData2" priority="NeverOverflow"/>
                 </layoutData>
             </Avatar>
         </tnt:ToolHeader>
@@ -86,13 +60,7 @@
                                 valueHelpRequest="onServiceRequestNumber"
                             />
 
-                            <Button
-                                id="goBtn"
-                                class="sapUiLargeMarginBegin"
-                                text="Generate QR"
-                                press="onGenerateQR"
-                                type="Emphasized"
-                            />
+                            
                         </HBox>
                     </l:BlockLayoutCell>
                 </l:BlockLayoutRow>
@@ -105,6 +73,9 @@
                         id="_IDGenBlockLayoutCell2"
                         width="90%"
                     >
+                     <HBox class="generateQr_area">
+                     <Button text="Generate IC QR" press="onGenerateQR" type="Emphasized"/>
+                       </HBox>
                         <Table
                             id="createTypeTable"
                             width="auto"
@@ -120,13 +91,14 @@
                         >
                             <columns>
                                 <Column
-                                    id="_IDGeolu10"
+                                    id="_IDGenColu"
                                     width="70px"
                                     hAlign="Center"
+                                    visible="false"
                                 >
                                     <Label
-                                        id="_enLabel0"
-                                        text="Seq No"
+                                        id="_IDGenLel0"
+                                        text="Box Code"
                                     />
                                 </Column>
                                 <Column
@@ -136,17 +108,7 @@
                                 >
                                     <Label
                                         id="_IDGenLabel0"
-                                        text="Packaging"
-                                    />
-                                </Column>
-                                <Column
-                                    id="_IDGenColu1"
-                                    width="70px"
-                                    hAlign="Center"
-                                >
-                                    <Label
-                                        id="_IDGenLabel2"
-                                        text="Product Code"
+                                        text="Seq No"
                                     />
                                 </Column>
                                 <Column
@@ -160,8 +122,19 @@
                                     />
                                 </Column>
                                 <Column
-                                    id="_IDGenColun3"
+                                    id="_IDGenColu1"
                                     width="70px"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel2"
+                                        text="Product Code"
+                                    />
+                                </Column>
+                                
+                                <Column
+                                    id="_IDGenColun3"
+                                    width="90px"
                                     hAlign="Center"
                                 >
                                     <Label
@@ -191,7 +164,7 @@
                                 </Column>
                                 <Column
                                     id="_IDGenColum31"
-                                    width="70px"
+                                    width="80px"
                                     hAlign="Center"
                                     mergeDuplicates="true"
                                 >
@@ -224,30 +197,32 @@
                                 
                             >
                                 <cells  >
-                                    <Text
-                                        id="_IDGenTex5"
-                                        class="inputItem"
-                                        text="{materialDataModel>hjf}"
-
-                                        
-                                    />
-                                    <Text
+                                <Text
                                         id="_IDGenText25"
                                         class="inputItem"
                                         text="{materialDataModel>packaging}"
 
                                         
                                     />
-                                    <Text
-                                        id="_IDGenText19"
+                                <Text
+                                        id="_IDGenText2"
                                         class="inputItem"
-                                        text="{materialDataModel>productCode}"
+                                        text="{materialDataModel>seqNo}"
+
+                                        
                                     />
+                                    
                                     <Text
                                         id="_IDGenText20"
                                         class="inputItem"
                                         text="{materialDataModel>batchId}"
                                     />
+                                    <Text
+                                        id="_IDGenText19"
+                                        class="inputItem"
+                                        text="{materialDataModel>productCode}"
+                                    />
+                                    
                                     <Text
                                         id="_IDGenText21"
                                         class="inputItem"
@@ -284,7 +259,7 @@
                             id="qrDialog"
                             title="QR Code"
                             stretchOnPhone="true"
-                        >
+                         >
                             <customHeader>
                                 <Toolbar>
                                     <Title text="QR Code" />

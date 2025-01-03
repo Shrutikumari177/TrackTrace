@@ -41,7 +41,7 @@
                     </l:BlockLayoutRow>
 
 
-                    <l:BlockLayoutRow id="OCproduct_BlockLayoutRow2" visible="true">
+                    <l:BlockLayoutRow id="OCproduct_BlockLayoutRow2" visible="false">
                         <l:BlockLayoutCell id="OCproduct_BlockLayoutCell2" width="90%">
                    <Dialog id="OCproduct_qrCodeDialog" horizontalScrolling="false" verticalScrolling="false">
                  <customHeader>
@@ -65,6 +65,7 @@
              <Button text="Generate OC QR" press="onGenerateOCQRPress" type="Emphasized"/>
             </HBox>
                  <Table
+                 
                    class="OCborderedTable"
                    id="OCproduct_ProductTable"
                    mode="MultiSelect"
@@ -78,12 +79,17 @@
                      </Column> -->
                      <Column hAlign="Center" mergeDuplicates="true">
                        <header>
-                         <Text text="Packaging 1" />
+                         <Text text="IC Code" />
                        </header>
                      </Column>
                      <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
                        <header>
-                         <Text text="Packaging 2" />
+                         <Text text="Box Code" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="SeqNo" />
                        </header>
                      </Column>
                      <Column hAlign="Center">
@@ -107,14 +113,9 @@
                          <Text text="Expiry Date" />
                        </header>
                      </Column>
-                     <Column hAlign="Center">
+                     <Column hAlign="Center" >
                        <header>
-                         <Text text="SeqNo" />
-                       </header>
-                     </Column>
-                     <Column hAlign="Center" mergeDuplicates="true">
-                       <header>
-                         <Text text="QR Code" />
+                         <Text text="Production ID" />
                        </header>
                      </Column>
                      <Column hAlign="Center" mergeDuplicates="true">
@@ -122,27 +123,38 @@
                          <Text text="OC Code" />
                        </header>
                      </Column>
+                     
+                     <Column hAlign="Center" mergeDuplicates="true">
+                       <header>
+                         <Text text="QR Code" />
+                       </header>
+                     </Column>
+                     
                    </columns>
                    <ColumnListItem class="borderedRow">
                      <cells>
                        <!--                  <Text text="{productionOrdersModel>Packaging1}" /> -->
                        <Text text="{productionOrdersModel>Packaging2}" />
                        <Text text="{productionOrdersModel>Packaging3}" />
+                         <Text text="{productionOrdersModel>SeqNo}" />
+                          <Text text="{productionOrdersModel>BatchId}" />
                        <Text text="{productionOrdersModel>ProductCode}" />
-                       <Text text="{productionOrdersModel>BatchId}" />
+                      
                        <Text text="{productionOrdersModel>StartDate}" />
                        <Text text="{productionOrdersModel>EndDate}" />
-                       <Text text="{productionOrdersModel>SeqNo}" />
-                       <Link text="{productionOrdersModel>qrCode}" press="onViewOCQRCodePress">
-                       <customData>
-                             <core:CustomData key="qrCode" value="{productionOrdersModel>qrCode}" />
-                         </customData>
-                         </Link>
+                       <Text text="{productionOrdersModel>productionCode}" />
                        <Link text="{productionOrdersModel>OCCode}" press="onViewOCQRCodePress">
                         <customData>
                              <core:CustomData key="qrCode" value="{productionOrdersModel>OCCode}" />
                          </customData>
                        </Link>
+                     
+                       <Link text="{productionOrdersModel>qrCode}" press="onViewOCQRCodePress">
+                       <customData>
+                             <core:CustomData key="qrCode" value="{productionOrdersModel>qrCode}" />
+                         </customData>
+                         </Link>
+                       
                      </cells>
                    </ColumnListItem>
                  </Table>

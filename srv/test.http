@@ -41,7 +41,27 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:4004/odata/v4/trackservice/BoxLineItem
+GET http://localhost:4004/odata/v4/trackservice/MaterialBox
+
+
+###
+
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000077'
+
+
+
+###
+POST http://localhost:4004/odata/v4/trackservice/MaterialBox
+Content-Type: application/json
+
+{
+  "SerialNo": "10011194",
+  "BatchID": "1000000077"
+}
+
+###
+
+
 
 ###
 POST http://localhost:4004/odata/v4/trackservice/PerfumeBottles

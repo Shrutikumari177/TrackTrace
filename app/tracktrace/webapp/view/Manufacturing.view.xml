@@ -34,7 +34,7 @@
                         <l:BlockLayoutCell id="boxProduct_BlockLayoutCell" width="90%">
                             <HBox id="boxProduct_headerPage">
                                 <Label id="boxProduct_prodcutionOrderLabel" class="sapUiTinyMarginTop" design="Bold" text="Batch ID"/>
-                                <Input id="boxProduct_prodcutionOrderInput" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onServiceRequestNumber" />
+                                <Input id="boxProduct_prodcutionOrderInput" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onValueHelpBatch" />
                            </HBox>
                         </l:BlockLayoutCell>
                     </l:BlockLayoutRow>
@@ -42,31 +42,14 @@
 
                     <l:BlockLayoutRow id="boxProduct_BlockLayoutRow2" visible="false">
                         <l:BlockLayoutCell id="boxProduct_BlockLayoutCell2" width="90%">
-                <Dialog id="boxProduct_qrCodeDialog" titleAlignment="Center" title="QR Code" horizontalScrolling="false" verticalScrolling="false">
-                <customHeader>
-                    <Bar id="boxProduct_bar">
-                         <contentMiddle>
-                             <Title id="boxProduct_dialogTitle" text="QR Code" />
-                         </contentMiddle>
-                         <contentRight>
-                             <Button id="boxProduct_dialogCloseBtn" icon="sap-icon://decline" tooltip="Close" press="onCloseDialog" />
-                         </contentRight>
-                  </Bar>
-                </customHeader>
-                    <content>
-                        <Image id="boxProduct_qrCodeDialogImage" class="qrImage" width="200px" height="200px" />
-                    </content>
-                    <endButton>
-                        <Button id="boxProduct_printQrBtn" text="Print" press="onPrintQR" />
-                    </endButton>
-                </Dialog>
                 <Table id="boxProduct_productTypeTable"
                      class="borderedTable"
-                     mode="SingleSelectLeft"
+                     mode="MultiSelect"
                      noDataText="Loading ..."
                      items="{materialDataModel>/materials}"
+                     selectionChange="onSelectionChange"
                      >
-             <columns>
+                  <columns>
                  
                   <Column id="_IDGenColu" hAlign="Center">
                       <Label id="_IDGenLal2" text="Seq No"/>
@@ -92,37 +75,63 @@
                     <Column id="_IDGenColum2" hAlign="Center">
                       <Label id="_IDGenLabe5" text="QR Code" textAlign="Center"/>
                   </Column>
-                   <Column id="_IDGenColu12" hAlign="Center">
-                      <Label id="_IDGenl2" text="Packaging"/>
-                  </Column>
+                  
               </columns>
              <ColumnListItem id="_istItem1" class="borderedRow" press="onMaterialRowSelect">
         <cells>
-            <Text id="_IDGenText31" class="inputItem" text="{materialDataModel>seqNo}" />
-            <Text id="_IDGenText20" class="inputItem"  text="{materialDataModel>batchId}" />
-            <Text id="_IDGenText19" class="inputItem" text="{materialDataModel>productCode}" />
-            <Text id="_IDGenText21" class="inputItem"  text="{materialDataModel>manufacturingDate}" />
-            <Text id="_IDGenText22" class="inputItem"  text="{materialDataModel>expiryDate}" />
-            <!-- <Link id="_IDGenText23" class="inputItem"  text="{materialDataModel>qrCode}" /> -->
-            <!-- <Link text="View QR Code" 
-                      href="{materialDataModel>qrCode}" 
-                      target="_blank" 
-                      visible="{= ${materialDataModel>qrCode} ? true : false }" /> -->
-                    
-            <Text id="_IDGenText24" class="inputItem"  text="{materialDataModel>productionId}" />
-            <Button text="Generate QR" type="Emphasized" press="onGenerateQRPress"/>
-              <Link text="View QR Code" 
-                      visible="{= ${materialDataModel>qrCode} ? true : false }"
-                      press=".onViewQRCodePress" 
-                      >
-                    <customData>
-                        <core:CustomData key="qrCode" value="{materialDataModel>qrCode}" />
-                    </customData>
-                </Link>
-                            <Text id="_IDGenTex2" class="inputItem"  text="{materialDataModel>expiryDat}" />
+            <Text id="_IDGenText31" class="inputItem" text="{materialDataModel>SerialNo}" />
+            <Text id="_IDGenText20" class="inputItem"  text="{materialDataModel>BatchNo}" />
+            <Text id="_IDGenText19" class="inputItem" text="{materialDataModel>Material}" />
+            <Text id="_IDGenText21" class="inputItem"  text="{materialDataModel>ManufactureDt}" />
+            <Text id="_IDGenText22" class="inputItem"  text="{materialDataModel>ExpiryDt}" />
+            
+           <Text id="_IDGenText24" class="inputItem"  text="{materialDataModel>ProductionOrder}" />
+   <Button 
+    text="Generate QR" 
+    type="Emphasized" 
+    press="onGenerateQRPress"
+    enabled="{= ${materialDataModel>BoxQRCode} ? false : true }" />
+              <Link   
+                 text="{= ${materialDataModel>BoxQRCode} ? ${materialDataModel>BoxQRCode} : '' }"
+                  visible="{= ${materialDataModel>BoxQRCode} ? true : false }"
+                  press=".onViewQRCodePress" 
+               />
+
                    </cells>
                 </ColumnListItem>
              </Table>
+             <Dialog
+                            id="qrDialog"
+                            title="QR Code"
+                            stretchOnPhone="true"
+                         >
+                            <customHeader>
+                                <Toolbar>
+                                    <Title text="QR Code" />
+                                    <ToolbarSpacer />
+                                    <Button
+                                        icon="sap-icon://decline"
+                                        press="onCloseQRDialog"
+                                    />
+                                </Toolbar>
+                            </customHeader>
+                            <content>
+                                <Image
+                                    class="qrImage"
+                                    id="qrImage"
+                                    src=""
+                                    width="200px"
+                                    height="200px"
+                                />
+                            </content>
+                            <buttons>
+                                <Button
+                                    text="Print QR"
+                                    press="onPrintQR"
+                                    type="Emphasized"
+                                />
+                            </buttons>
+                        </Dialog>
                         </l:BlockLayoutCell>
                     </l:BlockLayoutRow>
 

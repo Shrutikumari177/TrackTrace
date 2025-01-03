@@ -2,151 +2,46 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, MessageToast,Fragment,JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox"
+], function (Controller, MessageToast,Fragment,JSONModel,MessageBox) {
     "use strict";
     return Controller.extend("tracktrace.controller.Manufacturing", {
         onInit: async function () {
-            this.loadInitialData()
+            const oMaterialDataModel = new sap.ui.model.json.JSONModel([]);
+            this.getView().setModel(oMaterialDataModel, "materials");
+
+           
+            var oTable = this.byId('boxProduct_productTypeTable');
+            oTable._getSelectAllCheckbox().setVisible(false);
         },
-
-        loadInitialData:function(){
-            var oData = {
-                materials: [
-                    { productCode: "P001", batchId: "B001", manufacturingDate: "2024-01-01", expiryDate: "2025-01-01", qrCode: "", productionId: "PR001" },
-                    { productCode: "P001", batchId: "B001", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionId: "PR005" },
-                    { productCode: "P002", batchId: "B002", manufacturingDate: "2024-02-01", expiryDate: "2025-02-01", qrCode: "", productionId: "PR002" },
-                    { productCode: "P003", batchId: "B003", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionId: "PR003" },
-                    { productCode: "P002", batchId: "B002", manufacturingDate: "2024-03-01", expiryDate: "2025-03-01", qrCode: "", productionId: "PR004" }
-                ]
-            };
-
-            var uniqueProductCodes = [...new Set(oData.materials.map(item => item.batchId))];
-
-             var uniqueData = uniqueProductCodes.map(code => ({ batchId: code }));
-             var oUniqueModel = new sap.ui.model.json.JSONModel({ products: uniqueData });
-             this.getView().setModel(oUniqueModel, "uniqueProductModel");
-
-             var oModel = new sap.ui.model.json.JSONModel(oData);
-             this.getView().setModel(oModel, "materialModel");
-             this._loadInitialData()
-        },
-
-        _loadInitialData :async function(){
-             let oModel = this.getOwnerComponent().getModel()
-             let url = "BoxLineItem"
-             let oBindList = oModel.bindList(`/${url}`)
-             try{
-                 let oContext =await oBindList.requestContexts(0,Infinity)
-                 if(oContext.length === 0){
-                    MessageToast.show("Data not Found!") 
-                 }
-                let oData =  oContext.map(item=>item.getObject())
-                let pModel = new JSONModel()
-                pModel.setData({perfumeItem: oData})
-                this.getView().setModel(pModel,"perfumeModel")
-                console.log("perfumes data is: ", this.getView().getModel("perfumeModel").getData())
-             }
-             catch(error){
-                console.log(`Error when read ${url} entity`)
-             }
-         },
-
-        onValueHelpSelectItem: async function (oEvent) {
-            const oSelectedItem = oEvent.getParameter("selectedItem");
-            let tableLayout = this.byId("boxProduct_BlockLayoutRow2")
-            if (oSelectedItem) {
-                const sSelectedValue = oSelectedItem.getTitle();
-                await this._oInputField.setValue(sSelectedValue);
-                await this.getBindServices(sSelectedValue);
-                tableLayout.setVisible(true)
-
-            }
-        }, 
-
-        onGenerateQRPress:async function(){
-          let oTable = this.byId("boxProduct_productTypeTable")
-          let oSelectedItem = oTable.getSelectedItem()
-          if(!oSelectedItem){
-             MessageToast.show("Please select any item")
-          }
-          let sObject = oSelectedItem.getBindingContext("materialDataModel");
-          let rowData = sObject.getObject()
-          console.log("rowData",rowData)
-          let qrPayload = JSON.stringify(rowData);
-          let qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(qrPayload);
-            console.log("Generated QR Code URL: ", qrCodeUrl);
-            rowData.qrCode = qrCodeUrl;
-            await this._postQrData(rowData,qrCodeUrl)
-            this.getView().getModel("materialDataModel").refresh()
-        },
-
-        _postQrData :async function(rowData,qrCodeUrl){
-            const {productCode,batchId,manufacturingDate} = rowData
-            let boxModel = this.getOwnerComponent().getModel()
-           let boxPayload = {
-            productCode : productCode,
-            QrCode : qrCodeUrl,
-            BatchId : batchId,
-            CreationDate : manufacturingDate
-           }
-           let oBindList = boxModel.bindList("/BoxLineItem");
-            oBindList.create(boxPayload, true)
-            oBindList.attachCreateCompleted((oEvent) => {
-                let params = oEvent.getParameters();
-                if (params.success) {
-                   let response= params.context.getObject()
-                   console.log("Response",response);
+      
+        onSelectionChange: function (oEvent) {
+            var oTable = this.byId("boxProduct_productTypeTable");
+            var oSelectedItem = oEvent.getParameter("listItem");
+            var oContext = oSelectedItem.getBindingContext("materialDataModel");
+        
+            if (oContext) {
+                var bHasQRCode = oContext.getProperty("BoxQRCode");
+        
+                // Prevent selection of rows that have a BoxQRCode
+                if (bHasQRCode) {
+                    oSelectedItem.setSelected(false); // Deselect the item
+                    return;
                 }
-            })
-        },
-
-        onViewQRCodePress: function (oEvent) {
-            let qrCodeUrl = oEvent.getSource().getCustomData()[0].getValue();            
-            if (!qrCodeUrl) {
-                MessageToast.show("No QR Code available!");
-                return;
-            }            
-            let oDialog = this.byId("boxProduct_qrCodeDialog");
-            let oImage = this.byId("boxProduct_qrCodeDialogImage");
-            oImage.setSrc(qrCodeUrl);
-            oDialog.open();
-        },
         
-        onCloseDialog: function () {
-            this.byId("boxProduct_qrCodeDialog").close();
-        }, 
-        
-        onPrintQR: function () {
-            var oImage = this.byId("boxProduct_qrCodeDialogImage");
-            var qrImageSrc = oImage.getSrc();
-            if (!qrImageSrc) {
-                sap.m.MessageBox.error("QR Code is not available.");
-                return;
-            }
-            var { jsPDF } = window.jspdf;
-            var doc = new jsPDF();
-            var startX = 40;
-            var startY = 40;
-            doc.addImage(qrImageSrc, 'PNG', startX, startY, 50, 50);
-            doc.save("ICQRCode.pdf");
-        },
-
-        getBindServices: async function (value) {
-            try {
-                let oModel = this.getView().getModel("materialModel");
-                let modelData = oModel.getData().materials
-                let filterData = modelData.filter(item=>{
-                    return item.batchId === value
-                })
-                let dataModel = new JSONModel({materials:filterData})
-                this.getView().setModel(dataModel,"materialDataModel")
-            } catch (error) {
-                console.error("Error fetching bid details:", error.message);
+                // Handle deselection of the currently selected row
+                if (oSelectedItem.getSelected()) {
+                    // Keep the item selected
+                    oTable.removeSelections(true); // Clear all selections
+                    oSelectedItem.setSelected(true); // Select only the current item
+                } else {
+                    oTable.removeSelections(true); // Clear all selections if clicked again
+                }
             }
         },
-
-        onServiceRequestNumber: function(oEvent) {
+        
+        onValueHelpBatch: function(oEvent) {
             const oView = this.getView();
             this._oInputField = oEvent.getSource();        
             if (!this.requestNoFragment) {
@@ -163,6 +58,197 @@ sap.ui.define([
                 this.requestNoFragment.open();
             }
         },
+        onBatchIdValueHelpSearch: function (oEvent) {
+            var searchedValue = oEvent.getParameter("value");
+            var oFilter = new sap.ui.model.Filter("BatchNo", sap.ui.model.FilterOperator.Contains, searchedValue);
+            var oBinding = oEvent.getSource().getBinding("items");
+            var oSelectDialog = oEvent.getSource();
+        
+          
+            oBinding.filter([oFilter]);
+        
+            oBinding.attachEventOnce("dataReceived", function () {
+                var aItems = oBinding.getCurrentContexts();
+        
+                if (aItems.length === 0) {
+                    oSelectDialog.setNoDataText("No data found");
+                } else {
+                    oSelectDialog.setNoDataText("Loading...");
+                }
+            });
+        },
+       
+        onValueHelpBatchIdSelection: async function (oEvent) {
+            const oSelectedItem = oEvent.getParameter("selectedItem");
+            const tableLayout = this.byId("boxProduct_BlockLayoutRow2");
+        
+            if (oSelectedItem) {
+                const sSelectedBatchNo = oSelectedItem.getTitle(); 
+                this._oInputField.setValue(sSelectedBatchNo);
+        
+                try {
+                    const aFilteredData = await this._fetchBatchDetails(sSelectedBatchNo);
+        
+                    const dataModel = new sap.ui.model.json.JSONModel({ materials: aFilteredData });
+                    this.getView().setModel(dataModel, "materialDataModel");
+        
+                    tableLayout.setVisible(true);
+                } catch (error) {
+                    sap.m.MessageToast.show(error.message);
+                    this._oInputField.setValue("");
+                    tableLayout.setVisible(false);
+                }
+            }
+        
+            const oBinding = oEvent.getSource().getBinding("items");
+            oBinding.filter([]);
+        },
+        
+        _fetchBatchDetails: async function (sBatchNo) {
+            const oModel = this.getOwnerComponent().getModel();
+            const oBindList = oModel.bindList(`/getBatchIDRelevantData(BatchNo='${sBatchNo}')`);
+            const aBatchIdData = [];
+        
+            try {
+                const aContexts = await oBindList.requestContexts();
+        
+                aContexts.forEach((oContext) => {
+                    aBatchIdData.push(oContext.getObject());
+                });
+            } catch (error) {
+                throw new Error("Error fetching batch details: " + error.message);
+            }
+        
+            return aBatchIdData;
+        },
+        
+        onGenerateQRPress: function(oEvent) {
+            const oTable = this.byId("boxProduct_productTypeTable");
+            const selectedItem = oTable.getSelectedItem();
+        
+            if (selectedItem) {
+                const oModel = this.getView().getModel("materialDataModel");
+                const materialData = selectedItem.getBindingContext("materialDataModel").getObject();
+        
+                const oPayload = {
+                    SerialNo: materialData.SerialNo,
+                    BatchID: materialData.BatchNo
+                };
+        
+                console.log("Payload to backend: ", oPayload);
+        
+                this._createMaterialBox(oPayload, selectedItem);  // Pass the selected item to update it
+            } else {
+                sap.m.MessageToast.show("Please select the row to generate QR.");
+            }
+        },
+        
+        _createMaterialBox: async function (oPayload, selectedItem) {
+            try {
+                const oModel = this.getView().getModel("materialDataModel");
+                const oBindList = this.getView().getModel().bindList("/MaterialBox");
+        
+                const newEntry = {
+                    SerialNo: oPayload.SerialNo,
+                    BatchID: oPayload.BatchID
+                };
+        
+                // Perform the create operation and wait for the result
+                const oContext = await oBindList.create(newEntry);
+                await oContext.created();  // Ensure the entity creation is completed
+        
+                // Get the created data
+                const oData = oContext.getObject();
+                console.log("Created Data:", oData);
+                console.log("BoxQRCode:", oData.BoxQRCode);
+                console.log("BoxQRCodeURL:", oData.BoxQRCodeURL);
+                console.log("BatchID:", oData.BatchID);
+        
+                // Update the selected row with the new QR code and URL
+                const materialData = selectedItem.getBindingContext("materialDataModel").getObject();
+                materialData.BoxQRCode = oData.BoxQRCode;
+                materialData.BoxQRCodeURL = oData.BoxQRCodeURL;
+        
+                // Refresh the model to reflect the changes
+                oModel.refresh(true);
+                let oTable = this.byId("boxProduct_productTypeTable");
+                oTable.removeSelections();
+
+        
+                sap.m.MessageToast.show("QR Code generated successfully!");
+        
+            } catch (oError) {
+            
+                console.error("Error creating QR Code:", oError);
+                MessageBox.error("Error generating QR Code. Please try again.");
+            }
+        },
+
+        onViewQRCodePress: function (oEvent) {
+            let oLink = oEvent.getSource();
+            let oContext = oLink.getBindingContext("materialDataModel");
+            let oData = oContext.getObject();
+
+       
+            let BoxQRCodeURL = oData.BoxQRCodeURL;
+
+            let oDialog = this.byId("qrDialog");
+            let oImage = this.byId("qrImage");
+            oImage.setSrc(BoxQRCodeURL);
+
+            oDialog.open();
+        },
+        onCloseQRDialog: function () {
+            this.byId("qrDialog").close();
+        },
+        onPrintQR: function () {
+            var oImage = this.byId("qrImage");
+            var sImageSrc = oImage.getSrc();
+
+            console.log("QR Image Source:", sImageSrc);
+
+            if (sImageSrc) {
+                var oImageElement = new Image();
+                oImageElement.onload = function () {
+                    console.log("Image loaded successfully. Proceeding to print...");
+                    var oWindow = window.open("", "_blank");
+                    oWindow.document.write('<html><head><title>Print QR Code</title></head><body>');
+                    oWindow.document.write('<img src="' + sImageSrc + '" style="width:200px;height:200px;"/>');
+                    oWindow.document.write('</body></html>');
+                    oWindow.document.close();
+
+                   
+                    setTimeout(() => {
+                        oWindow.print();
+                        oWindow.close(); 
+                    }, 500); 
+                };
+                oImageElement.onerror = function () {
+                    console.error("Failed to load the QR code image from URL:", sImageSrc);
+                    sap.m.MessageToast.show("Failed to load the QR code image.");
+                };
+                oImageElement.src = sImageSrc;
+            } else {
+                console.warn("QR Code source is empty or undefined.");
+                sap.m.MessageToast.show("QR Code is not available for printing.");
+            }
+        },
+        
+        
+        
+        
+        
+       
+        
+        
+        
+
+        
+        
+
+     
+
+        
         
     });
 });
