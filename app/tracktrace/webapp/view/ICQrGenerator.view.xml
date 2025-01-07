@@ -57,7 +57,7 @@
                                 class="sapUiTinyMarginBegin"
                                 width="200px"
                                 showValueHelp="true"
-                                valueHelpRequest="onServiceRequestNumber"
+                                valueHelpRequest="onValueHelpBatch"
                             />
 
                             
@@ -66,7 +66,7 @@
                 </l:BlockLayoutRow>
 
                 <l:BlockLayoutRow
-                    id="_IDGenBlockLayoutRow2"
+                    id="IcCode_BlockLayoutRow"
                     visible="false"
                 >
                     <l:BlockLayoutCell
@@ -83,9 +83,10 @@
                             class="borderedTable"
                             mode="MultiSelect"
                             sticky="ColumnHeaders"
-                            noDataText="Loading ..."
+                            noDataText="{= ${materialDataModel>/materials}.length > 0 ? 'Loading...' : 'No Box Found' }"
                             selectionChange="onSelectionChange"
                             items="{materialDataModel>/materials}"
+
                          
                            
                         >
@@ -167,6 +168,7 @@
                                     width="80px"
                                     hAlign="Center"
                                     mergeDuplicates="true"
+                                    
                                 >
                                     <Label
                                         id="_IDGenLabe61"
@@ -207,7 +209,7 @@
                                 <Text
                                         id="_IDGenText2"
                                         class="inputItem"
-                                        text="{materialDataModel>seqNo}"
+                                        text="{materialDataModel>SerialNo}"
 
                                         
                                     />
@@ -215,42 +217,41 @@
                                     <Text
                                         id="_IDGenText20"
                                         class="inputItem"
-                                        text="{materialDataModel>batchId}"
+                                        text="{materialDataModel>BatchNo}"
                                     />
                                     <Text
                                         id="_IDGenText19"
                                         class="inputItem"
-                                        text="{materialDataModel>productCode}"
+                                        text="{materialDataModel>Material}"
                                     />
                                     
                                     <Text
                                         id="_IDGenText21"
                                         class="inputItem"
-                                        text="{materialDataModel>manufacturingDate}"
+                                        text="{materialDataModel>ManufactureDt}"
                                         
                                     />
                                     <Text
                                         id="_IDGenText22"
                                         class="inputItem"
-                                        text="{materialDataModel>expiryDate}"
+                                        text="{materialDataModel>ExpiryDt}"
                                     />
                                     <Text
                                         id="_IDGenText24"
                                         class="inputItem"
-                                        text="{materialDataModel>productionCode}"
+                                        text="{materialDataModel>ProductionOrder}"
                                     />
                                     <Text
                                         id="_IDGenText274"
                                         class="inputItem"
-                                        text="{materialDataModel>ICCode}"
+                                        text="{materialDataModel>ICID}"
                                     />
-                                    <Link
-                                        id="_IDGenText23"
-                                        class="inputItem"
-                                        text="{= ${materialDataModel>ICCode} ? ${materialDataModel>ICCode}.slice(-4) + ' View QR' : '' }"
-                                        press="onViewQRPress"
-                                        visible="{= !!${materialDataModel>qrCode}}"
-                                    />
+                                    
+                                    <Link   
+                                   text="{= ${materialDataModel>ICQRCode} ? ${materialDataModel>ICQRCode} : '' }"
+                                   visible="{= ${materialDataModel>ICQRCode} ? true : false }"
+                                          press=".onViewQRCodePress" 
+                                   />
                                 </cells>
                             </ColumnListItem>
                         </Table>

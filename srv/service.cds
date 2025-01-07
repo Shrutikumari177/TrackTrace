@@ -4,7 +4,7 @@ using ZTRACK_TRACE_SRV from './external/ZTRACK_TRACE_SRV.cds';
 
 service trackservice {
 
-     function getBatchIDRelevantData(BatchNo : String, ) returns array of {
+     function getBatchIDRelevantData(BatchNo : String,filterNonEmptyBoxQRCode:Boolean ) returns array of {
         BatchNo : String;
         SerialNo:String;
         Material:String;
@@ -13,8 +13,16 @@ service trackservice {
         ProductionOrder:Int64;
         BoxQRCodeURL      : String(255);
         BoxQRCode: String;
-         
+        ICID:String;
+        ICQRCode         : String;
+        ICQRCodeURL      : String(255); 
+        OCQRCode:String;
+        OCQRCodeURL        : String(255); 
+        
     };
+
+    
+    
    
     
    entity zbatchdetails_Track as projection on ZTRACK_TRACE_SRV.zbatchdetails_Track

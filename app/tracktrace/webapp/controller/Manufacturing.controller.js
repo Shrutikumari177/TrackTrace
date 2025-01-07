@@ -24,15 +24,12 @@ sap.ui.define([
             if (oContext) {
                 var bHasQRCode = oContext.getProperty("BoxQRCode");
         
-                // Prevent selection of rows that have a BoxQRCode
                 if (bHasQRCode) {
                     oSelectedItem.setSelected(false); // Deselect the item
                     return;
                 }
         
-                // Handle deselection of the currently selected row
                 if (oSelectedItem.getSelected()) {
-                    // Keep the item selected
                     oTable.removeSelections(true); // Clear all selections
                     oSelectedItem.setSelected(true); // Select only the current item
                 } else {
@@ -157,7 +154,6 @@ sap.ui.define([
                 const oContext = await oBindList.create(newEntry);
                 await oContext.created();  // Ensure the entity creation is completed
         
-                // Get the created data
                 const oData = oContext.getObject();
                 console.log("Created Data:", oData);
                 console.log("BoxQRCode:", oData.BoxQRCode);

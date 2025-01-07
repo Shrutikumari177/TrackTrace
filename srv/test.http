@@ -41,13 +41,20 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:4004/odata/v4/trackservice/MaterialBox
+GET http://localhost:4004/odata/v4/trackservice/MaterialBox?BatchID='1000000080'
+
+
+####
+GET http://localhost:4004/odata/v4/trackservice/InnerContainer?BatchID='1000000080'
+
 
 
 ###
 
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000077'
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'
 
+####
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNonEmptyBoxQRCode=true
 
 
 ###
@@ -59,7 +66,48 @@ Content-Type: application/json
   "BatchID": "1000000077"
 }
 
+#####
+POST http://localhost:4004/odata/v4/trackservice/OuterContainer
+Content-Type: application/json
+
+ {
+    "BatchID": "1000000080",
+    "ICs": [
+        { "ICID": "06012026" },
+        { "ICID": "06012027" }
+    ]
+}
+
+
 ###
+
+POST http://localhost:4004/odata/v4/trackservice/InnerContainer
+Content-Type: application/json
+
+{
+  "BatchID": "1000000080",
+  "Boxes": [
+   {
+      "SerialNo": "10011218",
+      "BoxQRCode": "00004fv09k"
+    },
+    {
+      "SerialNo": "10011222",
+      "BoxQRCode": "00004fv09u"
+    }
+    
+  ]
+}
+
+
+####
+
+GET http://localhost:4004/odata/v4/trackservice/OuterContainer
+
+
+
+
+
 
 
 
