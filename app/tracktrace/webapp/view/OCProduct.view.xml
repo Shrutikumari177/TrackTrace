@@ -72,21 +72,13 @@
                    items="{productionOrdersModel>/ProductionOrders}"
                   selectionChange="onSelectionChange">
                    <columns>
-                     <!--                  <Column mergeDuplicates="true" hAlign="Center">
-                       <header>
-                         <Text text="Packaging 1" />
-                       </header>
-                     </Column> -->
+                    
                      <Column hAlign="Center" mergeDuplicates="true">
                        <header>
                          <Text text="IC Code" />
                        </header>
                      </Column>
-                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
-                       <header>
-                         <Text text="Box Code" />
-                       </header>
-                     </Column>
+                     
                      <Column hAlign="Center">
                        <header>
                          <Text text="SeqNo" />
@@ -135,7 +127,7 @@
                      <cells>
                        <!--                  <Text text="{productionOrdersModel>Packaging1}" /> -->
                        <Text text="{productionOrdersModel>Packaging2}" />
-                       <Text text="{productionOrdersModel>Packaging3}" />
+                     
                          <Text text="{productionOrdersModel>SeqNo}" />
                           <Text text="{productionOrdersModel>BatchId}" />
                        <Text text="{productionOrdersModel>ProductCode}" />

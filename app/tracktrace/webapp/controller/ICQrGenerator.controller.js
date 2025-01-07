@@ -106,7 +106,7 @@ sap.ui.define([
             }
         
             const oModel = this.getOwnerComponent().getModel();
-             sEncodedBatchNo = encodeURIComponent(sBatchNo); // Encode the BatchNo to handle special characters
+             sEncodedBatchNo = encodeURIComponent(sBatchNo); 
             const sPath = `/getBatchIDRelevantData(BatchNo='${sEncodedBatchNo}',filterNonEmptyBoxQRCode=true)`; // Correct OData format
         
             const oBindList = oModel.bindList(sPath);
@@ -192,7 +192,7 @@ sap.ui.define([
                 oTable.invalidate();
                 oTable.removeSelections();
         
-                sap.m.MessageToast.show("QR Code generated successfully and rows reordered!");
+                sap.m.MessageToast.show("QR Code generated successfully ");
             } catch (oError) {
                 console.error("Error creating QR Code:", oError);
                 sap.m.MessageBox.error("Error generating QR Code. Please try again.");

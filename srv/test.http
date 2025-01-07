@@ -54,7 +54,7 @@ GET http://localhost:4004/odata/v4/trackservice/InnerContainer?BatchID='10000000
 GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'
 
 ####
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNonEmptyBoxQRCode=true
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNoEmptyICID=true
 
 
 ###
@@ -71,11 +71,12 @@ POST http://localhost:4004/odata/v4/trackservice/OuterContainer
 Content-Type: application/json
 
  {
-    "BatchID": "1000000080",
-    "ICs": [
-        { "ICID": "06012026" },
-        { "ICID": "06012027" }
-    ]
+  "BatchID": "1000000080",
+  "ICs": [
+    { "ICID": "06012027" },
+    { "ICID": "06012026" }
+  ],
+  "status": "Inventory"
 }
 
 
@@ -112,13 +113,3 @@ GET http://localhost:4004/odata/v4/trackservice/OuterContainer
 
 
 ###
-POST http://localhost:4004/odata/v4/trackservice/PerfumeBottles
-Content-Type: application/json
-
-{
-      "productCode": "P001",
-      "batchId": "B001",
-      "manufacturedDate": "2024-12-20",
-      "qrCode": "QRCode_P001",
-      "innerContainerId_innerContainerId": ""
-}
