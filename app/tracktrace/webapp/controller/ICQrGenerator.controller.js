@@ -75,7 +75,7 @@ sap.ui.define([
         },
         onValueHelpBatchIdSelection: async function (oEvent) {
             const oSelectedItem = oEvent.getParameter("selectedItem");
-            const tableLayout = this.byId("IcCode_BlockLayoutRow");
+            const tableLayout = this.byId("IcQrGen_BlockLayoutRowforTable");
         
             if (oSelectedItem) {
                 const sSelectedBatchNo = oSelectedItem.getTitle(); 

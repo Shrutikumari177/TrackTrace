@@ -9,51 +9,51 @@
     displayBlock="true"
 >
     <ScrollContainer
-        id="_IDGenScrollContainer1"
+        id="IcQrGen_ScrollContainer"
         vertical="true"
         height="100%"
     >
-       <tnt:ToolHeader  id="ICCode_ProductTableshellLikeToolHeaderOnlyMandatoryControls" class="sapUiTinyMargin">
+       <tnt:ToolHeader  id="IcQrGen_ToolHeader" class="sapUiTinyMargin">
           
-            <Title id="ICCode_Title" textAlign="Center" text="IC QR Generator" wrapping="false">
+            <Title id="IcQrGen_Title" textAlign="Center" text="IC QR Generator" wrapping="false">
                 <layoutData>
-                    <OverflowToolbarLayoutData id="ICCode_OverflowToolbarLayoutData" priority="Disappear"/>
+                    <OverflowToolbarLayoutData id="IcQrGen_OverflowToolbarLayoutData" priority="Disappear"/>
                 </layoutData>
             </Title>
-            <ToolbarSpacer id="ICCode_ToolbarSpacer" />
+            <ToolbarSpacer id="IcQrGen_ToolbarSpacer" />
             <Avatar 
-                id="ICCode_Avatar" 
+                id="IcQrGen_Avatar" 
                 src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
                 displaySize="XS" 
                 press=".onAvatarPressed" 
                 tooltip="Profile">
                 <layoutData>
-                    <OverflowToolbarLayoutData id="ICCode_OverflowToolbarLayoutData2" priority="NeverOverflow"/>
+                    <OverflowToolbarLayoutData id="IcQrGen_OverflowToolbar" priority="NeverOverflow"/>
                 </layoutData>
             </Avatar>
         </tnt:ToolHeader>
         <l:VerticalLayout
-            id="_IDGenVerticalLayout1"
+            id="IcQrGen_VerticalLayout"
             width="100%"
         >
             <l:BlockLayout
-                id="_IDGenBlockLayout1"
+                id="IcQrGen_BlockLayout"
                 background="Dashboard"
             >
-                <l:BlockLayoutRow id="_IDGenBlockLayoutRow1">
+                <l:BlockLayoutRow id="IcQrGen_BlockLayoutRow">
                     <l:BlockLayoutCell
-                        id="_IDGenBlockLayoutCell1"
+                        id="IcQrGen_BlockLayoutCell"
                         width="90%"
                     >
-                        <HBox id="headerPage">
+                        <HBox id="IcQrGen_headerPage">
                             <Label
-                                id="_IDGenLabel1"
+                                id="IcQrGen_BatchIdLabel"
                                 class="sapUiTinyMarginTop"
                                 design="Bold"
                                 text="Batch ID"
                             />
                             <Input
-                                id="productReqNo"
+                                id="IcQrGen_BatchIdInput"
                                 class="sapUiTinyMarginBegin"
                                 width="200px"
                                 showValueHelp="true"
@@ -66,11 +66,11 @@
                 </l:BlockLayoutRow>
 
                 <l:BlockLayoutRow
-                    id="IcCode_BlockLayoutRow"
+                    id="IcQrGen_BlockLayoutRowforTable"
                     visible="false"
                 >
                     <l:BlockLayoutCell
-                        id="_IDGenBlockLayoutCell2"
+                        id="IcQrGen_BlockLayoutCell2"
                         width="90%"
                     >
                      <HBox class="generateQr_area">
