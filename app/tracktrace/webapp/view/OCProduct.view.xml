@@ -35,7 +35,7 @@
                         <l:BlockLayoutCell id="OCproduct_GenBlockLayoutCell" width="90%">
                             <HBox id="OCproduct_headerPage1">
                                 <Label id="OCproduct_ProductOrderLabel" class="sapUiTinyMarginTop" design="Bold" text="Batch ID"/>
-                                <Input id="OCproduct_productOrder" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onServiceRequestNumber" />
+                                <Input id="OCproduct_productOrder" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onValueHelpBatch" />
                            </HBox>
                         </l:BlockLayoutCell>
                     </l:BlockLayoutRow>
@@ -43,33 +43,17 @@
 
                     <l:BlockLayoutRow id="OCproduct_BlockLayoutRow2" visible="false">
                         <l:BlockLayoutCell id="OCproduct_BlockLayoutCell2" width="90%">
-                   <Dialog id="OCproduct_qrCodeDialog" horizontalScrolling="false" verticalScrolling="false">
-                 <customHeader>
-                    <Bar id="OCproduct_bar">
-                         <contentMiddle>
-                             <Title id="OCproduct_barQrTitle" text="QR Code" />
-                         </contentMiddle>
-                         <contentRight>
-                             <Button id="OCproduct_dialogCloseBtn" icon="sap-icon://decline" tooltip="Close" press="onCloseDialog" />
-                         </contentRight>
-                  </Bar>
-                </customHeader>
-                <content>
-                    <Image id="OCproduct_qrCodeDialogImage" class="qrImage" width="200px" height="200px" />
-                </content>
-                <endButton>
-                    <Button id="OCproduct_QrPrintBtn" text="Print" press="onPrintQR" />
-                </endButton>
-            </Dialog>
+                  
             <HBox class="generateQr_area">
              <Button text="Generate OC QR" press="onGenerateOCQRPress" type="Emphasized"/>
             </HBox>
                  <Table
-                 
+                   noDataText="{= ${materialDataModel>/materials}.length > 0 ? 'Loading...' : 'No Box Found' }"
+                     sticky="ColumnHeaders"
                    class="OCborderedTable"
                    id="OCproduct_ProductTable"
                    mode="MultiSelect"
-                   items="{productionOrdersModel>/ProductionOrders}"
+                  items="{materialDataModel>/materials}"
                   selectionChange="onSelectionChange">
                    <columns>
                     
@@ -126,30 +110,63 @@
                    <ColumnListItem class="borderedRow">
                      <cells>
                        <!--                  <Text text="{productionOrdersModel>Packaging1}" /> -->
-                       <Text text="{productionOrdersModel>Packaging2}" />
+                       <Text text="{materialDataModel>ICID}" />
                      
-                         <Text text="{productionOrdersModel>SeqNo}" />
-                          <Text text="{productionOrdersModel>BatchId}" />
-                       <Text text="{productionOrdersModel>ProductCode}" />
+                         <Text text="{materialDataModel>SerialNo}" />
+                          <Text text="{materialDataModel>BatchNo}" />
+                       <Text text="{materialDataModel>Material}" />
                       
-                       <Text text="{productionOrdersModel>StartDate}" />
-                       <Text text="{productionOrdersModel>EndDate}" />
-                       <Text text="{productionOrdersModel>productionCode}" />
-                       <Link text="{productionOrdersModel>OCCode}" press="onViewOCQRCodePress">
-                        <customData>
-                             <core:CustomData key="qrCode" value="{productionOrdersModel>OCCode}" />
-                         </customData>
-                       </Link>
+                       <Text text="{materialDataModel>ManufactureDt}" />
+                       <Text text="{materialDataModel>ExpiryDt}" />
+                       <Text text="{materialDataModel>ProductionOrder}" />
+                       <Text
+                                        id="_IDGenTxt24"
+                                        class="inputItem"
+                                        text="{materialDataModel>OCID}"
+                                    />
                      
-                       <Link text="{productionOrdersModel>qrCode}" press="onViewOCQRCodePress">
-                       <customData>
-                             <core:CustomData key="qrCode" value="{productionOrdersModel>qrCode}" />
-                         </customData>
-                         </Link>
+                                  <Link   
+                                   text="{= ${materialDataModel>OCQRCode} ? ${materialDataModel>OCQRCode} : '' }"
+                                   visible="{= ${materialDataModel>OCQRCode} ? true : false }"
+                                          press=".onViewQRCodePress" 
+                                   />                      
+                     
                        
                      </cells>
                    </ColumnListItem>
                  </Table>
+                 <Dialog
+                            id="OCproduct_qrCodeDialog"
+                            title="QR Code"
+                            stretchOnPhone="true"
+                         >
+                            <customHeader>
+                                <Toolbar>
+                                    <Title text="QR Code" />
+                                    <ToolbarSpacer />
+                                    <Button
+                                        icon="sap-icon://decline"
+                                        press="onCloseQRDialog"
+                                    />
+                                </Toolbar>
+                            </customHeader>
+                            <content>
+                                <Image
+                                    class="qrImage"
+                                    id="OCproduct_qrImage"
+                                    src=""
+                                    width="200px"
+                                    height="200px"
+                                />
+                            </content>
+                            <buttons>
+                                <Button
+                                    text="Print QR"
+                                    press="onPrintQR"
+                                    type="Emphasized"
+                                />
+                            </buttons>
+                        </Dialog>
 
                
                         </l:BlockLayoutCell>
