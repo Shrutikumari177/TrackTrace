@@ -87,7 +87,13 @@ module.exports = async (srv) => {
                     });
             }
             if (filterNoEmptyICID) {
-                combinedResult = combinedResult.filter(item => item.ICID && item.ICID.trim() !== "");
+                combinedResult = combinedResult
+                    .filter(item => item.ICID && item.ICID.trim() !== "") 
+                    .sort((a, b) => {
+                        if (a.ICID > b.ICID) return -1; 
+                        if (a.ICID < b.ICID) return 1; 
+                        return 0;  
+                    });
             }
 
             return combinedResult;

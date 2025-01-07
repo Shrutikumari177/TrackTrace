@@ -172,6 +172,78 @@ sap.ui.define([
             sap.m.MessageToast.show("QR Code is not available for printing.");
         }
     },
+    onGenerateOCQRPress: function () {
+      const oTable = this.byId("OCproduct_ProductTable"); 
+      const selectedItems = oTable.getSelectedItems(); 
+  
+      if (selectedItems.length === 0) {
+          sap.m.MessageToast.show("Please select at least one row.");
+          return;
+      }
+  
+      const oPayload = {
+          BatchID:sEncodedBatchNo, 
+          ICs: [],
+          status: "Inventory"
+      };
+  
+      selectedItems.forEach((item) => {
+          const materialData = item.getBindingContext("materialDataModel").getObject();
+          oPayload.ICs.push({
+            ICID: materialData.ICID,
+             
+          });
+      });
+  
+      console.log("Payload to backend: ", oPayload);
+      this._createOuterContainer(oPayload, selectedItems); 
+  
+      
+  },
+  _createOuterContainer: async function (oPayload, selectedItems) {
+    try {
+        const oModel = this.getView().getModel("materialDataModel");
+        const oBindList = this.getView().getModel().bindList("/OuterContainer");
+
+        const oContext = await oBindList.create(oPayload);
+        await oContext.created();
+
+        const oData = oContext.getObject();
+
+        let updatedRows = [];
+        let remainingRows = [];
+        const oTableData = oModel.getProperty("/materials"); 
+        selectedItems.forEach((item) => {
+            const materialData = item.getBindingContext("materialDataModel").getObject();
+
+            materialData.OCID = oData.OCID;
+            materialData.OCQRCode = oData.OCQRCode;
+            materialData.OCQRCodeURL = oData.OCQRCodeURL;
+
+            updatedRows.push(materialData);
+        });
+
+        oTableData.forEach((row) => {
+            if (!updatedRows.includes(row)) {
+                remainingRows.push(row);
+            }
+        });
+
+        const reorderedData = updatedRows.concat(remainingRows);
+
+        oModel.setProperty("/materials", reorderedData);
+        oModel.refresh(true);
+
+        const oTable = this.byId("OCproduct_ProductTable");
+        oTable.invalidate();
+        oTable.removeSelections();
+
+        sap.m.MessageToast.show("QR Code generated successfully ");
+    } catch (oError) {
+        console.error("Error creating QR Code:", oError);
+        sap.m.MessageBox.error("Error generating QR Code. Please try again.");
+    }
+},
 
      
         
