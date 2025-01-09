@@ -53,6 +53,12 @@ GET http://localhost:4004/odata/v4/trackservice/InnerContainer?BatchID='10000000
 
 GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'
 
+
+
+###
+GET http://localhost:4004/odata/v4/trackservice/getBatchOCValueHelp?BatchID='1000000080'
+
+
 ####
 GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNoEmptyICID=true
 

@@ -14,6 +14,11 @@ sap.ui.define([
         onInit: function () {
             let oTable = this.byId('createTypeTable');
             oTable._getSelectAllCheckbox().setVisible(false);
+
+            this._oBusyDialog = new sap.m.BusyDialog({
+                title: "Generating QR Code",
+                text: "Please wait..."
+            });
             
            
 
@@ -125,9 +130,10 @@ sap.ui.define([
             return aBatchIdData;
         },
 
+       
         onGenerateQR: function () {
-            const oTable = this.byId("createTypeTable"); 
-            const selectedItems = oTable.getSelectedItems(); 
+            const oTable = this.byId("createTypeTable");
+            const selectedItems = oTable.getSelectedItems();
         
             if (selectedItems.length === 0) {
                 sap.m.MessageToast.show("Please select at least one row.");
@@ -135,7 +141,7 @@ sap.ui.define([
             }
         
             const oPayload = {
-                BatchID:sEncodedBatchNo, 
+                BatchID: sEncodedBatchNo,
                 Boxes: []
             };
         
@@ -143,16 +149,16 @@ sap.ui.define([
                 const materialData = item.getBindingContext("materialDataModel").getObject();
                 oPayload.Boxes.push({
                     SerialNo: materialData.SerialNo,
-                    BoxQRCode: materialData.BoxQRCode 
+                    BoxQRCode: materialData.BoxQRCode
                 });
             });
         
-            console.log("Payload to backend: ", oPayload);
-            this._createInnerContainer(oPayload, selectedItems); 
         
-            
+            this._oBusyDialog.open();
+        
+            this._createInnerContainer(oPayload, selectedItems);
         },
-       
+        
         _createInnerContainer: async function (oPayload, selectedItems) {
             try {
                 const oModel = this.getView().getModel("materialDataModel");
@@ -161,11 +167,11 @@ sap.ui.define([
                 const oContext = await oBindList.create(oPayload);
                 await oContext.created();
         
-                const oData = oContext.getObject(); // Get the created data
+                const oData = oContext.getObject();
         
                 let updatedRows = [];
                 let remainingRows = [];
-                const oTableData = oModel.getProperty("/materials"); // Adjust the path to match your model's structure
+                const oTableData = oModel.getProperty("/materials");
         
                 selectedItems.forEach((item) => {
                     const materialData = item.getBindingContext("materialDataModel").getObject();
@@ -192,12 +198,14 @@ sap.ui.define([
                 oTable.invalidate();
                 oTable.removeSelections();
         
-                sap.m.MessageToast.show("QR Code generated successfully ");
             } catch (oError) {
                 console.error("Error creating QR Code:", oError);
                 sap.m.MessageBox.error("Error generating QR Code. Please try again.");
+            } finally {
+                this._oBusyDialog.close();
             }
         },
+        
 
         onViewQRCodePress: function (oEvent) {
             let oLink = oEvent.getSource();

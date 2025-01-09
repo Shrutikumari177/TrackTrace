@@ -22,6 +22,10 @@ service trackservice {
         
     };
 
+    function getBatchOCValueHelp(BatchID : String, ) returns array of {
+        OCID:String;
+    };
+
     
     
    

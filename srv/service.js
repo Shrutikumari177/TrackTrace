@@ -14,7 +14,6 @@ module.exports = async (srv) => {
                 req.reject(400, "The parameter 'BatchNo' is required.");
             }
 
-            //  Fetch batch details
             const query = SELECT.from('zbatchdetails_Track')
                 .columns(['BatchNo', 'SerialNo', 'Material', 'ManufactureDt', 'ExpiryDt', 'ProductionOrder'])
                 .where({ BatchNo });
@@ -27,7 +26,6 @@ module.exports = async (srv) => {
 
             const SerialNos = result.map(item => item.SerialNo);
 
-            // Fetch material box details
             const resultData = await SELECT.from('track.MaterialBox')
                 .columns(['BoxQRCode', 'BoxQRCodeURL', 'SerialNo', 'IC_ICQRCode', 'IC_ICQRCodeURL', 'IC_ICID',
                     'IC.OC_OCID', 'IC.OC_OCQRCode', 'IC.OC_OCQRCodeURL']).where({
@@ -35,7 +33,7 @@ module.exports = async (srv) => {
                         SerialNo: { in: SerialNos }
                     });
 
-            console.log("resultData",resultData);
+            
             
             let combinedResult = result.map(batchItem => {
                 const matchedBoxData = resultData.filter(box => box.SerialNo === batchItem.SerialNo);
@@ -86,15 +84,26 @@ module.exports = async (srv) => {
                         return 0;
                     });
             }
+           
             if (filterNoEmptyICID) {
                 combinedResult = combinedResult
-                    .filter(item => item.ICID && item.ICID.trim() !== "") 
+                    .filter(item => item.ICID && item.ICID.trim() !== "") // Ensure ICID is non-empty
                     .sort((a, b) => {
-                        if (a.ICID > b.ICID) return -1; 
-                        if (a.ICID < b.ICID) return 1; 
-                        return 0;  
+                        if (a.OCID && b.OCID) {
+                            if (a.OCID > b.OCID) return -1;
+                            if (a.OCID < b.OCID) return 1;
+                        } else if (a.OCID) {
+                            return -1;
+                        } else if (b.OCID) {
+                            return 1;
+                        } else {
+                            if (a.ICID > b.ICID) return -1;
+                            if (a.ICID < b.ICID) return 1;
+                        }
+                        return 0; 
                     });
             }
+            
 
             return combinedResult;
 
@@ -104,15 +113,26 @@ module.exports = async (srv) => {
         }
     });
 
+    srv.on('getBatchOCValueHelp', async (req) => {
+        const { BatchID } = req.data;
+        
+        const results = await SELECT.from('track.OuterContainer')
+            .where({ BatchID: BatchID });
+
+        const OCIDList = results.map(item => ({
+            OCID: item.OCID
+        }));
+
+        return OCIDList;
+    });
 
 
-    //    function to create QR URL
+
     const createQRCodeURL = (data) => {
         const qrPayload = JSON.stringify(data);
         return `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(qrPayload)}`;
     };
 
-    // function to fetch details from batch id
     async function fetchBatchDetails(BatchID, SerialNo) {
         try {
             const query = SELECT.one.from('zbatchdetails_Track')
@@ -180,10 +200,6 @@ module.exports = async (srv) => {
         }
     });
 
-
-
-
-    // function to create unique Ic ID
     const generateUniqueICID = async () => {
         const lastIC = await cds.run(
             SELECT.one.from('track.InnerContainer').columns('ICID').orderBy({ ICID: 'desc' })
@@ -194,6 +210,7 @@ module.exports = async (srv) => {
         const nextICID = String(Number(lastICID) + 1).padStart(8, '0');
         return nextICID;
     };
+
     srv.on('CREATE', 'InnerContainer', async (req) => {
 
         const { BatchID, Boxes } = req.data;
@@ -255,11 +272,20 @@ module.exports = async (srv) => {
             }).join(''); const base36String = parseInt(combinedData.substring(0, 8), 16).toString(36);
             const icQRCode = base36String.slice(0, 10).padStart(10, '0');
 
-            const icQRCodeURL = createQRCodeURL({
+            const qrCodePayload = {
                 ICID: newICID,
                 BatchID: BatchID,
-                Boxes: boxDetails,
-            });
+                ManufactureDt: boxDetails[0].ManufactureDt,
+                ExpiryDt: boxDetails[0].ExpiryDt,
+                ProductionOrder: boxDetails[0].ProductionOrder,
+                Material: boxDetails[0].Material,
+                UniqueBoxes: boxDetails.map((box) => ({
+                    SerialNo: box.SerialNo,
+                    BoxQRCode: box.BoxQRCode,
+                })),
+            };
+    
+            const icQRCodeURL = createQRCodeURL(qrCodePayload);
 
             const innerContainerData = {
                 ICID: newICID,
@@ -287,22 +313,28 @@ module.exports = async (srv) => {
         }
     });
 
-
-
+    const generateUniqueOCID = async () => {
+        const lastOC = await cds.run(
+            SELECT.one.from('track.OuterContainer').columns('OCID').orderBy({ OCID: 'desc' })
+        );
+    
+        const lastOCID = lastOC?.OCID || '00000000';
+        return String(Number(lastOCID) + 1).padStart(8, '0');
+    };
     srv.on('CREATE', 'OuterContainer', async (req) => {
         const { BatchID, ICs, status } = req.data;
-
+    
         if (!BatchID || !Array.isArray(ICs) || ICs.length === 0) {
             req.error(400, "Invalid payload: BatchID and ICs are required and must be a non-empty array.");
         }
-
+    
         try {
             const existingICs = await cds.run(
                 SELECT.from('track.InnerContainer')
                     .columns(['ICID', 'OC_OCID'])
                     .where({ ICID: { in: ICs.map(ic => ic.ICID) } })
             );
-
+    
             const linkedICs = existingICs.filter(ic => ic.OC_OCID);
             if (linkedICs.length > 0) {
                 const linkedOCIDs = linkedICs.map(ic => ic.OC_OCID).join(', ');
@@ -311,63 +343,96 @@ module.exports = async (srv) => {
                     `The following InnerContainers are already linked to OuterContainer(s): ${linkedOCIDs}.`
                 );
             }
-
-            const lastOC = await cds.run(
-                SELECT.one.from('track.OuterContainer').columns('OCID').orderBy({ OCID: 'desc' })
-            );
-            const lastOCID = lastOC?.OCID || '00000000';
-            const newOCID = String(Number(lastOCID) + 1).padStart(8, '0');
-
+    
+            const newOCID = await generateUniqueOCID();
+    
+            let manufactureDt, expiryDt, productionOrder, material;
+    
+            const groupedICs = ICs.map(ic => ({ ICID: ic.ICID, Boxes: [] }));
+    
+            for (const ic of ICs) {
+                const boxes = await cds.run(
+                    SELECT.from('track.MaterialBox').columns(['SerialNo']).where({ IC_ICID: ic.ICID })
+                );
+    
+                for (const box of boxes) {
+                    const batchDetails = await fetchBatchDetails(BatchID, box.SerialNo);
+                    if (batchDetails) {
+                        manufactureDt = batchDetails.ManufactureDt;
+                        expiryDt = batchDetails.ExpiryDt;
+                        productionOrder = batchDetails.ProductionOrder;
+                        material = batchDetails.Material;
+    
+                        const icIndex = groupedICs.findIndex(item => item.ICID === ic.ICID);
+                        if (icIndex !== -1) {
+                            groupedICs[icIndex].Boxes.push({ SerialNo: box.SerialNo });
+                        }
+                    } else {
+                        req.error(404, `Batch details not found for SerialNo: ${box.SerialNo}`);
+                    }
+                }
+            }
+    
             const combinedData = ICs.map(ic => `${ic.ICID}${newOCID}${BatchID}`).join('');
             const base36String = parseInt(combinedData.substring(0, 8), 16).toString(36);
             const ocQRCode = base36String.slice(0, 10).padStart(10, '0');
-
+    
             const ocQRCodeURL = createQRCodeURL({
                 OCID: newOCID,
                 BatchID: BatchID,
-                ICs: ICs.map(ic => ic.ICID),
                 status: status || 'Inventory',
+                ManufactureDt: manufactureDt,
+                ExpiryDt: expiryDt,
+                ProductionOrder: productionOrder,
+                Material: material,
+                ICs: groupedICs,
             });
-
+    
             const newOuterContainer = {
                 OCID: newOCID,
                 OCQRCode: ocQRCode,
                 OCQRCodeURL: ocQRCodeURL,
                 BatchID: BatchID,
-                status: status || 'New',
+                status: status || 'Inventory',
+                VendorId: "",
+                VendorName: "",
+                ManufactureDt: manufactureDt,
+                ExpiryDt: expiryDt,
+                ProductionOrder: productionOrder,
+                Material: material,
             };
+    
             await cds.run(INSERT.into('track.OuterContainer').entries(newOuterContainer));
-
+    
             for (const ic of ICs) {
                 await cds.run(
                     UPDATE('track.InnerContainer')
-                        .set({ OC_OCID: newOCID,
+                        .set({
+                            OC_OCID: newOCID,
                             OC_OCQRCode: ocQRCode,
                             OC_OCQRCodeURL: ocQRCodeURL
-                         })
+                        })
                         .where({ ICID: ic.ICID })
                 );
             }
-
+    
             return {
                 ...newOuterContainer,
-                ICs: ICs.map(ic => ic.ICID),
+                ICs: groupedICs,
             };
         } catch (error) {
             console.error("Error creating OuterContainer:", error.message);
             req.reject(500, error.message || "Failed to create OuterContainer.");
         }
     });
+    
 
 
 
 
 
 
-
-
-
-
+   
 
 
 

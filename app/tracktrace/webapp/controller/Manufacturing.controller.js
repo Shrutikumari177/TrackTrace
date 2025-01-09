@@ -10,7 +10,11 @@ sap.ui.define([
         onInit: async function () {
             const oMaterialDataModel = new sap.ui.model.json.JSONModel([]);
             this.getView().setModel(oMaterialDataModel, "materials");
-
+            
+            this._oBusyDialog = new sap.m.BusyDialog({
+                title: "Generating QR Code",
+                text: "Please wait..."
+            });
            
             var oTable = this.byId('boxProduct_productTypeTable');
             oTable._getSelectAllCheckbox().setVisible(false);
@@ -119,7 +123,8 @@ sap.ui.define([
             return aBatchIdData;
         },
         
-        onGenerateQRPress: function(oEvent) {
+      
+        onGenerateQRPress: function (oEvent) {
             const oTable = this.byId("boxProduct_productTypeTable");
             const selectedItem = oTable.getSelectedItem();
         
@@ -134,7 +139,9 @@ sap.ui.define([
         
                 console.log("Payload to backend: ", oPayload);
         
-                this._createMaterialBox(oPayload, selectedItem);  // Pass the selected item to update it
+                this._oBusyDialog.open();
+        
+                this._createMaterialBox(oPayload, selectedItem);
             } else {
                 sap.m.MessageToast.show("Please select the row to generate QR.");
             }
@@ -150,35 +157,28 @@ sap.ui.define([
                     BatchID: oPayload.BatchID
                 };
         
-                // Perform the create operation and wait for the result
                 const oContext = await oBindList.create(newEntry);
-                await oContext.created();  // Ensure the entity creation is completed
+                await oContext.created(); 
         
                 const oData = oContext.getObject();
-                console.log("Created Data:", oData);
-                console.log("BoxQRCode:", oData.BoxQRCode);
-                console.log("BoxQRCodeURL:", oData.BoxQRCodeURL);
-                console.log("BatchID:", oData.BatchID);
-        
-                // Update the selected row with the new QR code and URL
+               
                 const materialData = selectedItem.getBindingContext("materialDataModel").getObject();
                 materialData.BoxQRCode = oData.BoxQRCode;
                 materialData.BoxQRCodeURL = oData.BoxQRCodeURL;
         
-                // Refresh the model to reflect the changes
                 oModel.refresh(true);
-                let oTable = this.byId("boxProduct_productTypeTable");
-                oTable.removeSelections();
-
         
-                sap.m.MessageToast.show("QR Code generated successfully!");
+                const oTable = this.byId("boxProduct_productTypeTable");
+                oTable.removeSelections();
         
             } catch (oError) {
-            
                 console.error("Error creating QR Code:", oError);
-                MessageBox.error("Error generating QR Code. Please try again.");
+                sap.m.MessageBox.error("Error generating QR Code. Please try again.");
+            } finally {
+                this._oBusyDialog.close();
             }
         },
+        
 
         onViewQRCodePress: function (oEvent) {
             let oLink = oEvent.getSource();

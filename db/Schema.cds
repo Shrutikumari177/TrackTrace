@@ -28,11 +28,12 @@ entity InnerContainer {
 
 entity OuterContainer {
   key OCID        : String;
-  key    OCQRCodeURL : String(255);
-   key    OCQRCode    : String;
+  key OCQRCodeURL : String(255);
+  key OCQRCode    : String;
       BatchID     : String(50);
- 
       status      : String;
       ICs         : Composition of many InnerContainer
                       on ICs.OC = $self;
+      VendorId :  String;
+      VendorName :String;             
 }

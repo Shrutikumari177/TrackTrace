@@ -12,6 +12,12 @@ sap.ui.define([
         onInit: function () {
           let oTable = this.byId('OCproduct_ProductTable');
           oTable._getSelectAllCheckbox().setVisible(false);
+
+          this._oBusyDialog = new sap.m.BusyDialog({
+            title: "Generating QR Code",
+            text: "Please wait..."
+        });
+        
           
           const oMaterialDataModel = new sap.ui.model.json.JSONModel([]);
           this.getView().setModel(oMaterialDataModel, "materials");
@@ -23,7 +29,11 @@ sap.ui.define([
             let bSelected = oEvent.getParameter("selected");
         
             let sICID = oSelectedItem.getBindingContext("materialDataModel").getProperty("ICID");
-        
+            let sOCID = oSelectedItem.getBindingContext("materialDataModel").getProperty("OCID");
+            if (sOCID) {
+                oSelectedItem.setSelected(false); 
+                return;
+            }
             oTable.getItems().forEach(oItem => {
                 let oContext = oItem.getBindingContext("materialDataModel");
                 if (oContext) {
@@ -194,8 +204,8 @@ sap.ui.define([
              
           });
       });
+      this._oBusyDialog.open();
   
-      console.log("Payload to backend: ", oPayload);
       this._createOuterContainer(oPayload, selectedItems); 
   
       
@@ -238,10 +248,11 @@ sap.ui.define([
         oTable.invalidate();
         oTable.removeSelections();
 
-        sap.m.MessageToast.show("QR Code generated successfully ");
     } catch (oError) {
         console.error("Error creating QR Code:", oError);
         sap.m.MessageBox.error("Error generating QR Code. Please try again.");
+    }finally {
+        this._oBusyDialog.close();
     }
 },
 
