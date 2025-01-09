@@ -124,6 +124,20 @@
           "target": [
             "TargetICPage"
           ]
+        },
+        {
+          "name": "onRouteInvMapping",
+          "pattern": "InvMapping",
+          "target": [
+            "TargetInvMapping"
+          ]
+        },
+        {
+          "name": "onRouteProductionTracDash",
+          "pattern": "ProductionTracDash",
+          "target": [
+            "TargetProductionTracDash"
+          ]
         }
       ],
       "targets": {
@@ -146,6 +160,14 @@
         "TargetICPage": {
           "id": "OCIcQrPage",
           "name": "ICQrGenerator"
+        },
+        "TargetInvMapping": {
+          "id": "InvMapping",
+          "name": "InvMapping"
+        },
+        "TargetProductionTracDash": {
+          "id": "ProductionTrackingDashboard",
+          "name": "ProductionTrackingDashboard"
         }
       }
     },

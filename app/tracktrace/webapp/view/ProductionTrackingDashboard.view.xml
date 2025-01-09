@@ -1,0 +1,288 @@
+<mvc:View
+    controllerName="tracktrace.controller.ProductionTrackingDashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l = "sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:tnt="sap.tnt"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <ScrollContainer id="dashboard2_ScrollContainer" vertical="true" height="100%">
+        <tnt:ToolHeader id="d2shellOnlyMandatoryControls" class="sapUiTinyMargin header_nav">
+            <Title id="dashboard2_Title" textAlign="Center" text="Production Tracking Dashboard" wrapping="false">
+                <layoutData>
+                    <OverflowToolbarLayoutData id="dashboard2_OverflowToolbarLayoutData" priority="Disappear" />
+                </layoutData>
+            </Title>
+            <ToolbarSpacer id="dashboard2_ToolbarSpacer" />
+            <Avatar 
+                id="dashboard2_IDGenAvatar" 
+                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
+                displaySize="XS" 
+                press=".onAvatarPressed" 
+                tooltip="Profile">
+                <layoutData>
+                    <OverflowToolbarLayoutData id="dashboard2_OverflowToolbarLayoutData2" priority="NeverOverflow" />
+                </layoutData>
+            </Avatar>
+        </tnt:ToolHeader>
+
+        <l:VerticalLayout id="dashboard2_VerticalLayout" width="100%">
+            <l:BlockLayout id="dashboard2_BlockLayout" background="Dashboard">
+
+             <l:BlockLayoutRow id="dashboard2_BlockLayoutRow3">
+                    <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell3" width="90%">
+                    <Label text="OC Code" class="sapUiTinyMargin" design="Bold"/>
+                   <Select
+                    id="dashboard_ocSelectBox"
+                    width="15%"
+                    class="sapUiLargeMarginEnd"
+					forceSelection="false"
+					items="{
+						path: 'orderDataModel>/orderConfirmations'
+					}">
+					<core:Item key="{orderDataModel>orderConfirmationId}"  text="{orderDataModel>orderConfirmationId}" />
+				</Select>
+                    <Label text="Batch ID" class="sapUiTinyMargin" design="Bold"/>
+                   <Select
+                   id="dashboard_batchIdSelectBox"
+                     width="15%"
+                     class="sapUiLargeMarginEnd"
+					forceSelection="false"
+					items="{
+						path: 'orderDataModel>/orderConfirmations'
+					}">
+					<core:Item key="{orderDataModel>batchId}"  text="{orderDataModel>batchId}" />
+				</Select>
+                <Label text="Date" class="sapUiTinyMargin" design="Bold" />
+                <DatePicker
+                    width="15%"
+					id="DP1"
+					placeholder="Enter Date"
+					change="handleChange"
+					class="sapUiSmallMarginBottom"/>
+                    <Button text="GO" type="Emphasized" class="sapUiSmallMarginBegin" press="_onGoButtonPress"/>
+                    </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+
+                <l:BlockLayoutRow id="dashboard_shapeLayout" visible="false">
+                    <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell" width="90%">
+                       <VBox>
+                    <HBox 
+                        items="{orderModel>/orderConfirmations}" 
+                        justifyContent="Center" 
+                        alignItems="Center">
+                        <items>
+                            <VBox justifyContent="Center" alignItems="Center">
+                                <Image
+                                    src="images/image.png"
+                                    alt="{orderModel>orderConfirmationId}"
+                                    width="120px"
+                                    class="shape_image"
+                                    height="60px"
+                                    press=".onImageClick" />
+                                <Text 
+                                    text="{orderModel>orderConfirmationId}" 
+                                    class="shape_text"
+                                    textAlign="Center" />
+                            </VBox>
+                        </items>
+                    </HBox>
+                </VBox>
+                    </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+
+
+                <l:BlockLayoutRow id="dashboard_ContainerDetailsLayout" visible="false">
+                    <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell2" width="90%">
+                              <IconTabBar
+            id="idIconTabBar"
+            select=".onFilterSelect"
+            class="sapUiResponsiveContentPadding">
+            <items>
+              <IconTabFilter id="tankDialogDetailsTab"
+                icon="sap-icon://detail-more"
+                iconColor="Positive"
+                text="OC Details"
+                key="initial">
+           <VBox id="tankDialogDetailsTabVBox" class="tank_info_box sapUiResponsiveMargin">
+             <FlexBox id="tankDialogDetailsTabFlexBox" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabTankNo" text="OC Code"  width="100%"/>
+               <Text text=":" id="tank_colon"/>  
+             </HBox>
+               <VBox id="f1" width="50%" class="ibox">
+               <Text id="tankDialogDetailsTabTankNoText" class="details_text" text="{fragmentModel>/orderConfirmationId}"/>
+               </VBox>
+             </FlexBox>
+
+             <FlexBox id="tankDialogDetailsTabFlexBox1" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabStorage" text="Batch ID"  width="100%"/>
+               <Text text=":" id="storage_colon"/>
+               </HBox>
+               <VBox id="f2" class="ibox" width="50%">
+               <Text id="tankDialogDetailsTabStorageText" class="details_text" text="{fragmentModel>/batchId}"/>
+               </VBox>
+             </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox2" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabPlant" text="Dealer"  width="100%"/>
+               <Text text=":" id="plant_colon"/>
+               </HBox>
+               <VBox id="f3" class="ibox" width="50%">
+               <Text id="tankDialogDetailsTabPlantText" class="details_text" text="{fragmentModel>/customer}" />
+               </VBox>
+             </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox3" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabDip" text="Status" />
+               <Text text=":" id="dipQty_colon"/>
+               </HBox>
+               <VBox id="f4" class="ibox" width="50%">
+               <Text id="tankDialogDetailsTabDipText"  class="details_text" text="{fragmentModel>/status}" />
+               </VBox>
+             </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox4" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabTemp" text="Mfg Date" />
+               <Text text=":" id="temp_colon"/>
+               </HBox>
+                <VBox id="f5" class="ibox" width="50%">
+               <Text id="tankDialogDetailsTabTempText" class="details_text" text="{fragmentModel>/date}" />
+
+                 </VBox>
+             </FlexBox>
+           </VBox>
+      </IconTabFilter>    
+
+
+        <!-- Enter IC Code Code -->
+			<IconTabFilter id="tankDialogEnterDipTab"
+				icon="sap-icon://create"
+				iconColor="Positive"
+				text="IC Details"
+        count="{path: 'fragmentModel>/internalConfirmations', formatter: '.countFormatter'}"
+				key="Heavy">   
+           <SearchField liveChange=".onSearchOCItem"/>
+               <Table
+                   class="OCborderedTable"
+                   id="dashboardOCproduct_ProductTable"
+                   items="{fragmentModel>/internalConfirmations}"
+                  selectionChange="onSelectionChange">
+                   <columns>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Packaging" />
+                       </header>
+                     </Column>
+                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                       <header>
+                         <Text text="Batch ID" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Product Code" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Qr Code" />
+                       </header>
+                     </Column>
+                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                       <header>
+                         <Text text="Manufacturing Date" />
+                       </header>
+                     </Column>
+                     
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="expiry Date" />
+                       </header>
+                     </Column>
+                   </columns>
+                   <ColumnListItem class="borderedRow" type="Navigation" press="onIcRowSelect">
+                     <cells>
+                       <Text text="{fragmentModel>internalConfirmationId}"/>
+                       <Text text="{fragmentModel>batchId}" />
+                       <Text text="{fragmentModel>productOrder}" />
+                       <Text text="" />
+                       <Text text="{fragmentModel>mfgDate}" />
+                       <Text text="{fragmentModel>expiryDate}" />
+                     </cells>
+                   </ColumnListItem>
+                 </Table>    
+      </IconTabFilter> 
+
+      <IconTabFilter id="DialogBoxDetails"
+				icon="sap-icon://create"
+				iconColor="Positive"
+				text="Box Details"
+        enabled="false"
+        count="{path: 'boxModelData>/boxes', formatter: '.countFormatter'}"
+				key="boxKey">  
+                <SearchField liveChange=".onSearchBoxItem"/>
+                 <Table
+                   class="OCborderedTable"
+                   id="detailsFragemnt_boxTable"
+                   items="{boxModelData>/boxes}"
+                  selectionChange="onSelectionChange">
+                   <columns>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="S No" />
+                       </header>
+                     </Column>
+                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                       <header>
+                         <Text text="Product Code" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Batch ID" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Qr Code" />
+                       </header>
+                     </Column>
+                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                       <header>
+                         <Text text="Manufacturing Date" />
+                       </header>
+                     </Column>
+                     
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="expiry Date" />
+                       </header>
+                     </Column>
+                   </columns>
+                   <ColumnListItem class="borderedRow">
+                     <cells>
+                       <Text text="{boxModelData>sno}"/>
+                       <Text text="{boxModelData>productionOrder}" />
+                       <Text text="{boxModelData>batchId}" />
+                       <Text text="" />
+                       <Text text="{boxModelData>mfgDate}" />
+                       <Text text="{boxModelData>expiryDate}" />
+                     </cells>
+                   </ColumnListItem>
+                 </Table>
+
+        </IconTabFilter>
+
+		</items>
+	</IconTabBar>
+                    </l:BlockLayoutCell>
+                </l:BlockLayoutRow>
+            </l:BlockLayout>
+        </l:VerticalLayout>
+
+    </ScrollContainer>
+</mvc:View>

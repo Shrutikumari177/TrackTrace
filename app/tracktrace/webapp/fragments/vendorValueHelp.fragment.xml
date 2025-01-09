@@ -1,0 +1,21 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="vendorValueHelpValueHelp1"
+        noDataText="Loading..."
+        title="Select Material No"
+        search="onValueHelpSearch"
+        liveChange="onValueHelpSearch"
+        confirm="onVendorValueConfirmItem"
+        cancel="onValueHelpClosevoy"
+        items="{vendorDataModel>/vendors}"
+        initialFocus="SearchField">
+        <StandardListItem 
+            title="{vendorDataModel>vendorId}"
+            description=""
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

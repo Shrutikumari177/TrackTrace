@@ -1,0 +1,21 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="batchValueHelpValueHelp1"
+        noDataText="Loading..."
+        title="Select Material No"
+        search="onValueHelpSearch"
+        liveChange="onValueHelpSearch"
+        confirm="onBatchValueConfirmItem"
+        cancel="onValueHelpClosevoy"
+        items="{ocContainerModel>/orderConfirmations}"
+        initialFocus="SearchField">
+        <StandardListItem 
+            title="{ocContainerModel>batchId}"
+            description=""
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

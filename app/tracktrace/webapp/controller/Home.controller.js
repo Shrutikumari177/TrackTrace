@@ -23,5 +23,13 @@ sap.ui.define([
             const tile = this.getOwnerComponent().getRouter();
             tile.navTo("onRouteICPage");
         },
+        onPressOcVendorMapping: function () {
+            const tile = this.getOwnerComponent().getRouter();
+            tile.navTo("onRouteInvMapping");
+        },
+        onPressProductionTrackDashboard: function () {
+            const tile = this.getOwnerComponent().getRouter();
+            tile.navTo("onRouteProductionTracDash");
+        },
     });
   });
