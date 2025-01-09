@@ -1,0 +1,343 @@
+<mvc:View
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:ndc="sap.ndc"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    controllerName="tracktrace.controller.DealerDashboard"
+    height="100%"
+>
+    <l:ResponsiveSplitter
+        id="_IDGenResponsiveSplitter1"
+        defaultPane="default"
+    >
+        <l:PaneContainer
+            id="_IDGenPaneContainer"
+            resize=".onRootContainerResize"
+        >
+            <!--  First Pane: Fixed Height 20%  -->
+            <l:SplitPane
+                requiredParentWidth="400"
+                id="default"
+            >
+                <l:layoutData>
+                    <l:SplitterLayoutData
+                        id="_IDGenSplitterLayoutData"
+                        size="25%"
+                    />
+                </l:layoutData>
+                <Panel
+                    id="_IDGenPanel"
+                    headerText="Dealer"
+                    height="100%"
+                >
+                    <Label
+                        id="_IDGenLabel"
+                        text="SCAN BARCODE"
+                        class="sapUiSmallMarginEnd "
+                        design="Bold"
+                    />
+                    <!-- Barcode Scanner Button -->
+                    <ndc:BarcodeScannerButton
+                        id="sampleBarcodeScannerButton"
+                        width="10%"
+                        scanSuccess="onScanSuccess"
+                        scanFail="onScanError"
+                        inputLiveUpdate="onScanLiveupdate"
+                        class="sapUiSmallMarginBottom"
+                    />
+                    <!-- <VBox id="_IDGenVBox" >
+                    <Label id="_IDGenLabel9" 
+                    
+                    text="Start Date"
+                    
+                    
+                    />
+                    <DatePicker id="_IDGenDatePicker1" 
+                    
+                    class="sapUiSmallMarginBottom"
+                    />
+                    <Label id="_IDGenLabel15" 
+                    
+                    text="End Date"
+                    
+                    
+                    />
+                    <DatePicker id="_IDGenDatePicker2" 
+                    
+                    
+                    />
+                    
+                    </VBox>
+                     -->
+
+                    <!-- <Input
+                        id="stp_Input"
+                        width="100%"
+                        showValueHelp="true"
+                        valueHelpRequest="outerCompartment"
+                        value=""
+                        placeholder="Outer Compartment"
+                    /> -->
+
+                    <List
+                        id="idlst"
+                        growing="true"
+                        growingScrollToLoad="true"
+                        growingThreshold="5"
+                    >
+                        <ObjectListItem
+                            id="_IDGenObjectListItem1"
+                            title="Outer Compartment Number"
+                            type="Navigation"
+                            press="onSelectContract"
+                        >
+                            <ObjectAttribute
+                                id="matnr"
+                                text="Material: {scandatamodel>/BatchId}"
+                            />
+                        </ObjectListItem>
+                    </List>
+                </Panel>
+            </l:SplitPane>
+            <!--  Middle Pane: Auto Height  -->
+            <l:SplitPane
+                requiredParentWidth="400"
+                id="default1"
+            >
+                <l:layoutData>
+                    <l:SplitterLayoutData
+                        id="_IDGenSplitterLayoutData1"
+                        size="auto"
+                    />
+                </l:layoutData>
+                <Panel
+                    id="_IDGenPanel1"
+                    headerText="Outer Compartment Details"
+                    height="100%"
+                >
+                    <f:SimpleForm
+                        id="_IDGenSimpleForm11"
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        singleContainerFullSize="false"
+                        class="formClass"
+                    >
+                        <f:content>
+                            <VBox id="_IDGenVBox2">
+                                <List id="_IDGenList1">
+                                    <DisplayListItem
+                                        id="contractID"
+                                        label="Outer Box ID : {scandatamodel>/ocCode}"
+                                    />
+                                    <DisplayListItem
+                                        id="materialID"
+                                        label="Batch no: {scandatamodel>/batchId}"
+                                    />
+
+                                    <DisplayListItem
+                                        id="materialID2"
+                                        label="Material: {scandatamodel>/rows/0/ProductCode}"
+                                    />
+                                </List>
+                            </VBox>
+                            <VBox id="_IDGenVBox2w">
+                                <List id="_IDGenList1w">
+                                    <DisplayListItem
+                                        id="contractID3"
+                                        label="Box Unit: {scandatamodel>/totalRows}"
+                                    />
+
+                                    <DisplayListItem
+                                        id="contractID1"
+                                        label="Inner Compartment Unit: {scandatamodel>/totalPackaging2}"
+                                    />
+                                    <DisplayListItem
+                                        id="materialIDe2"
+                                        label="Material Code :"
+                                    />
+                                </List>
+                            </VBox>
+                        </f:content>
+                    </f:SimpleForm>
+
+                    <Table
+                        id="createTypeTable"
+                        width="auto"
+                        contextualWidth="Auto"
+                        class="borderedTable"
+                        sticky="ColumnHeaders"
+                        noDataText="Loading ..."
+                        selectionChange="onSelectionChange"
+                        items="{scandatamodel>/rows}"
+                    >
+                        <headerToolbar>
+                            <OverflowToolbar id="_IDGenOverflowToolbar1">
+                                <Title
+                                    id="_IDG1enTitle2"
+                                    text="Materail Information"
+                                    textAlign="Center"
+                                    level="H2"
+                                />
+                                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <columns>
+                            <!-- <Column
+                                id="_IDGenColum3"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabe6"
+                                    text="OC ID"
+                                />
+                            </Column> -->
+                            <Column
+                                id="_IDGenColu10"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabel0"
+                                    text="IC ID"
+                                />
+                            </Column>
+                            <Column
+                                id="_IDGenColu1"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabedl2"
+                                    text="Packaging"
+                                />
+                            </Column>
+                            <Column
+                                id="_IDGenColum"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabdel4"
+                                    text="Product Code"
+                                />
+                            </Column>
+                            <Column
+                                id="_IDGenColun2"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabdel3"
+                                    text="Expiry Date"
+                                />
+                            </Column>
+                            <Column
+                                id="_IDGenColun3"
+                                width="70px"
+                                hAlign="Center"
+                            >
+                                <Label
+                                    id="_IDGenLabedl5"
+                                    text="Manufacturing Date"
+                                />
+                            </Column>
+                            
+
+                            <!-- <Column
+                                    id="_IDGenColum31"
+                                    width="70px"
+                                    hAlign="Center"
+                                    mergeDuplicates="true"
+                                >
+                                    <Label
+                                        id="_IDGenLabe61"
+                                        text="IC Code"
+                                        textAlign="Center"
+                                    />
+                                </Column> -->
+                            <Column
+                                id="_IDGenColum2"
+                                width="70px"
+                                hAlign="Center"
+                                mergeDuplicates="true"
+                            >
+                                <Label
+                                    id="_IDGenLabe5"
+                                    text="QR Code"
+                                    textAlign="Center"
+                                />
+                            </Column>
+                        </columns>
+
+                        <ColumnListItem
+                            id="_istItem1"
+                            class="borderedRow"
+                            press="onMaterialRowSelect"
+                        >
+                            <cells>
+                                <Text
+                                    id="_IDGenText2w5"
+                                    class="inputItem"
+                                    text="{scandatamodel>SeqNo}"
+                                />
+                                <Text
+                                    id="_IDGenText25"
+                                    class="inputItem"
+                                    text="{scandatamodel>Packaging3}"
+                                />
+                                <Text
+                                    id="_IDGenText19"
+                                    class="inputItem"
+                                    text="{scandatamodel>ProductCode}"
+                                />
+                                <Text
+                                    id="_IDGenText20"
+                                    class="inputItem"
+                                    text="{scandatamodel>Packaging2}"
+                                />
+                                <Text
+                                    id="_IDGenText21"
+                                    class="inputItem"
+                                    text="{scandatamodel>StartDate}"
+                                />
+                                <Text
+                                    id="_IDGenText22"
+                                    class="inputItem"
+                                    text="{scandatamodel>EndDate}"
+                                />
+                                <!-- <Text
+                                    id="_IDGenText24"
+                                    class="inputItem"
+                                    text="{scandatamodel>productionCode}"
+                                /> -->
+
+                                <Link
+                                    id="_IDGenText23"
+                                    class="inputItem"
+                                    text="{= ${materialDataModel>ICCode} ? ${materialDataModel>ICCode}.slice(-4) + ' View QR' : '' }"
+                                    press="onViewQRPress"
+                                    visible="{= !!${materialDataModel>qrCode}}"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </Table>
+
+                    <!-- <Button
+                        id="_IDGenButton1"
+                        text="Submit"
+                        class="sapUiSmallMargin"
+                        type="Emphasized"
+                        press="createNomination"
+                    /> -->
+                </Panel>
+            </l:SplitPane>
+        </l:PaneContainer>
+    </l:ResponsiveSplitter>
+</mvc:View>

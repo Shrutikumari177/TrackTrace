@@ -1,4 +1,4 @@
-/* checksum : 15d45d75d277aa3a0c1048184afa43cd */
+/* checksum : e47865c5d45d506e5bcc6b7d0dcffa52 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -56,5 +56,42 @@ entity ZTRACK_TRACE_SRV.zbatchno_track {
   @sap.label : 'Batch'
   @sap.quickinfo : 'Batch Number'
   key BatchNo : String(10) not null;
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'track ordertype'
+entity ZTRACK_TRACE_SRV.zorderType_Track {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Plant'
+  key Plant : String(4) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Order Type'
+  OrderType : String(4);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'material for track'
+entity ZTRACK_TRACE_SRV.ztrack_material {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Material'
+  @sap.quickinfo : 'Material Number'
+  key Material : String(40) not null;
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Material type'
+  MaterialType : String(4);
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Material description'
+  @sap.quickinfo : 'Material Description in Uppercase for Matchcodes'
+  MaterialDesc : String(40);
 };
 

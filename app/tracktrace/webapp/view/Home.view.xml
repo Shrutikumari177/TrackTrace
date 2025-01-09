@@ -92,6 +92,19 @@
                 </TileContent>
             </GenericTile>
             <GenericTile
+                id="_IDGenGenericil"
+                class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
+                header=" Dealer Dashboard"
+                press="onPressDealerDashboard"
+            >
+                <TileContent id="_IDGenTileonten">
+                    <ImageContent
+                        id="_IDGenImageConen"
+                        src="sap-icon://decision"
+                    />
+                </TileContent>
+            </GenericTile>
+            <GenericTile
                 id="_IDGenGericTil"
                 class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
                 header="Production Tracking Dashboard"

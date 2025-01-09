@@ -1,9 +1,25 @@
 const cds = require('@sap/cds');
 
 module.exports = async (srv) => {
+    const ZPRODUCTION_ORDERS_TRACKTRACE_SRV = await cds.connect.to("ZPRODUCTION_ORDERS_TRACKTRACE_SRV"); 
+      srv.on('READ', 'A_PlannedOrder', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrder', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderComponent', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderItem', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderOperation', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderStatus', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'A_ProductionRsceTools', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+      srv.on('READ', 'FunctionMessageSet', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+
+
+
+
     const ZTRACK_TRACE_SRV = await cds.connect.to("ZTRACK_TRACE_SRV");
     srv.on('READ', 'zbatchdetails_Track', req => ZTRACK_TRACE_SRV.run(req.query));
     srv.on('READ', 'zbatchno_track', req => ZTRACK_TRACE_SRV.run(req.query));
+    srv.on('READ', 'ztrack_material', req => ZTRACK_TRACE_SRV.run(req.query)); 
+    srv.on('READ', 'zorderType_Track', req => ZTRACK_TRACE_SRV.run(req.query)); 
+
 
     
     srv.on('getBatchIDRelevantData', async (req) => {

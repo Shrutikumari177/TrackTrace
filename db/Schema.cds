@@ -11,14 +11,14 @@ entity MaterialBox {
   key SerialNo     : String;
   key BoxQRCode    : String(255);
       BoxID        : String;
-      BoxQRCodeURL : String(255);
+      BoxQRCodeURL : String;
       BatchID      : String(50);
       IC           : Association to InnerContainer;
 }
 
 entity InnerContainer {
   key ICID        : String;
-  key ICQRCodeURL : String(255);
+  key ICQRCodeURL : String;
   key ICQRCode    : String;
       BatchID     : String(50);
       Boxes       : Composition of many MaterialBox
@@ -28,7 +28,7 @@ entity InnerContainer {
 
 entity OuterContainer {
   key OCID        : String;
-  key OCQRCodeURL : String(255);
+  key OCQRCodeURL : String;
   key OCQRCode    : String;
       BatchID     : String(50);
       status      : String;

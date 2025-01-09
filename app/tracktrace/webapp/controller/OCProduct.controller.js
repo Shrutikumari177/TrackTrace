@@ -247,12 +247,12 @@ sap.ui.define([
         const oTable = this.byId("OCproduct_ProductTable");
         oTable.invalidate();
         oTable.removeSelections();
+        this._oBusyDialog.close();
 
     } catch (oError) {
         console.error("Error creating QR Code:", oError);
-        sap.m.MessageBox.error("Error generating QR Code. Please try again.");
-    }finally {
         this._oBusyDialog.close();
+        sap.m.MessageBox.error("Error generating QR Code. Please try again.");
     }
 },
 

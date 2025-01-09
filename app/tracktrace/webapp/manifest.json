@@ -138,6 +138,13 @@
           "target": [
             "TargetProductionTracDash"
           ]
+        },
+        {
+          "name": "onRouteDealerDashboard",
+          "pattern": "DealerDashboard",
+          "target": [
+            "TargetDealerDashboard"
+          ]
         }
       ],
       "targets": {
@@ -168,6 +175,10 @@
         "TargetProductionTracDash": {
           "id": "ProductionTrackingDashboard",
           "name": "ProductionTrackingDashboard"
+        },
+        "TargetDealerDashboard": {
+          "id": "DealerDashboard",
+          "name": "DealerDashboard"
         }
       }
     },

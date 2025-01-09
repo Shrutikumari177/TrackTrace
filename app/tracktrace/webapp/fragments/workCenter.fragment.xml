@@ -1,0 +1,23 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="workCenterDialog"
+        noDataText="Loading..."
+        title="Select Work Center"
+        liveChange=".onWorkCenterFilterSearch"
+        search=".onWorkCenterFilterSearch"
+        confirm="onWorkCenterValueHelpClose"
+        cancel="onWorkCenterValueHelpClose"
+        items="{/material}"
+        initialFocus="SearchField"
+        multiSelect="false"
+        contentWidth="480px">
+        <StandardListItem
+            id="workCenterListItem"
+            title="{workCenter}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

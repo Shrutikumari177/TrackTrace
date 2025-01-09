@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="productionplant"
+        noDataText="Loading..."
+        title="Select Production Plant"
+        liveChange=".onproductionplantFilterSearch"
+        search=".onproductionplantFilterSearch"
+        confirm="onproductionplantValueHelpClose"
+        cancel="onproductionplantValueHelpClose"
+        items="{/material}"
+        initialFocus="SearchField"
+        multiSelect="false"
+        contentWidth="480px"
+        
+    >
+        
+        <StandardListItem id="_IDGenStandardListItem3" 
+            
+            title="{productionPlant}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+            
+    </SelectDialog>
+</core:FragmentDefinition>

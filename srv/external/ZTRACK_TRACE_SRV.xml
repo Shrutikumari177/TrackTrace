@@ -46,9 +46,26 @@
                 </Key>
                 <Property Name="BatchNo" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:label="Batch" sap:quickinfo="Batch Number"/>
             </EntityType>
+            <EntityType Name="zorderType_TrackType" sap:label="track ordertype" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4" sap:display-format="UpperCase" sap:label="Plant"/>
+                <Property Name="OrderType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Order Type"/>
+            </EntityType>
+            <EntityType Name="ztrack_materialType" sap:label="material for track" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Material"/>
+                </Key>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40" sap:display-format="UpperCase" sap:label="Material" sap:quickinfo="Material Number"/>
+                <Property Name="MaterialType" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:label="Material type"/>
+                <Property Name="MaterialDesc" Type="Edm.String" MaxLength="40" sap:display-format="UpperCase" sap:label="Material description" sap:quickinfo="Material Description in Uppercase for Matchcodes"/>
+            </EntityType>
             <EntityContainer Name="ZTRACK_TRACE_SRV_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="zbatchdetails_Track" EntityType="ZTRACK_TRACE_SRV.zbatchdetails_TrackType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
                 <EntitySet Name="zbatchno_track" EntityType="ZTRACK_TRACE_SRV.zbatchno_trackType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="zorderType_Track" EntityType="ZTRACK_TRACE_SRV.zorderType_TrackType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="ztrack_material" EntityType="ZTRACK_TRACE_SRV.ztrack_materialType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
             </EntityContainer>
             <Annotations Target="ZTRACK_TRACE_SRV.ZTRACK_TRACE_SRV_Entities"
                 xmlns="http://docs.oasis-open.org/odata/ns/edm">

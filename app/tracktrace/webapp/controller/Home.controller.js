@@ -31,5 +31,9 @@ sap.ui.define([
             const tile = this.getOwnerComponent().getRouter();
             tile.navTo("onRouteProductionTracDash");
         },
+        onPressDealerDashboard: function () {
+            const tile = this.getOwnerComponent().getRouter();
+            tile.navTo("onRouteDealerDashboard");
+        },
     });
   });

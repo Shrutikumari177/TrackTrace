@@ -50,6 +50,18 @@
         },
         "csrf": true,
         "csrfInBatch": true
+      },
+      "ZPRODUCTION_ORDERS_TRACKTRACE_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZPRODUCTION_ORDERS_TRACKTRACE_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/sap/ZPRODUCTION_ORDERS_TRACKTRACE_SRV"
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
       }
     }
   }

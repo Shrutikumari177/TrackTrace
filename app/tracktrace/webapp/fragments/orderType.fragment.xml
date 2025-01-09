@@ -1,0 +1,23 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="orderTypeDialog"
+        noDataText="Loading..."
+        title="Select Order Type"
+        liveChange=".onOrderTypeFilterSearch"
+        search=".onOrderTypeFilterSearch"
+        confirm="onOrderTypeValueHelpClose"
+        cancel="onOrderTypeValueHelpClose"
+        items="{/material}"
+        initialFocus="SearchField"
+        multiSelect="false"
+        contentWidth="480px">
+        <StandardListItem
+            id="orderTypeListItem"
+            title="{orderType}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>
