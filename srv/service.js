@@ -1,15 +1,22 @@
 const cds = require('@sap/cds');
 
 module.exports = async (srv) => {
-    const ZPRODUCTION_ORDERS_TRACKTRACE_SRV = await cds.connect.to("ZPRODUCTION_ORDERS_TRACKTRACE_SRV"); 
-      srv.on('READ', 'A_PlannedOrder', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionOrder', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionOrderComponent', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionOrderItem', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionOrderOperation', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionOrderStatus', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'A_ProductionRsceTools', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
-      srv.on('READ', 'FunctionMessageSet', req => ZPRODUCTION_ORDERS_TRACKTRACE_SRV.run(req.query)); 
+    
+
+
+    const ZAPI_PRODUCTION_ORDERS = await cds.connect.to("ZAPI_PRODUCTION_ORDERS"); 
+      srv.on('READ', 'A_ProductionOrder', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderComponent', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderItem', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderOperation', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'A_ProductionOrderStatus', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'A_ProductionRsceTools', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'FunctionMessageSet', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+      srv.on('READ', 'ReleaseMessageSet', req => ZAPI_PRODUCTION_ORDERS.run(req.query)); 
+     
+      const ZAPI_PROD_ORDER_CONFIRMATION_2_SRV = await cds.connect.to("ZAPI_PROD_ORDER_CONFIRMATION_2_SRV"); 
+      srv.on('READ', 'ProdnOrdConf2', req => ZAPI_PROD_ORDER_CONFIRMATION_2_SRV.run(req.query)); 
+      srv.on('READ', 'ProdnOrdConfMatlDocItm', req => ZAPI_PROD_ORDER_CONFIRMATION_2_SRV.run(req.query));   
 
 
 

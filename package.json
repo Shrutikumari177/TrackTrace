@@ -62,6 +62,30 @@
         },
         "csrf": true,
         "csrfInBatch": true
+      },
+      "ZAPI_PRODUCTION_ORDERS": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZAPI_PRODUCTION_ORDERS",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/sap/API_PRODUCTION_ORDERS"
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
+      },
+      "ZAPI_PROD_ORDER_CONFIRMATION_2_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZAPI_PROD_ORDER_CONFIRMATION_2_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/sap/API_PROD_ORDER_CONFIRMATION_2_SRV"
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
       }
     }
   }

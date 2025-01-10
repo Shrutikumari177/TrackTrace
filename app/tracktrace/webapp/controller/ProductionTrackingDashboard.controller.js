@@ -187,7 +187,6 @@ sap.ui.define([
                 this._loadImageData(oData.orderConfirmationId)
             }
             console.log("Clicked Image Data:", oData);
-            // sap.m.MessageToast.show(`Selected Order Confirmation: ${oData.orderConfirmationId}`);
         },  
         
         _loadImageData :  function(receivedId){
