@@ -142,7 +142,169 @@ module.exports = async (srv) => {
         return OCIDList;
     });
 
+    srv.on('getBatchOcDealerMappingdata', async (req) => {
+        try {
+            const { BatchID, OCID } = req.data;
+    
+            if (!BatchID || !OCID) {
+                return req.reject(400, 'BatchID and OCID are required');
+            }
+    
+            const batchDetails = await ZTRACK_TRACE_SRV.run(
+                SELECT.one
+                    .from('zbatchdetails_Track')
+                    .columns(['ManufactureDt', 'ExpiryDt', 'ProductionOrder'])
+                    .where({ BatchNo: BatchID })
+            );
+    
+            if (!batchDetails) {
+                return req.reject(404, `No details found for BatchID: ${BatchID}`);
+            }
+    
+            const innerContainerCount = await SELECT.from('track.InnerContainer')
+                .where({ BatchID, OC_OCID: OCID })
+                .columns('ICID')
+                .then(rows => rows.length);
+    
+            const OuterContainerData = await SELECT.from('track.OuterContainer')
+                .where({ BatchID, OCID })
+                .columns('VendorId', 'VendorName');
+    
+            if (OuterContainerData.length === 0) {
+                return req.reject(404, `No OuterContainer found for BatchID: ${BatchID} and OCID: ${OCID}`);
+            }
+    
+            const { VendorId, VendorName } = OuterContainerData[0];
+    
+            return {
+                OCID,
+                ProductionOrder: batchDetails.ProductionOrder,
+                BatchID,
+                ManufactureDt: batchDetails.ManufactureDt,
+                ExpiryDt: batchDetails.ExpiryDt,
+                Quantity: innerContainerCount, 
+                VendorId,
+                VendorName
+            };
+        } catch (error) {
+            console.error('Error:', error);
+            return req.reject(500, error.message);
+        }
+    });
 
+    srv.on('getProductionTrackingDashboardData', async (req) => {
+        try {
+            const { OCID } = req.data;
+    
+            if (!OCID) {
+                return req.reject(400, "'OCID' is a required parameter.");
+            }
+    
+            const outerContainerData = await SELECT.one.from('track.OuterContainer')
+                .columns([
+                    'OCID',
+                    'OCQRCode',
+                    'OCQRCodeURL',
+                    'BatchID',
+                    'status',
+                    'VendorId',
+                    'VendorName'
+                ])
+                .where({ OCID });
+    
+            if (!outerContainerData) {
+                return req.reject(404, "No data found for the provided OCID.");
+            }
+    
+            const { BatchID } = outerContainerData;
+    
+        
+            const response = {
+                OCID: outerContainerData.OCID,
+                OCQRCode: outerContainerData.OCQRCode,
+                OCQRCodeURL: outerContainerData.OCQRCodeURL,
+                BatchID: outerContainerData.BatchID,
+                status: outerContainerData.status,
+                VendorId: outerContainerData.VendorId || "",
+                VendorName: outerContainerData.VendorName || "",
+                ManufactureDt: null,
+                ExpiryDt: null,
+                ProductionOrder: null,
+                Material: null,
+                ICs: []
+            };
+    
+            const icData = await SELECT.from('track.MaterialBox')
+                .columns([
+                    'IC_ICID as ICID',
+                    'IC_ICQRCode as ICQRCode',
+                    'IC_ICQRCodeURL as ICQRCodeURL',
+                    'SerialNo',
+                    'BoxQRCode',
+                    'BoxQRCodeURL',
+                    'IC.OC_OCID'
+                ])
+                .where({ 'IC.OC_OCID': OCID, BatchID });
+    
+            if (icData.length > 0) {
+                const groupedICs = icData.reduce((acc, item) => {
+                    if (!acc[item.ICID]) {
+                        acc[item.ICID] = {
+                            ICID: item.ICID,
+                            ICQRCode: item.ICQRCode,
+                            ICQRCodeURL: item.ICQRCodeURL,
+                            Boxes: []
+                        };
+                    }
+                    acc[item.ICID].Boxes.push({
+                        SerialNo: item.SerialNo,
+                        BoxQRCode: item.BoxQRCode,
+                        BoxQRCodeURL: item.BoxQRCodeURL
+                    });
+                    return acc;
+                }, {});
+                response.ICs = Object.values(groupedICs);
+            }
+    
+            // Fetch batch details if available
+            const batchDetails = await ZTRACK_TRACE_SRV.run(
+                SELECT.one
+                    .from('zbatchdetails_Track')
+                    .columns(['ManufactureDt', 'ExpiryDt', 'ProductionOrder', 'Material'])
+                    .where({ BatchNo: BatchID })
+            );
+    
+            if (batchDetails) {
+                Object.assign(response, {
+                    ManufactureDt: batchDetails.ManufactureDt,
+                    ExpiryDt: batchDetails.ExpiryDt,
+                    ProductionOrder: batchDetails.ProductionOrder,
+                    Material: batchDetails.Material
+                });
+            }
+    
+            return response;
+    
+        } catch (error) {
+            console.error("Error in getProductionTrackingDashboardData:", error);
+            return req.reject(500, error.message || "Internal Server Error");
+        }
+    });
+
+    srv.on('getDealerDashOCValueHelp', async (req) => {
+        const { VendorId } = req.data;
+        
+        const results = await SELECT.from('track.OuterContainer')
+            .where({ VendorId: VendorId });
+
+        const OCIDList = results.map(item => ({
+            OCID: item.OCID
+        }));
+
+        return OCIDList;
+    });
+    
+    
 
     const createQRCodeURL = (data) => {
         const qrPayload = JSON.stringify(data);
@@ -337,6 +499,8 @@ module.exports = async (srv) => {
         const lastOCID = lastOC?.OCID || '00000000';
         return String(Number(lastOCID) + 1).padStart(8, '0');
     };
+
+
     srv.on('CREATE', 'OuterContainer', async (req) => {
         const { BatchID, ICs, status } = req.data;
     
@@ -363,10 +527,15 @@ module.exports = async (srv) => {
             const newOCID = await generateUniqueOCID();
     
             let manufactureDt, expiryDt, productionOrder, material;
-    
-            const groupedICs = ICs.map(ic => ({ ICID: ic.ICID, Boxes: [] }));
+            const groupedICs = [];
     
             for (const ic of ICs) {
+                const existingGroupedIC = groupedICs.find(groupedIC => groupedIC.ICID === ic.ICID);
+    
+                if (!existingGroupedIC) {
+                    groupedICs.push({ ICID: ic.ICID, Boxes: [] });
+                }
+    
                 const boxes = await cds.run(
                     SELECT.from('track.MaterialBox').columns(['SerialNo']).where({ IC_ICID: ic.ICID })
                 );
@@ -379,9 +548,12 @@ module.exports = async (srv) => {
                         productionOrder = batchDetails.ProductionOrder;
                         material = batchDetails.Material;
     
-                        const icIndex = groupedICs.findIndex(item => item.ICID === ic.ICID);
-                        if (icIndex !== -1) {
-                            groupedICs[icIndex].Boxes.push({ SerialNo: box.SerialNo });
+                        const currentIC = groupedICs.find(item => item.ICID === ic.ICID);
+                        if (currentIC) {
+                            const serialExists = currentIC.Boxes.some(b => b.SerialNo === box.SerialNo);
+                            if (!serialExists) {
+                                currentIC.Boxes.push({ SerialNo: box.SerialNo });
+                            }
                         }
                     } else {
                         req.error(404, `Batch details not found for SerialNo: ${box.SerialNo}`);
@@ -441,13 +613,72 @@ module.exports = async (srv) => {
             req.reject(500, error.message || "Failed to create OuterContainer.");
         }
     });
+
+    srv.on('UPDATE', 'OuterContainer', async (req) => {
+        try {
+            const { OCID, OCQRCode, OCQRCodeURL, VendorId, VendorName, status } = req.data;
+        
+            if (!OCID  ||  !VendorId || !VendorName || !status) {
+                return req.reject(400, 'OCID, VendorId, VendorName, and status are required.');
+            }
+    
+            const existingOC = await cds.run(
+                SELECT.from('track.OuterContainer')
+                    .where({ OCID })
+            );
+            
+           
+        
+            if (!existingOC || existingOC.length === 0) {
+                return req.reject(404, `OuterContainer with OCID: ${OCID} not found.`);
+            }
+            const  sOCQRCode = existingOC[0].OCQRCode; 
+            const sOCQRCodeURL=existingOC[0].OCQRCodeURL
+            
+    
+            const updateResult = await cds.run(
+                UPDATE('track.OuterContainer')
+                    .set({
+                        VendorId,
+                        VendorName,
+                        status
+                    })
+                    .where({ OCID, OCQRCode:sOCQRCode, OCQRCodeURL:sOCQRCodeURL })
+            );
+        
+            if (updateResult === 0) {
+                return req.reject(500, `Failed to update OuterContainer for OCID: ${OCID}, OCQRCode: ${OCQRCode}, and OCQRCodeURL: ${OCQRCodeURL}`);
+            }
+    
+            return {
+                message: `OuterContainer updated successfully for OCID: ${OCID}`
+              
+            };
+        } catch (error) {
+            console.error('Error updating OuterContainer:', error.message);
+            req.reject(500, error.message);
+        }
+    });
+   
+
+   
     
 
 
 
 
 
+    
+    
+   
 
+   
+    
+
+
+    
+
+    
    
 
 

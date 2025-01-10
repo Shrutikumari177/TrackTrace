@@ -13,20 +13,61 @@ service trackservice {
         ManufactureDt:DateTime;
         ExpiryDt:DateTime;
         ProductionOrder:Int64;
-        BoxQRCodeURL      : String(255);
+        BoxQRCodeURL      : String;
         BoxQRCode: String;
         ICID:String;
         ICQRCode         : String;
-        ICQRCodeURL      : String(255); 
+        ICQRCodeURL      : String; 
         OCID:String;
         OCQRCode:String;
-        OCQRCodeURL        : String(255); 
+        OCQRCodeURL        : String; 
         
     };
 
     function getBatchOCValueHelp(BatchID : String, ) returns array of {
         OCID:String;
     };
+
+    function getBatchOcDealerMappingdata(BatchID : String,OCID:String) returns array of{
+           OCID:String;
+           ProductionOrder:Int64;
+           BatchID      : String(50);
+           ManufactureDt:DateTime;
+           ExpiryDt:DateTime;
+           Qunatity :Int64;
+            VendorId :  String;
+            VendorName :String; 
+    };
+
+    function getProductionTrackingDashboardData( OCID: String) returns array of  {
+        OCID: String;
+        OCQRCode: String;
+        OCQRCodeURL: String;
+        BatchID: String;
+        status: String;
+        VendorId: String;
+        VendorName: String;
+        ManufactureDt: DateTime;
+        ExpiryDt: DateTime;
+        ProductionOrder: Int64;
+        Material: String;
+        ICs: array of {
+            ICID: String;
+            ICQRCode: String;
+            ICQRCodeURL: String;
+            Boxes: array of {
+                SerialNo: String;
+                BoxQRCode: String;
+                BoxQRCodeURL: String;
+            };
+        };
+    };
+
+    function getDealerDashOCValueHelp(VendorId : String, ) returns array of {
+        OCID:String;
+    };
+
+
 
     
     

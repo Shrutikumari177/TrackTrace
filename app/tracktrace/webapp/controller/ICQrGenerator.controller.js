@@ -112,7 +112,10 @@ sap.ui.define([
         
             const oModel = this.getOwnerComponent().getModel();
              sEncodedBatchNo = encodeURIComponent(sBatchNo); 
-            const sPath = `/getBatchIDRelevantData(BatchNo='${sEncodedBatchNo}',filterNonEmptyBoxQRCode=true)`; // Correct OData format
+            const sPath = `/getBatchIDRelevantData(BatchNo='${sEncodedBatchNo}',filterNonEmptyBoxQRCode=true)`;
+            
+           console.log("spath",sPath);
+           
         
             const oBindList = oModel.bindList(sPath);
             const aBatchIdData = [];
