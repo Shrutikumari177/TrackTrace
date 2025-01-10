@@ -60,6 +60,12 @@
             "path": "/sap/opu/odata/sap/ZPRODUCTION_ORDERS_TRACKTRACE_SRV"
           }
         },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/sap/ZPRODUCTION_ORDERS_TRACKTRACE_SRV"
+          }
+        },
         "csrf": true,
         "csrfInBatch": true
       },
@@ -72,6 +78,12 @@
             "path": "/sap/opu/odata/sap/API_PRODUCTION_ORDERS"
           }
         },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
+            "path": "/sap/opu/odata/sap/API_PRODUCTION_ORDERS"
+          }
+        },
         "csrf": true,
         "csrfInBatch": true
       },
@@ -81,6 +93,12 @@
         "[production]": {
           "credentials": {
             "destination": "Ingenx_OData_SAP",
+            "path": "/sap/opu/odata/sap/API_PROD_ORDER_CONFIRMATION_2_SRV"
+          }
+        },
+        "[development]": {
+          "credentials": {
+            "destination": "SandboxPO",
             "path": "/sap/opu/odata/sap/API_PROD_ORDER_CONFIRMATION_2_SRV"
           }
         },
