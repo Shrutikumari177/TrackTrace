@@ -279,6 +279,7 @@
                                 id="enColun2"
                                 width="70px"
                                 hAlign="Center"
+                                visible="false"
                             >
                                 <Label
                                     id="enLabdel3"

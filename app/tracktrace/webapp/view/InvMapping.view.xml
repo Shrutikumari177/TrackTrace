@@ -82,8 +82,8 @@
                                 <Input id="mapping_startloc" width="180px" value="{filterOcModelData>/location}" editable="false"/>    
                                 <Label id="_IDGenLabel7" text="Manufacturing Date" design="Bold" class="sapUiTinyMarginTop"/>
                                 <Input id="mapping_startDateInput" width="180px" value="{filterOcModelData>/ManufactureDt}" editable="false"/>                                
-                                <Label id="_IDGenLabel8" text="Expiry Date" design="Bold" class="sapUiTinyMarginTop"/>
-                                <Input id="mapping_endDateInput" width="180px" value="{filterOcModelData>/ExpiryDt}" editable="false" />
+                                <Label id="_IDGenLabel8" text="Expiry Date" design="Bold" class="sapUiTinyMarginTop" visible="false"/>
+                                <Input id="mapping_endDateInput" width="180px" value="{filterOcModelData>/ExpiryDt}" editable="false"  visible="false"/>
                               
                                
                             </form:content>

@@ -163,7 +163,7 @@
 
                  </VBox>
              </FlexBox>
-             <FlexBox id="tankDialogDetailsTabFlexBox6" class="fbox">
+             <FlexBox id="tankDialogDetailsTabFlexBox6" class="fbox" visible="false">
              <HBox class="tankNo_box">
                <Text id="tankDialogDetailsexpp" text="Expiry Date" />
                <Text text=":" id="exp_colon"/>
@@ -228,7 +228,7 @@
                        </header>
                      </Column>
                      
-                     <Column hAlign="Center">
+                     <Column hAlign="Center" visible="false">
                        <header>
                          <Text text="expiry Date" />
                        </header>
@@ -288,7 +288,7 @@
                        </header>
                      </Column>
                      
-                     <Column hAlign="Center">
+                     <Column hAlign="Center" visible="false">
                        <header>
                          <Text text="expiry Date" />
                        </header>
