@@ -79,13 +79,16 @@
                                         class="sapUiTinyMarginTop"
                                         required="true"
                                     />
-                                    <HBox id="productionPlantHBox_createProduct">
+                                    <HBox
+                                        id="productionPlantHBox_createProduct"
+                                    >
                                         <Input
                                             id="productionPlantInput_createProduct"
                                             showValueHelp="true"
                                             valueHelpRequest="onProductionPlantValueHelp"
                                             width="200px"
                                             class="salesOrgDesc"
+                                            value="{filterProductionModel>/value/0/Plant}"
                                         />
                                     </HBox>
                                     <Label
@@ -140,6 +143,7 @@
                                             showValueHelp="true"
                                             valueHelpRequest="onOrderTypeValueHelp"
                                             required="true"
+                                            value="{filterProductionModel>/value/0/ManufacturingOrderType}"
                                         />
                                     </HBox>
 
@@ -225,6 +229,18 @@
                             text="Good Issue"
                             icon="sap-icon://activity-items"
                         >
+                            <Label
+                                id="saadw"
+                                text="Select Production Order"
+                                class="sapUiSmallMarginEnd"
+                                design="Bold"
+                            />
+                            <Input
+                                id="workCenterInput_createProducte"
+                                showValueHelp="true"
+                                valueHelpRequest="onWorkCenterValueHelp"
+                                width="200px"
+                            />
                             <form:SimpleForm
                                 id="simpleForm_goodIssue_createProduct"
                                 class="tableBorder sapUiTinyMargin"
@@ -238,6 +254,7 @@
                                         sticky="ColumnHeaders"
                                         noDataText="Loading ..."
                                         selectionChange="onSelectionChange"
+                                        items="{filterComponentModel>/value}"
                                     >
                                         <columns>
                                             <Column
@@ -340,15 +357,42 @@
                                             press="onMaterialRowSelect"
                                         >
                                             <cells>
-                                                <Input id="input_items_createProduct" value="Items"/>
-                                                <Input id="input_components_createProduct" value="Components" />
-                                                <Input id="input_description_createProduct" value="Description"/>
-                                                <Input id="input_requestQuantity_createProduct" value="Request Quantity"/>
-                                                <Input id="input_uom_createProduct" value="UOM"/>
-                                                <Input id="input_itemCapacity_createProduct" value="Item Capacity"/>
-                                                <Input id="input_plant_createProduct" value="Plant"/>
-                                                <Input id="input_batch_createProduct" value="Storage Location"/>
-                                                <Input id="input_storageLocation_createProduct" value="Batch"/>
+                                                <Input
+                                                    id="input_items_createProduct"
+                                                    value="{filterComponentModel>BOMItem}"
+                                                />
+                                                <Input
+                                                    id="input_components_createProduct"
+                                                    value="{filterComponentModel>Material}"
+                                                />
+                                                <Input
+                                                    id="input_description_createProduct"
+                                                    value="{filterComponentModel>BOMItemDescription}"
+                                                />
+                                                <Input
+                                                    id="input_requestQuantity_createProduct"
+                                                    value="{filterComponentModel>RequiredQuantity}"
+                                                />
+                                                <Input
+                                                    id="input_uom_createProduct"
+                                                    value="{filterComponentModel>UOM}"
+                                                />
+                                                <Input
+                                                    id="input_itemCapacity_createProduct"
+                                                    value="{filterComponentModel>BOMItemCategory}"
+                                                />
+                                                <Input
+                                                    id="input_plant_createProduct"
+                                                    value="{filterComponentModel>Plant}"
+                                                />
+                                                <Input
+                                                    id="input_storageLocation_createProduct"
+                                                    value="{filterComponentModel>StorageLocation}"
+                                                />
+                                                <Input
+                                                    id="input_batch_createProduct"
+                                                    value="{filterComponentModel>ManufacturingOrder}"
+                                                />
                                             </cells>
                                         </ColumnListItem>
                                     </Table>
@@ -362,58 +406,468 @@
                             text="Confirmation"
                             icon="sap-icon://bbyd-active-sales"
                         >
+                            <Label
+                                id="saaddw"
+                                text="Select Production Order"
+                                class="sapUiSmallMarginEnd"
+                                design="Bold"
+                            />
+                            <Input
+                                id="workCenterInput_createProduedcte"
+                                showValueHelp="true"
+                                valueHelpRequest="onWorkCenterValueHelp"
+                                width="200px"
+                            />
                             <form:SimpleForm
                                 id="simpleForm_confirmation_createProduct"
                                 class="tableBorder sapUiTinyMargin"
                                 editable="true"
                             >
                                 <form:content>
-                                    <core:Title id="title_confirmation_createProduct" />
+                                    <core:Title id="title_createProduct12" />
                                     <Label
-                                        id="label_deliveryQuantity_createProduct"
-                                        text="Delivery Quantity"
+                                        id="label_material_createProduct2"
+                                        text="Confirmation"
                                         design="Bold"
                                         class="sapUiTinyMarginTop"
                                     />
-                                    <HBox id="deliveryQuantityHBox_createProduct">
+                                    <HBox id="soldTPBox_createProduc22t">
                                         <Input
-                                            id="deliveryQuantityInput_createProduct"
+                                            id="materialInput_createProduc2t"
+                                            width="200px"
+                                            required="true"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        id="label_productionPlant_createProd2uct"
+                                        text="Operation"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                        required="true"
+                                    />
+                                    <HBox
+                                        id="productionPlantHBox_createProdu2ct"
+                                    >
+                                        <Input
+                                            id="productionPlantInput_createPr2oduct"
+                                            width="200px"
+                                            class="salesOrgDesc"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        id="label_startDate_createProdu2ct"
+                                        text="Suboperation"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Input
+                                        id="dpStart_createProd2uct"
+                                        change="onSelectDate"
+                                        width="200px"
+                                    />
+                                    <Label
+                                        id="label_endDate_crea2teProduct"
+                                        text="Confirm Type"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <Select
+                                        id="dpEnd_createProduc2t"
+                                        change="onSelectDate"
+                                        width="200px"
+                                    />
+
+                                    <Label
+                                        id="label_prodQuantity_cre2ateProduct"
+                                        text="Capacity Category"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="prodQuantityHBox_crea2teProduct">
+                                        <Input
+                                            id="productionQuantityI2nput_createProduct"
                                             width="200px"
                                             type="Number"
+                                        />
+                                    </HBox>
+
+                                    <core:Title id="title_createPro2duct2" />
+                                    <Label
+                                        id="orderTypeLabel_create2Product"
+                                        text="Material"
+                                        design="Bold"
+                                        required="true"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="orderTypeHBox_creat2eProduct">
+                                        <Input
+                                            id="orderTypeInput_crea2teProduct"
+                                            width="200px"
+                                            required="true"
+                                        />
+                                    </HBox>
+
+                                    <Label
+                                        id="workCenterLabel_crea2teProduct"
+                                        text="Material Description"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="workCenterHBox_cre2ateProduct">
+                                        <Input
+                                            id="workCenterInput_cre2ateProduct"
+                                            showValueHelp="true"
+                                            valueHelpRequest="onWorkCenterValueHelp"
+                                            width="200px"
+                                            class="workCenterInput"
+                                            editable="false"
+                                        />
+                                    </HBox>
+
+                                    <Label
+                                        id="label_priority_creat2eProduct"
+                                        text="Sequence"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="priorityHBox_creat2eProduct">
+                                        <Input
+                                            id="prioritySelect_cr2eateProduct"
+                                            width="200px"
+                                        />
+                                    </HBox>
+
+                                    <Label
+                                        id="remarksLabel_createProductee"
+                                        text="Plant"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="remarksHBox_createProducte">
+                                        <Input
+                                            id="remarksInput_createProducdt"
+                                            width="200px"
+                                            required="true"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        id="remarksLabel_createProducteew"
+                                        text="Yield"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox id="remarksHBox_createProductew">
+                                        <Input
+                                            id="remarksInput_createProducdwt"
+                                            width="200px"
+                                            required="true"
                                         />
                                     </HBox>
                                 </form:content>
                             </form:SimpleForm>
                         </IconTabFilter>
-                        
+
                         <IconTabFilter
-                            id="iconTabFilter_goodReceipt_createProduct"
+                            id="_IDGenIconTabFilter2"
                             key="itemDetails"
                             text="Good Receipt"
                             icon="sap-icon://receipt"
                         >
                             <form:SimpleForm
                                 id="simpleForm_goodReceipt_createProduct"
-                                class="tableBorder sapUiTinyMargin"
+                                class="tableBorder sapUiTinyMarginBottom"
                                 editable="true"
                             >
                                 <form:content>
-                                    <core:Title id="title_goodReceipt_createProduct" />
+                                    <core:Title
+                                        id="title_goodReceipt_createProduct"
+                                    />
                                     <Label
                                         id="label_deliveryQuantity_goodReceipt_createProduct"
-                                        text="Delivery Quantity"
+                                        text="Document Date"
+                                        design="Bold"
+                                    />
+                                    <HBox
+                                        id="deliveryQuantityHBox_goodReceipt_createProduct"
+                                    >
+                                        <DatePicker
+                                            id="deliveryQuantityInput_goodReceipt_createProduct"
+                                            width="200px"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        id="label_deliveryQuantity_goodReceipt_createProductw"
+                                        text="Posting Date"
                                         design="Bold"
                                         class="sapUiTinyMarginTop"
                                     />
-                                    <HBox id="deliveryQuantityHBox_goodReceipt_createProduct">
-                                        <Input
-                                            id="deliveryQuantityInput_goodReceipt_createProduct"
+                                    <HBox
+                                        id="deliveryQuantityHBox_goodReceipt_createProductw"
+                                    >
+                                        <DatePicker
+                                            id="deliveryQuantityInput_goodReceipt_createProduwct"
                                             width="200px"
-                                            type="Number"
+                                        />
+                                    </HBox>
+                                    <core:Title
+                                        id="title_goodReceipt_createProduwct"
+                                    />
+                                    <Label
+                                        id="label_deliveryQuantity_goodReceipt_crewateProduct"
+                                        text="Delivery Note"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox
+                                        id="deliveryQuantityHBox_goodReceipt_crewwwateProduct"
+                                    >
+                                        <Input
+                                            id="deliveryQuantityInput_goodReceipt_createPwroduct"
+                                            width="200px"
+                                        />
+                                    </HBox>
+                                    <Label
+                                        id="label_deliveryQuantity_goodReceipt_creatweProductw"
+                                        text="Doc. Header Text"
+                                        design="Bold"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                    <HBox
+                                        id="deliveryQuantityHBox_goodReceipt_createProducwtw"
+                                    >
+                                        <Input
+                                            id="deliveryQuantityInput_goodReceipt_createProwduwct"
+                                            width="200px"
                                         />
                                     </HBox>
                                 </form:content>
                             </form:SimpleForm>
+                            <IconTabBar id="_IDGenIconTabBar1">
+                                <items>
+                                    <!-- Child Tab 1 -->
+                                    <IconTabFilter
+                                        id="_IDGenIconTabFilter3"
+                                        text="Material"
+                                    >
+                                        <form:SimpleForm
+                                            id="simpleForm_goodReceipt_creatwweProduct"
+                                            editable="true"
+                                            
+                                            class="tableBorder"
+                                        >
+                                            <form:content>
+                                                <core:Title
+                                                    id="title_goodReceipt_createPrwoduct"
+                                                />
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceipt_wcreateProduct"
+                                                    text="Material"
+                                                    design="Bold"
+                                                    class="sapUiTinyMarginTop"
+                                                />
+                                                <HBox
+                                                    id="deliveryQuantityHBox_goodReceipt_wcreateProduct"
+                                                >
+                                                    <Input
+                                                        id="deliveryQuantityInput_goodReceiwpt_createProduct"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                    <Input
+                                                        id="eew"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                </HBox>
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceipt_wcrewateProduct"
+                                                    text="Material Group"
+                                                    design="Bold"
+                                                    class="sapUiSmallMarginTop"
+                                                />
+                                                <Input
+                                                    id="wfer"
+                                                    width="200px"
+                                                    class="sapUiTinyMarginBegin sapUiSmallMarginTop"
+                                                />
+                                            </form:content>
+                                        </form:SimpleForm>
+                                    </IconTabFilter>
+
+                                    <!-- Child Tab 2 -->
+                                    <IconTabFilter
+                                        id="_IDGenIconTabFilter4"
+                                        text="Quantity"
+                                    >
+                                        <form:SimpleForm
+                                            id="simpleForm_goodReceipt_creatswwweProduct"
+                                            editable="true"
+                                            class="tableBorder"
+                                        >
+                                            <form:content>
+                                                <core:Title
+                                                    id="title_goodReceipt_createPrwodssuct"
+                                                />
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceipt_wcreatePsdroduct"
+                                                    text="Qty in Unit Of Entry"
+                                                    design="Bold"
+                                                    class="sapUiTinyMarginTop"
+                                                />
+                                                <HBox
+                                                    id="deliveryQuantityHBox_goodReceipt_wcreatwweProduct"
+                                                >
+                                                    <Input
+                                                        id="deliveryQuantityInput_goodReceiwpt_cwwreateProduct"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                </HBox>
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceipt_wcrewwwateProduct"
+                                                    text="Qty in SKU"
+                                                    design="Bold"
+                                                    class="sapUiSmallMarginTop"
+                                                />
+                                                <Input
+                                                    id="wfewr"
+                                                    width="200px"
+                                                    class="sapUiTinyMarginBegin sapUiSmallMarginTop"
+                                                />
+                                            </form:content>
+                                        </form:SimpleForm>
+                                    </IconTabFilter>
+
+                                    <IconTabFilter
+                                        id="_IDGenIconTabFilter4w"
+                                        text="Where"
+                                    >
+                                        <form:SimpleForm
+                                            id="simpleForm_goodRecweipt_creatswwweProduct"
+                                            editable="true"
+                                            class="tableBorder"
+                                        >
+                                            <form:content>
+                                                <core:Title
+                                                    id="titledd_goodReceipt_createPrwodssuct"
+                                                />
+                                                <Label
+                                                    id="label_deliverdyQuantity_goodReceipt_wcreatePsdroduct"
+                                                    text="Plant"
+                                                    design="Bold"
+                                                    class="sapUiTinyMarginTop"
+                                                />
+                                                <HBox
+                                                    id="delivesryQuantityHBox_goodReceipt_wcreatwweProduct"
+                                                >
+                                                    <Input
+                                                        id="delisveryQuantityInput_goodReceiwpt_cwwreateProduct"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                </HBox>
+                                                <Label
+                                                    id="label_sdeliveryQuantity_goodReceipt_wcrewwwateProduct"
+                                                    text="Storage Location"
+                                                    design="Bold"
+                                                    class="sapUiSmallMarginTop"
+                                                />
+                                                <Input
+                                                    id="wfewsr"
+                                                    width="200px"
+                                                    class="sapUiTinyMarginBegin sapUiSmallMarginTop"
+                                                />
+                                            </form:content>
+                                        </form:SimpleForm>
+                                    </IconTabFilter>
+
+                                    <IconTabFilter
+                                        id="_IDGenIconTabFilwerw4w"
+                                        text="Order Data"
+                                    >
+                                        <form:SimpleForm
+                                            id="simpleForm_goodReceipt_creatswwweProductds"
+                                            editable="true"
+                                            class="tableBorder"
+                                        >
+                                            <form:content>
+                                                <core:Title
+                                                    id="title_goodReceipt_createPrwddddodssuct"
+                                                />
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceipt_wcreatddePsdroduct"
+                                                    text="Order"
+                                                    design="Bold"
+                                                    class="sapUiTinyMarginTop"
+                                                />
+                                                <HBox
+                                                    id="deliveryQuantityHBox_goodReceipt_wcreaddtwweProduct"
+                                                >
+                                                    <Input
+                                                        id="deliveryQuantityInput_goodReceiwpt_cddwwreateProduct"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                </HBox>
+                                            </form:content>
+                                        </form:SimpleForm>
+                                    </IconTabFilter>
+
+                                    <IconTabFilter
+                                        id="_IDGenIconTabFilterw4w"
+                                        text="Batch"
+                                    >
+                                        <form:SimpleForm
+                                            id="simpleForm_gooddeceipt_creatswwweProduct"
+                                            editable="true"
+                                            class="tableBorder"
+                                        >
+                                            <form:content>
+                                                <core:Title
+                                                    id="title_gooddReceipt_createPrwodssuct"
+                                                />
+                                                <Label
+                                                    id="label_deliveryQuantity_goodRedceipt_wcreatePsdroduct"
+                                                    text="Date of Manufacturing"
+                                                    design="Bold"
+                                                    class="sapUiTinyMarginTop"
+                                                />
+                                                <HBox
+                                                    id="deliveryQuantityHBox_goodReceipt_wcreatdwweProduct"
+                                                >
+                                                    <DatePicker
+                                                        id="deliveryQuantityInput_goodReceiwpt_cwwdreateProduct"
+                                                        width="200px"
+                                                        class="sapUiTinyMarginBegin"
+                                                    />
+                                                </HBox>
+                                                <Label
+                                                    id="label_deliveryQuantity_goodReceidpt_wcrewwwateProduct"
+                                                    text="SLED/BBD"
+                                                    design="Bold"
+                                                    class="sapUiSmallMarginTop"
+                                                />
+                                                <DatePicker
+                                                    id="wfddwr"
+                                                    width="200px"
+                                                    class="sapUiTinyMarginBegin sapUiSmallMarginTop"
+                                                    editable="false"
+                                                />
+                                            </form:content>
+                                        </form:SimpleForm>
+                                    </IconTabFilter>
+
+                                    <!-- <IconTabFilter
+                                        id="_IDGenIconTabFielterw4w"
+                                        text="Serial Number"
+                                    >
+                                        <Text
+                                            id="_IDGenTeextw3"
+                                            text="Content of Child Tab 2"
+                                        />
+                                    </IconTabFilter> -->
+                                </items>
+                            </IconTabBar>
                         </IconTabFilter>
                     </items>
                 </IconTabBar>

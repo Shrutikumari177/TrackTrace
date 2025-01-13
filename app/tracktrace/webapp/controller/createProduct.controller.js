@@ -13,6 +13,8 @@ sap.ui.define([
         },
 
         onMaterialValuehelpClick: function (oEvent) {
+
+            
             this._oInputField = oEvent.getSource().getBindingContext();
             
             // Check if the dialog is already created
@@ -34,6 +36,7 @@ sap.ui.define([
                 const oMaterialModel = new sap.ui.model.json.JSONModel({ value: aMaterials });
                 this.getView().setModel(oMaterialModel, "materialModel");
                 
+                // Open the dialog
                 this._oMaterialDialog.open();
             }).catch(() => {
                 sap.m.MessageBox.error("Failed to fetch material data.");
@@ -60,7 +63,7 @@ sap.ui.define([
             var oSelectedItem = oEvent.getParameter("selectedItem");
             if (oSelectedItem) {
                 // Retrieve the selected material name
-                var sSelectedMaterial = oSelectedItem.getTitle();
+                var sSelectedMaterial = oSelectedItem.getTitle().trim();
                 // Set the value in the input field
                 this.getView().byId("materialInput_createProduct").setValue(sSelectedMaterial);
                 this.loadContractData(sSelectedMaterial);
@@ -68,35 +71,60 @@ sap.ui.define([
             // Clear filters after selection or cancel
             oEvent.getSource().getBinding("items").filter([]);
         },
-
-
+        
         loadContractData: function (sSelectedMaterial) {
             let contractModel = this.getOwnerComponent().getModel();
+            let componentModel = this.getOwnerComponent().getModel();
         
-            // Bind the context to /A_ProductionOrder path
+            // Bind the list to the /A_ProductionOrder path
             let contractBindlist = contractModel.bindList("/A_ProductionOrder");
-            console.log(contractBindlist);
-            
-            // Fetch the contexts (data entries) for the list
-            let contexts = contractBindlist.getContexts();
+            let componentModelBindlist = componentModel.bindList("/A_ProductionOrderComponent");
         
-            // If contexts are available, iterate over and filter the data
-            if (contexts) {
-                contexts.forEach(function (context) {
-                    // Access the object using context.getObject()
-                    let contractData = context.getObject();
+            // Fetch the contexts (data entries) for the /A_ProductionOrder list
+            contractBindlist.requestContexts().then((aContractContexts) => {
+                // Map contexts to their data objects
+                const aProductionOrders = aContractContexts.map((oContext) => oContext.getObject());
         
-                    // Ensure the contractData exists and filter by MaterialName and selected material
-                    if (contractData && contractData.MaterialName !== "Final Fuel" && contractData.Material === sSelectedMaterial) {
-                        console.log("Filtered Data:", contractData);
-                    }
+                // Filter the production orders based on the selected material name
+                const aFilteredOrders = aProductionOrders.filter((oOrder) => {
+                    return oOrder.MaterialName.trim().toLowerCase() === sSelectedMaterial.trim().toLowerCase();
                 });
-            } else {
-                console.error("No contexts available in the model.");
-            }
+        
+                console.log("Filtered Production Orders:", aFilteredOrders);
+        
+                if (aFilteredOrders.length === 0) {
+                    console.log("No matching production orders found.");
+                    return;
+                }
+        
+                // Extract all unique ManufacturingOrder values
+                const aManufacturingOrders = aFilteredOrders.map((oOrder) => oOrder.ProductionOrder);
+        
+                // Fetch the contexts (data entries) for the /A_ProductionOrderComponent list
+                componentModelBindlist.requestContexts().then((aComponentContexts) => {
+                    // Map contexts to their data objects
+                    const aComponents = aComponentContexts.map((oContext) => oContext.getObject());
+        
+                    // Filter components based on ManufacturingOrder matching ProductionOrder
+                    const aFilteredComponents = aComponents.filter((oComponent) => {
+                        return aManufacturingOrders.includes(oComponent.ManufacturingOrder);
+                    });
+        
+                    console.log("Filtered Components:", aFilteredComponents);
+        
+                    // Set the filtered data to JSON models
+                    const oFilteredOrdersModel = new sap.ui.model.json.JSONModel({ value: aFilteredOrders });
+                    this.getView().setModel(oFilteredOrdersModel, "filterProductionModel");
+        
+                    const oFilteredComponentsModel = new sap.ui.model.json.JSONModel({ value: aFilteredComponents });
+                    this.getView().setModel(oFilteredComponentsModel, "filterComponentModel");
+                }).catch((oError) => {
+                    console.error("Error fetching component contexts:", oError);
+                });
+            }).catch((oError) => {
+                console.error("Error fetching production order contexts:", oError);
+            });
         },
-        
-        
         
         
         
