@@ -58,7 +58,7 @@
                       <Label id="BoxProduct_manufacturingDateLabel" text="Manufacturing Date"/>
                       </header>
                   </Column>
-                  <Column id="_IDGenColum" hAlign="Center">
+                  <Column id="_IDGenColum" hAlign="Center" visible="false">
                       <Label id="_IDGenLabel4" text="Expiry Date"/>
                   </Column>
                   <Column id="_IDGenColum3" hAlign="Center">

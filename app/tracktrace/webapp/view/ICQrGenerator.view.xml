@@ -138,6 +138,7 @@
                                     id="_IDGenColum"
                                     width="70px"
                                     hAlign="Center"
+                                    visible="false"
                                 >
                                     <Label
                                         id="_IDGenLabel4"

@@ -56,7 +56,7 @@
                      
                      <Column hAlign="Center">
                        <header>
-                         <Text text="SeqNo" />
+                         <Text text="Seq No" />
                        </header>
                      </Column>
                      <Column hAlign="Center">
@@ -64,7 +64,7 @@
                          <Text text="Batch ID" />
                        </header>
                      </Column>
-                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                     <Column  hAlign="Center">
                        <header>
                          <Text text="Product Code" />
                        </header>
@@ -75,7 +75,7 @@
                          <Text text="Manufacturing Date" />
                        </header>
                      </Column>
-                     <Column hAlign="Center">
+                     <Column hAlign="Center" visible="false">
                        <header>
                          <Text text="Expiry Date" />
                        </header>
