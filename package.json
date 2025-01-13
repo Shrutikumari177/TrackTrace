@@ -32,6 +32,9 @@
     "sql": {
       "native_hana_associations": false
     },
+    "server": {
+      "index": true
+    },
     "requires": {
       "ZTRACK_TRACE_SRV": {
         "kind": "odata-v2",

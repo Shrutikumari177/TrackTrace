@@ -1,3 +1,4 @@
+
 sap.ui.define([
     "sap/ui/core/mvc/Controller"
 ], (Controller) => {
@@ -114,14 +115,34 @@ sap.ui.define([
                 const oData = await oBindinggetCust.requestObject();
 
                 let allOCIDData = oData.value[0]
+                let pOrder = allOCIDData.ProductionOrder
+                let mfgDate = allOCIDData.ManufactureDt
+                let expDate = allOCIDData.ExpiryDt
+                let BatchID = allOCIDData.BatchID
                 
-                var oNewModel = new sap.ui.model.json.JSONModel();
-
-                // Set the fetched OData into the new model
-                oNewModel.setData(allOCIDData);
-                console.table("oNewModel" , oNewModel)
+                console.table("oNewModel" , allOCIDData)
+                const result = allOCIDData.ICs.flatMap(ic => {
+                    return ic.Boxes.map(box => ({
+                        ICID: ic.ICID,
+                        ICQRCode: ic.ICQRCode,
+                        ICQRCodeUrl: ic.ICQRCodeURL,
+                        BoxSerialNo: box.SerialNo,
+                        BoxQRCode: box.BoxQRCode,
+                        BoxQRCodeUrl: box.BoxQRCodeURL,
+                        pOrder,
+                        mfgDate,
+                        expDate,
+                        BatchID,
+                    }));
+                });
+                
+                console.log("result",result);
+                var oNewModel1 = new sap.ui.model.json.JSONModel();
+                oNewModel1.setData(result);        
+                this.getView().setModel(oNewModel1, "newArrayModel");
         
-                // Set the new model to the view
+                var oNewModel = new sap.ui.model.json.JSONModel();
+                oNewModel.setData(allOCIDData);        
                 this.getView().setModel(oNewModel, "newModel");
         
                 // Log the fetched data
@@ -129,7 +150,58 @@ sap.ui.define([
             } catch (oError) {
                 console.error("Error fetching data:", oError);
             }
-        }
+        },
+
+        onDealerDashboardICQrCode: function(oEvent){
+            let oSource = oEvent.getSource()
+            let oBinding = oSource.getBindingContext("newArrayModel")
+            let oData = oBinding.getObject()
+             let BoxQRCodeURL = oData.ICQRCodeUrl;
+            let oDialog = this.byId("dealerDashboardDetailQrDialog");
+            let oImage = this.byId("dealerDashboardDetailsqrImage");
+            oImage.setSrc(BoxQRCodeURL);
+            oDialog.open();
+        }, 
+        onCloseQRDialog: function () {
+            this.byId("dealerDashboardDetailQrDialog").close();
+        }, 
+        onDealerDashboardPrintQR: function () {
+            var oImage = this.byId("dashboardDetailsqrImage");
+            var sImageSrc = oImage.getSrc();
+            if (sImageSrc) {
+                var oImageElement = new Image();
+                oImageElement.onload = function () {
+                    console.log("Image loaded successfully. Proceeding to print...");
+                    var oWindow = window.open("", "_blank");
+                    oWindow.document.write('<html><head><title>Print QR Code</title></head><body>');
+                    oWindow.document.write('<img src="' + sImageSrc + '" style="width:200px;height:200px;"/>');
+                    oWindow.document.write('</body></html>');
+                    oWindow.document.close();
+                    setTimeout(() => {
+                        oWindow.print();
+                        oWindow.close(); 
+                    }, 500); 
+                };
+                oImageElement.onerror = function () {
+                    console.error("Failed to load the QR code image from URL:", sImageSrc);
+                    sap.m.MessageToast.show("Failed to load the QR code image.");
+                };
+                oImageElement.src = sImageSrc;
+            } else {
+                console.warn("QR Code source is empty or undefined.");
+                sap.m.MessageToast.show("QR Code is not available for printing.");
+            }
+        },
+        onDealerDashboardBoxQrCode: function(oEvent){
+            let oSource = oEvent.getSource()
+            let oBinding = oSource.getBindingContext("newArrayModel")
+            let oData = oBinding.getObject()
+             let BoxQRCodeURL = oData.BoxQRCodeUrl;
+            let oDialog = this.byId("dealerDashboardDetailQrDialog");
+            let oImage = this.byId("dealerDashboardDetailsqrImage");
+            oImage.setSrc(BoxQRCodeURL);
+            oDialog.open();
+        },
         
 
 
