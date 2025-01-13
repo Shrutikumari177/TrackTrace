@@ -17,25 +17,18 @@
                 </layoutData>
             </Title>
             <ToolbarSpacer id="boxProduct_ToolbarSpacer" />
-            <Avatar 
-                id="boxProduct_Avatar" 
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
-                displaySize="XS" 
-                press=".onAvatarPressed" 
-                tooltip="Profile">
-                <layoutData>
-                    <OverflowToolbarLayoutData id="boxProduct_OverflowToolbarLayoutData2" priority="NeverOverflow"/>
-                </layoutData>
-            </Avatar>
+            
         </tnt:ToolHeader>
             <l:VerticalLayout id="boxProduct_VerticalLayout" width="100%">
                 <l:BlockLayout id="boxProduct_BlockLayout" background="Dashboard">
                     <l:BlockLayoutRow id="boxProduct_BlockLayoutRow">
                         <l:BlockLayoutCell id="boxProduct_BlockLayoutCell" width="90%">
+                      
                             <HBox id="boxProduct_headerPage">
                                 <Label id="boxProduct_prodcutionOrderLabel" class="sapUiTinyMarginTop" design="Bold" text="Batch ID"/>
                                 <Input id="boxProduct_prodcutionOrderInput" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onValueHelpBatch" />
                            </HBox>
+                            
                         </l:BlockLayoutCell>
                     </l:BlockLayoutRow>
 
@@ -61,13 +54,15 @@
                       <Label id="BoxProduct_ProductCodeLabel" text="Product Code"/>
                   </Column>
                   <Column id="BoxProduct_manufacturingDateCol" hAlign="Center">
+                  <header>
                       <Label id="BoxProduct_manufacturingDateLabel" text="Manufacturing Date"/>
+                      </header>
                   </Column>
                   <Column id="_IDGenColum" hAlign="Center">
                       <Label id="_IDGenLabel4" text="Expiry Date"/>
                   </Column>
                   <Column id="_IDGenColum3" hAlign="Center">
-                      <Label id="_IDGenLabe6" text="Prodcution ID" textAlign="Center"/>
+                      <Label id="_IDGenLabe6" text="Production ID" textAlign="Center"/>
                   </Column>
                     <Column  hAlign="Center">
                       <Label text="Generate QR" textAlign="Center"/>

@@ -21,16 +21,7 @@
                 </layoutData>
             </Title>
             <ToolbarSpacer id="IcQrGen_ToolbarSpacer" />
-            <Avatar 
-                id="IcQrGen_Avatar" 
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
-                displaySize="XS" 
-                press=".onAvatarPressed" 
-                tooltip="Profile">
-                <layoutData>
-                    <OverflowToolbarLayoutData id="IcQrGen_OverflowToolbar" priority="NeverOverflow"/>
-                </layoutData>
-            </Avatar>
+            
         </tnt:ToolHeader>
         <l:VerticalLayout
             id="IcQrGen_VerticalLayout"

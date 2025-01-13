@@ -18,16 +18,7 @@
                 </layoutData>
             </Title>
             <ToolbarSpacer id="OCproduct_ToolbarSpacer" />
-            <Avatar 
-                id="OCproduct_IDGenAvatar" 
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
-                displaySize="XS" 
-                press=".onAvatarPressed" 
-                tooltip="Profile">
-                <layoutData>
-                    <OverflowToolbarLayoutData id="OCproduct_OverflowToolbarLayoutData2" priority="NeverOverflow"/>
-                </layoutData>
-            </Avatar>
+            
         </tnt:ToolHeader>
             <l:VerticalLayout id="OCproduct_VerticalLayout" width="100%">
                 <l:BlockLayout id="OCproduct_BlockLayout" background="Dashboard">

@@ -8,7 +8,6 @@
     xmlns:core="sap.ui.core"
     xmlns:f="sap.f"
     height="100%"
-    busyIndicatorDelay="0"
 >
     <tnt:ToolHeader
         id="toolHeader_createProduct"
@@ -84,8 +83,6 @@
                                     >
                                         <Input
                                             id="productionPlantInput_createProduct"
-                                            showValueHelp="true"
-                                            valueHelpRequest="onProductionPlantValueHelp"
                                             width="200px"
                                             class="salesOrgDesc"
                                             value="{filterProductionModel>/value/0/Plant}"
@@ -140,8 +137,7 @@
                                         <Input
                                             id="orderTypeInput_createProduct"
                                             width="200px"
-                                            showValueHelp="true"
-                                            valueHelpRequest="onOrderTypeValueHelp"
+                                           
                                             required="true"
                                             value="{filterProductionModel>/value/0/ManufacturingOrderType}"
                                         />
@@ -157,8 +153,6 @@
                                     <HBox id="workCenterHBox_createProduct">
                                         <Input
                                             id="workCenterInput_createProduct"
-                                            showValueHelp="true"
-                                            valueHelpRequest="onWorkCenterValueHelp"
                                             width="200px"
                                             class="workCenterInput"
                                             editable="false"
@@ -435,7 +429,7 @@
                                         <Input
                                             id="materialInput_createProduc2t"
                                             width="200px"
-                                            required="true"
+                                            editable="false"
                                         />
                                     </HBox>
                                     <Label
@@ -443,7 +437,6 @@
                                         text="Operation"
                                         design="Bold"
                                         class="sapUiTinyMarginTop"
-                                        required="true"
                                     />
                                     <HBox
                                         id="productionPlantHBox_createProdu2ct"
@@ -452,6 +445,7 @@
                                             id="productionPlantInput_createPr2oduct"
                                             width="200px"
                                             class="salesOrgDesc"
+                                            editable="false"
                                         />
                                     </HBox>
                                     <Label
@@ -464,6 +458,7 @@
                                         id="dpStart_createProd2uct"
                                         change="onSelectDate"
                                         width="200px"
+                                        editable="false"
                                     />
                                     <Label
                                         id="label_endDate_crea2teProduct"
@@ -475,6 +470,7 @@
                                         id="dpEnd_createProduc2t"
                                         change="onSelectDate"
                                         width="200px"
+                                        editable="false"
                                     />
 
                                     <Label
@@ -488,6 +484,7 @@
                                             id="productionQuantityI2nput_createProduct"
                                             width="200px"
                                             type="Number"
+                                            editable="false"
                                         />
                                     </HBox>
 
@@ -496,14 +493,13 @@
                                         id="orderTypeLabel_create2Product"
                                         text="Material"
                                         design="Bold"
-                                        required="true"
                                         class="sapUiTinyMarginTop"
                                     />
                                     <HBox id="orderTypeHBox_creat2eProduct">
                                         <Input
                                             id="orderTypeInput_crea2teProduct"
                                             width="200px"
-                                            required="true"
+                                            editable="false"
                                         />
                                     </HBox>
 
@@ -521,6 +517,7 @@
                                             width="200px"
                                             class="workCenterInput"
                                             editable="false"
+                                            
                                         />
                                     </HBox>
 
@@ -534,6 +531,7 @@
                                         <Input
                                             id="prioritySelect_cr2eateProduct"
                                             width="200px"
+                                            editable="false"
                                         />
                                     </HBox>
 
@@ -547,7 +545,7 @@
                                         <Input
                                             id="remarksInput_createProducdt"
                                             width="200px"
-                                            required="true"
+                                            editable="false"
                                         />
                                     </HBox>
                                     <Label
@@ -560,7 +558,7 @@
                                         <Input
                                             id="remarksInput_createProducdwt"
                                             width="200px"
-                                            required="true"
+                                            editable="false"
                                         />
                                     </HBox>
                                 </form:content>
@@ -764,6 +762,7 @@
                                                         id="delisveryQuantityInput_goodReceiwpt_cwwreateProduct"
                                                         width="200px"
                                                         class="sapUiTinyMarginBegin"
+                                                        editable="false"
                                                     />
                                                 </HBox>
                                                 <Label
@@ -807,6 +806,7 @@
                                                         id="deliveryQuantityInput_goodReceiwpt_cddwwreateProduct"
                                                         width="200px"
                                                         class="sapUiTinyMarginBegin"
+                                                        editable="false"
                                                     />
                                                 </HBox>
                                             </form:content>
@@ -839,6 +839,7 @@
                                                         id="deliveryQuantityInput_goodReceiwpt_cwwdreateProduct"
                                                         width="200px"
                                                         class="sapUiTinyMarginBegin"
+                                                        editable="false"
                                                     />
                                                 </HBox>
                                                 <Label

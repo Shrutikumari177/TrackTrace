@@ -24,7 +24,7 @@ sap.ui.define([
             }
             
             // Show busy indicator
-            sap.ui.core.BusyIndicator.show(0); // Delay set to 0 for immediate visibility
+            // sap.ui.core.BusyIndicator.show(0); // Delay set to 0 for immediate visibility
             
             // Fetch data from OData V4 service using list binding
             const oODataModel = this.getView().getModel(); // Assuming the default model is OData V4
@@ -42,7 +42,7 @@ sap.ui.define([
                 sap.m.MessageBox.error("Failed to fetch material data.");
             }).finally(() => {
                 // Hide busy indicator
-                sap.ui.core.BusyIndicator.hide();
+                // sap.ui.core.BusyIndicator.hide();
             });
         },
         

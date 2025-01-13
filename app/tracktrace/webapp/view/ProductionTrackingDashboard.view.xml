@@ -16,16 +16,7 @@
                 </layoutData>
             </Title>
             <ToolbarSpacer id="dashboard2_ToolbarSpacer" />
-            <Avatar 
-                id="dashboard2_IDGenAvatar" 
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
-                displaySize="XS" 
-                press=".onAvatarPressed" 
-                tooltip="Profile">
-                <layoutData>
-                    <OverflowToolbarLayoutData id="dashboard2_OverflowToolbarLayoutData2" priority="NeverOverflow" />
-                </layoutData>
-            </Avatar>
+            
         </tnt:ToolHeader>
 
         <l:VerticalLayout id="dashboard2_VerticalLayout" width="100%">

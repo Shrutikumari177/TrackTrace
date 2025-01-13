@@ -10,7 +10,19 @@
     xmlns:viz.data="sap.viz.ui5.data"
     controllerName="tracktrace.controller.DealerDashboard"
     height="100%"
+     xmlns:form="sap.ui.layout.form"
+    xmlns:tnt="sap.tnt"  
 >
+<tnt:ToolHeader  id="DealerDash_toolheader" class="sapUiTinyMargin">
+          
+            <Title id="DealerDash_Title" textAlign="Center" text="Dealer Dashboard" wrapping="false">
+                <layoutData>
+                    <OverflowToolbarLayoutData id="DealerDash_OverflowToolbarLayoutData" priority="Disappear"/>
+                </layoutData>
+            </Title>
+            <ToolbarSpacer id="DealerDash_ToolbarSpacer" />
+            
+        </tnt:ToolHeader>
     <l:ResponsiveSplitter
         id="_IDGenResponsiveSplitter1"
         defaultPane="default"
@@ -32,7 +44,7 @@
                 </l:layoutData>
                 <Panel
                     id="_IDGenPanel"
-                    headerText="Dealer"
+                    headerText="Outer Compartments"
                     height="100%"
                 >
                     <Label

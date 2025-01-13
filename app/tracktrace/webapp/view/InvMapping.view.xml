@@ -16,17 +16,7 @@
                 </layoutData>
             </Title>
             <ToolbarSpacer id="invMapping_ToolbarSpacer" />
-            <Avatar 
-                id="invMapping_IDGenAvatar" 
-                src="test-resources/sap/tnt/images/Woman_avatar_01.png" 
-                displaySize="XS" 
-                press=".onAvatarPressed" 
-                tooltip="Profile">
-                <layoutData>
-                    <OverflowToolbarLayoutData id="invMapping_OverflowToolbarLayoutData2" priority="NeverOverflow" />
-                </layoutData>
-            </Avatar>
-        </tnt:ToolHeader>
+                    </tnt:ToolHeader>
 
         <l:VerticalLayout id="invMapping_VerticalLayout" width="100%">
             <l:BlockLayout id="invMapping_BlockLayout" background="Dashboard">

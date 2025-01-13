@@ -9,16 +9,15 @@
         search=".onMaterialFilterSearch"
         confirm="onMaterialValueHelpClose"
         cancel="onMaterialValueHelpClose"
-        items="{materialModel>/value}"
+        items="{/ztrack_material}"
         initialFocus="SearchField"
         multiSelect="false"
-        contentWidth="480px"
         
     >
         
         <StandardListItem id="_IDGenStandardListItem" 
             
-            title="{materialModel>MaterialDesc}"
+            title="{MaterialDesc}"
             iconDensityAware="false"
             iconInset="false"
             type="Active" />
