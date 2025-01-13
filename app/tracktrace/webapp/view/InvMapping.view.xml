@@ -10,7 +10,7 @@
 
     <ScrollContainer id="invMapping_ScrollContainer" vertical="true" height="100%">
         <tnt:ToolHeader id="invMappingshellOnlyMandatoryControls" class="sapUiTinyMargin header_nav">
-            <Title id="invMapping_Title" textAlign="Center" text="Dealer OC Mapping Screen" wrapping="false">
+            <Title id="invMapping_Title" textAlign="Center" text="Dealer OC Mapping " wrapping="false">
                 <layoutData>
                     <OverflowToolbarLayoutData id="invMapping_OverflowToolbarLayoutData" priority="Disappear" />
                 </layoutData>

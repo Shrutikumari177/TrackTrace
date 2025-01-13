@@ -114,7 +114,7 @@ sap.ui.define([
                   if(ocValue && batchValue){
                     this.getOcDataWithBatchIdAndOCID(ocValue,batchValue).then(oData=>{
                        console.log("get Data:",oData)
-                       debugger
+                       
                        if(oData[0].VendorId){
                             oModel.setProperty("/vendorIdDisplay",true)
                             oModel.setProperty("/vendorIdEdit",false)

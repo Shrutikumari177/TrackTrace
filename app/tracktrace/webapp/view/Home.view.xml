@@ -81,7 +81,7 @@
             <GenericTile
                 id="_IDGenGenericTil"
                 class="sapUiSmallMarginBegin sapUiSmallMarginTop tileLayout"
-                header="OC Dealer Mapping"
+                header=" Dealer OC Mapping"
                 press="onPressOcVendorMapping"
             >
                 <TileContent id="_IDGenTileConten">

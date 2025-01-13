@@ -51,17 +51,17 @@
                      >
                   <columns>
                  
-                  <Column id="_IDGenColu" hAlign="Center">
-                      <Label id="_IDGenLal2" text="Seq No"/>
+                  <Column id="BoxProduct_SeqCol" hAlign="Center">
+                      <Label id="BoxProduct_SeqLabel" text="Seq No"/>
                   </Column>
-                  <Column id="_IDGenColun2" hAlign="Center">
-                      <Label id="_IDGenLabel3" text="Batch ID"/>
+                  <Column id="BoxProduct_BatchIdCol" hAlign="Center">
+                      <Label id="BoxProduct_BatchIdLabel" text="Batch ID"/>
                   </Column>
-                  <Column id="_IDGenColu1" hAlign="Center">
-                      <Label id="_IDGenLabel2" text="Product Code"/>
+                  <Column id="BoxProduct_ProductCodeCol" hAlign="Center">
+                      <Label id="BoxProduct_ProductCodeLabel" text="Product Code"/>
                   </Column>
-                  <Column id="_IDGenColun3" hAlign="Center">
-                      <Label id="_IDGenLabel5" text="Manufacturing Date"/>
+                  <Column id="BoxProduct_manufacturingDateCol" hAlign="Center">
+                      <Label id="BoxProduct_manufacturingDateLabel" text="Manufacturing Date"/>
                   </Column>
                   <Column id="_IDGenColum" hAlign="Center">
                       <Label id="_IDGenLabel4" text="Expiry Date"/>
