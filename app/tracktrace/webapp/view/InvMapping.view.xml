@@ -10,7 +10,7 @@
 
     <ScrollContainer id="invMapping_ScrollContainer" vertical="true" height="100%">
         <tnt:ToolHeader id="invMappingshellOnlyMandatoryControls" class="sapUiTinyMargin header_nav">
-            <Title id="invMapping_Title" textAlign="Center" text="Mapping Screen" wrapping="false">
+            <Title id="invMapping_Title" textAlign="Center" text="Dealer OC Mapping Screen" wrapping="false">
                 <layoutData>
                     <OverflowToolbarLayoutData id="invMapping_OverflowToolbarLayoutData" priority="Disappear" />
                 </layoutData>
@@ -33,10 +33,10 @@
 
              <l:BlockLayoutRow id="invMapping_BlockLayoutRow3">
                     <l:BlockLayoutCell id="invMapping_GenBlockLayoutCell3" width="90%">
-                    <Label text="OC Code" class="sapUiTinyMargin" design="Bold"/>
-                   <Input id="mapping_ocValueHelpInput" width="15%" showValueHelp="true" class="sapUiSmallMarginEnd" valueHelpRequest="onOpenOcCodeValueHelp" />
                     <Label text="Batch ID" class="sapUiTinyMargin" design="Bold"/>
                     <Input id="mapping_batchValueHelpInput" width="15%" showValueHelp="true" valueHelpRequest="onOpenBatchIdValueHelp" />
+                    <Label text="OC ID" class="sapUiTinyMargin sapUiLargeMarginBegin" design="Bold"/>
+                   <Input id="mapping_ocValueHelpInput" width="15%" showValueHelp="true" class="sapUiSmallMarginEnd" valueHelpRequest="onOpenOcCodeValueHelp" />
                     <Button text="GO" class="sapUiTinyMarginBegin" type="Emphasized" press="_onMappingGoButtonPress"/>
                     </l:BlockLayoutCell>
                 </l:BlockLayoutRow>
@@ -49,41 +49,51 @@
                                 <Toolbar id="TB1">
                                     <Title id="Title1" text="Product Details"/>
                                     <ToolbarSpacer id="_IDGenToolbarSpacer4"/>
-                                    <Button text="Submit" type="Emphasized"/>
+                                    <Button text="Submit" type="Emphasized" visible="{displayOrNotModel>/submitBtnEnabled}" press="onSubmitMappingData"/>
                                 </Toolbar>
                             </form:toolbar>
                             <form:content>
                                 <core:Title id="_IDGenTitle1"/>
-                                <Label id="_IDLabel2" text="OC Code" design="Bold" class="sapUiTinyMarginTop"/>
-                                <HBox id="mapping_ocCodeInputBox">
-                                    <Input id="mapping_ocCodeInput" value="{filterOcModelData>/orderConfirmationId}" width="200px" editable="false"/>
+                                <Label id="_IDLabel2" text="OC ID" design="Bold" class="sapUiTinyMarginTop"/>
+                                <HBox id="mapping_ocCodeInputBox" >
+                                    <Input id="mapping_ocCodeInput" value="{filterOcModelData>/OCID}" width="200px" editable="false" />
                                 </HBox>
                                 <Label id="_IDLabel4" text="Production Order" design="Bold" class="sapUiTinyMarginTop"/>
                                 <HBox id="mapping_oderNoInputBox">
-                                    <Input id="mapping_oderNoInput" value="{filterOcModelData>/productionOrder}" width="200px" editable="false"/>
+                                    <Input id="mapping_oderNoInput" value="{filterOcModelData>/ProductionOrder}" width="200px" editable="false"/>
                                 </HBox>
                                 <Label id="_IDLabel6" text="Batch ID" design="Bold" class="sapUiTinyMarginTop"/>
                                 <HBox id="mapping_batchIdInputHBox">
-                                    <Input id="mapping_batchIdInput" value="{filterOcModelData>/batchId}" width="200px" editable="false"/>
+                                    <Input id="mapping_batchIdInput" value="{filterOcModelData>/BatchID}" width="200px" editable="false"/>
                                 </HBox>
-                                <Label id="_IDLabel5" text="Quantity" design="Bold" class="sapUiTinyMarginTop"/>
+                                <Label id="_IDLabel5" text="IC Quantity" design="Bold" class="sapUiTinyMarginTop"/>
                                 <HBox id="mapping_qtyInputHBox">
-                                    <Input id="mapping_qtyInput" width="200px" value="{filterOcModelData>/quantity}" editable="false"/>
+                                    <Input id="mapping_qtyInput" width="200px" value="{filterOcModelData>/Quantity}" editable="false"/>
                                 </HBox>
 
 
 
                                 <core:Title id="_IenTitle2"/>
-                                <Label id="_IDnLabel3" text="Vendor ID" design="Bold" required="true" class="sapUiTinyMarginTop"/>
-                                <HBox id="_IDGenHBox5">
-                                    <Input id="mapping_vendorValueHelpInput" width="200px" showValueHelp="true" valueHelpRequest="_onOpenVendorValueHelp" required="true"/>
+                                <!-- valuehelp -->
+                                <Label id="_IDnLabel3" text="Dealer ID" design="Bold" required="true" class="sapUiTinyMarginTop" visible="{displayOrNotModel>/vendorIdEdit}"/>
+                                <HBox id="_IDGenHBox5" visible="{displayOrNotModel>/vendorIdEdit}">
+                                    <Input id="mapping_vendorValueHelpInput" width="178px" showValueHelp="true" valueHelpRequest="_onOpenVendorValueHelp" required="true"/>
                                 </HBox>
-                                <Label id="_IDGenLabel30" text="Vendor Name" design="Bold" class="sapUiTinyMarginTop"/>
-                                <Input id="mapping_vendorNameInput" value="" width="200px" editable="false"/>
-                                <Label id="_IDGenLabel7" text="Start Date" design="Bold" class="sapUiTinyMarginTop"/>
-                                <Input id="mapping_startDateInput" width="200px" value="{filterOcModelData>/startDate}" editable="false"/>                                
-                                <Label id="_IDGenLabel8" text="End Date" design="Bold" class="sapUiTinyMarginTop"/>
-                                <Input id="mapping_endDateInput" width="200px" value="{filterOcModelData>/endDate}" editable="false"/>
+                                <Input id="mapping_vendorNameInput" value="" width="180px" visible="{displayOrNotModel>/vendorIdEdit}" editable="false"/>
+
+                                <!-- display fields -->
+                                <Label id="_nLabel3" text="Dealer ID" design="Bold" class="sapUiTinyMarginTop" visible="{displayOrNotModel>/vendorIdDisplay}"/>
+                                <HBox id="_IGenHBox5" visible="{displayOrNotModel>/vendorIdDisplay}">
+                                    <Input id="mapping_vendorValueHelpInput2" width="180px" editable="false" value="{filterOcModelData>/VendorId}"/>
+                                </HBox>
+                                <Input id="mapping_vendorNameInputq" value="{filterOcModelData>/VendorName}" width="180px" editable="false" visible="{displayOrNotModel>/vendorIdDisplay}"/>
+
+                                <Label id="_IDGenLab7" text="Dealer Location" design="Bold" class="sapUiTinyMarginTop"/>
+                                <Input id="mapping_startloc" width="180px" value="{filterOcModelData>/location}" editable="false"/>    
+                                <Label id="_IDGenLabel7" text="Manufacturing Date" design="Bold" class="sapUiTinyMarginTop"/>
+                                <Input id="mapping_startDateInput" width="180px" value="{filterOcModelData>/ManufactureDt}" editable="false"/>                                
+                                <Label id="_IDGenLabel8" text="Expiry Date" design="Bold" class="sapUiTinyMarginTop"/>
+                                <Input id="mapping_endDateInput" width="180px" value="{filterOcModelData>/ExpiryDt}" editable="false" />
                               
                                
                             </form:content>

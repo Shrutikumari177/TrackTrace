@@ -89,6 +89,7 @@
                         growing="true"
                         growingScrollToLoad="true"
                         growingThreshold="5"
+                        items = "{/OuterContainer}"
                     >
                         <ObjectListItem
                             id="_IDGenObjectListItem1"
@@ -98,7 +99,7 @@
                         >
                             <ObjectAttribute
                                 id="matnr"
-                                text="Material: {scandatamodel>/BatchId}"
+                                text="Material: {OCID}"
                             />
                         </ObjectListItem>
                     </List>
@@ -132,33 +133,33 @@
                                 <List id="_IDGenList1">
                                     <DisplayListItem
                                         id="contractID"
-                                        label="Outer Box ID : {scandatamodel>/ocCode}"
+                                        label="Outer Box ID : {newModel>/OCID}"
                                     />
                                     <DisplayListItem
                                         id="materialID"
-                                        label="Batch no: {scandatamodel>/batchId}"
+                                        label="Batch no: {newModel>/BatchID}"
                                     />
 
                                     <DisplayListItem
                                         id="materialID2"
-                                        label="Material: {scandatamodel>/rows/0/ProductCode}"
+                                        label="Material:{newModel>/Material}"
                                     />
                                 </List>
                             </VBox>
                             <VBox id="_IDGenVBox2w">
-                                <List id="_IDGenList1w">
+                                <List id="_IDGenList1w" >
                                     <DisplayListItem
                                         id="contractID3"
-                                        label="Box Unit: {scandatamodel>/totalRows}"
+                                        label="Box Unit: {newModel>/Material}"
                                     />
 
                                     <DisplayListItem
                                         id="contractID1"
-                                        label="Inner Compartment Unit: {scandatamodel>/totalPackaging2}"
+                                        label="Inner Compartment Unit: {newModel>/Material}"
                                     />
                                     <DisplayListItem
                                         id="materialIDe2"
-                                        label="Material Code :"
+                                        label="Material Code : {newModel>/Material}"
                                     />
                                 </List>
                             </VBox>
@@ -173,7 +174,7 @@
                         sticky="ColumnHeaders"
                         noDataText="Loading ..."
                         selectionChange="onSelectionChange"
-                        items="{scandatamodel>/rows}"
+                        items="{newModel>/ICs}"
                     >
                         <headerToolbar>
                             <OverflowToolbar id="_IDGenOverflowToolbar1">
@@ -285,45 +286,50 @@
                                 <Text
                                     id="_IDGenText2w5"
                                     class="inputItem"
-                                    text="{scandatamodel>SeqNo}"
+                                    text="{newModel>ICID}"
+                                />
+                               <VBox id="_IDGenVBox">
+                    <items>
+                        <List id="_IDGenList2" items="{newModel>Boxes}">
+                            <items>
+                                <StandardListItem id="_IDGenStandardListItem1"
+                                    title="{newModel>SerialNo}" />
+                            </items>
+                        </List>
+                    </items>
+                </VBox>
+                                <Text
+                                    id="_IDGenTextee19"
+                                    class="inputItem"
+                                    text="{newModel>/ProductionOrder}"
                                 />
                                 <Text
-                                    id="_IDGenText25"
+                                    id="_IDGenTexte20"
                                     class="inputItem"
-                                    text="{scandatamodel>Packaging3}"
+                                    text="{newModel>/ExpiryDt}"
                                 />
                                 <Text
-                                    id="_IDGenText19"
+                                    id="_IDGenTexet21"
                                     class="inputItem"
-                                    text="{scandatamodel>ProductCode}"
+                                    text="{newModel>/ManufactureDt}"
                                 />
-                                <Text
-                                    id="_IDGenText20"
+                                <!-- <Text
+                                    id="_IDGenTexte22"
                                     class="inputItem"
-                                    text="{scandatamodel>Packaging2}"
-                                />
-                                <Text
-                                    id="_IDGenText21"
-                                    class="inputItem"
-                                    text="{scandatamodel>StartDate}"
-                                />
-                                <Text
-                                    id="_IDGenText22"
-                                    class="inputItem"
-                                    text="{scandatamodel>EndDate}"
-                                />
+                                    text="{newModel>ManufactureDt}"
+                                /> -->
                                 <!-- <Text
                                     id="_IDGenText24"
                                     class="inputItem"
-                                    text="{scandatamodel>productionCode}"
+                                    text="{newModel>productionCode}"
                                 /> -->
 
                                 <Link
-                                    id="_IDGenText23"
-                                    class="inputItem"
-                                    text="{= ${materialDataModel>ICCode} ? ${materialDataModel>ICCode}.slice(-4) + ' View QR' : '' }"
-                                    press="onViewQRPress"
-                                    visible="{= !!${materialDataModel>qrCode}}"
+                                     id="_IDGenText23"
+    class="inputItem"
+    text="{= ${newModel>/OCQRCode} ? ${newModel>/OCQRCode}.slice(-4) + ' View QR' : '' }"
+    press="onViewQRPress"
+    visible="{= !!${newModel>/OCQRCodeURL} }"
                                 />
                             </cells>
                         </ColumnListItem>

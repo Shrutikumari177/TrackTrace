@@ -4,15 +4,15 @@
     <SelectDialog
         id="ocCodeValueHelp"
         noDataText="Loading..."
-        title="Select Material No"
-        search="onValueHelpSearch"
-        liveChange="onValueHelpSearch"
+        title="Select OC ID"
+        search="onOCValueHelpSearch"
+        liveChange="onOCValueHelpSearch"
         confirm="onOCValueConfirmItem"
         cancel="onValueHelpClosevoy"
-        items="{ocContainerModel>/orderConfirmations}"
+        items="{batchDataModel>/}"
         initialFocus="SearchField">
         <StandardListItem 
-            title="{ocContainerModel>orderConfirmationId}"
+            title="{batchDataModel>OCID}"
             description=""
             iconDensityAware="false"
             iconInset="false"

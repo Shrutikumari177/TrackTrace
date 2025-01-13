@@ -4,15 +4,15 @@
     <SelectDialog
         id="batchValueHelpValueHelp1"
         noDataText="Loading..."
-        title="Select Material No"
-        search="onValueHelpSearch"
-        liveChange="onValueHelpSearch"
+        title="Select Batch ID"
+        search="onBatchValueHelpSearch"
+        liveChange="onBatchValueHelpSearch"
         confirm="onBatchValueConfirmItem"
         cancel="onValueHelpClosevoy"
-        items="{ocContainerModel>/orderConfirmations}"
+        items="{/zbatchno_track}"
         initialFocus="SearchField">
         <StandardListItem 
-            title="{ocContainerModel>batchId}"
+            title="{BatchNo}"
             description=""
             iconDensityAware="false"
             iconInset="false"

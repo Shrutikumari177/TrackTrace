@@ -33,35 +33,12 @@
 
              <l:BlockLayoutRow id="dashboard2_BlockLayoutRow3">
                     <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell3" width="90%">
-                    <Label text="OC Code" class="sapUiTinyMargin" design="Bold"/>
-                   <Select
-                    id="dashboard_ocSelectBox"
-                    width="15%"
-                    class="sapUiLargeMarginEnd"
-					forceSelection="false"
-					items="{
-						path: 'orderDataModel>/orderConfirmations'
-					}">
-					<core:Item key="{orderDataModel>orderConfirmationId}"  text="{orderDataModel>orderConfirmationId}" />
-				</Select>
                     <Label text="Batch ID" class="sapUiTinyMargin" design="Bold"/>
-                   <Select
-                   id="dashboard_batchIdSelectBox"
-                     width="15%"
-                     class="sapUiLargeMarginEnd"
-					forceSelection="false"
-					items="{
-						path: 'orderDataModel>/orderConfirmations'
-					}">
-					<core:Item key="{orderDataModel>batchId}"  text="{orderDataModel>batchId}" />
-				</Select>
-                <Label text="Date" class="sapUiTinyMargin" design="Bold" />
-                <DatePicker
-                    width="15%"
-					id="DP1"
-					placeholder="Enter Date"
-					change="handleChange"
-					class="sapUiSmallMarginBottom"/>
+                    <Input id="productionDashboard_batchId" width="15%" showValueHelp="true" valueHelpRequest="_onDashboardBatchValueHelp"/>
+                    <Label text="OC ID" class="sapUiTinyMargin sapUiLargeMarginBegin" design="Bold"/>
+                    <Input id="productionDashboard_ocID" width="15%" showValueHelp="true" valueHelpRequest="_onDashboardOCValueHelp"/>
+                <Label text="Date" class="sapUiTinyMargin sapUiLargeMarginBegin" design="Bold" />
+                <DatePicker width="15%" id="DP1" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom"/>
                     <Button text="GO" type="Emphasized" class="sapUiSmallMarginBegin" press="_onGoButtonPress"/>
                     </l:BlockLayoutCell>
                 </l:BlockLayoutRow>
@@ -70,20 +47,20 @@
                     <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell" width="90%">
                        <VBox>
                     <HBox 
-                        items="{orderModel>/orderConfirmations}" 
+                        items="{orderModel>/}" 
                         justifyContent="Center" 
                         alignItems="Center">
                         <items>
                             <VBox justifyContent="Center" alignItems="Center">
                                 <Image
                                     src="images/image.png"
-                                    alt="{orderModel>orderConfirmationId}"
+                                    alt="{orderModel>OCID}"
                                     width="120px"
                                     class="shape_image"
                                     height="60px"
                                     press=".onImageClick" />
                                 <Text 
-                                    text="{orderModel>orderConfirmationId}" 
+                                    text="{orderModel>OCID}" 
                                     class="shape_text"
                                     textAlign="Center" />
                             </VBox>
@@ -96,6 +73,38 @@
 
                 <l:BlockLayoutRow id="dashboard_ContainerDetailsLayout" visible="false">
                     <l:BlockLayoutCell id="dashboard2_GenBlockLayoutCell2" width="90%">
+                    <Dialog
+                            id="dashboarDeatislDetailQrDialog"
+                            title="QR Code"
+                            stretchOnPhone="true"
+                         >
+                            <customHeader>
+                                <Toolbar>
+                                    <Title text="QR Code" />
+                                    <ToolbarSpacer />
+                                    <Button
+                                        icon="sap-icon://decline"
+                                        press="onCloseQRDialog"
+                                    />
+                                </Toolbar>
+                            </customHeader>
+                            <content>
+                                <Image
+                                    class="qrImage"
+                                    id="dashboardDetailsqrImage"
+                                    src=""
+                                    width="200px"
+                                    height="200px"
+                                />
+                            </content>
+                            <buttons>
+                                <Button
+                                    text="Print QR"
+                                    press="onDashboardPrintQR"
+                                    type="Emphasized"
+                                />
+                            </buttons>
+                        </Dialog> 
                               <IconTabBar
             id="idIconTabBar"
             select=".onFilterSelect"
@@ -113,7 +122,7 @@
                <Text text=":" id="tank_colon"/>  
              </HBox>
                <VBox id="f1" width="50%" class="ibox">
-               <Text id="tankDialogDetailsTabTankNoText" class="details_text" text="{fragmentModel>/orderConfirmationId}"/>
+               <Text id="tankDialogDetailsTabTankNoText" class="details_text" text="{fragmentModel>/OCID}"/>
                </VBox>
              </FlexBox>
 
@@ -123,7 +132,7 @@
                <Text text=":" id="storage_colon"/>
                </HBox>
                <VBox id="f2" class="ibox" width="50%">
-               <Text id="tankDialogDetailsTabStorageText" class="details_text" text="{fragmentModel>/batchId}"/>
+               <Text id="tankDialogDetailsTabStorageText" class="details_text" text="{fragmentModel>/BatchID}"/>
                </VBox>
              </FlexBox>
              <FlexBox id="tankDialogDetailsTabFlexBox2" class="fbox">
@@ -132,7 +141,16 @@
                <Text text=":" id="plant_colon"/>
                </HBox>
                <VBox id="f3" class="ibox" width="50%">
-               <Text id="tankDialogDetailsTabPlantText" class="details_text" text="{fragmentModel>/customer}" />
+               <Text id="tankDialogDetailsTabPlantText" class="details_text" text="{fragmentModel>/VendorId}" />
+               </VBox>
+             </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox5" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsTabnt" text="Dealer Name"  width="100%"/>
+               <Text text=":" id="dname"/>
+               </HBox>
+               <VBox id="f6" class="ibox" width="50%">
+               <Text id="dnameText" class="details_text" text="{fragmentModel>/VendorName}" />
                </VBox>
              </FlexBox>
              <FlexBox id="tankDialogDetailsTabFlexBox3" class="fbox">
@@ -146,16 +164,37 @@
              </FlexBox>
              <FlexBox id="tankDialogDetailsTabFlexBox4" class="fbox">
              <HBox class="tankNo_box">
-               <Text id="tankDialogDetailsTabTemp" text="Mfg Date" />
+               <Text id="tankDialogDetailsTabTemp" text="Manufacturing Date" />
                <Text text=":" id="temp_colon"/>
                </HBox>
                 <VBox id="f5" class="ibox" width="50%">
-               <Text id="tankDialogDetailsTabTempText" class="details_text" text="{fragmentModel>/date}" />
+               <Text id="tankDialogDetailsTabTempText" class="details_text" text="{fragmentModel>/ManufactureDt}" />
 
                  </VBox>
              </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox6" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDetailsexpp" text="Expiry Date" />
+               <Text text=":" id="exp_colon"/>
+               </HBox>
+                <VBox id="f7" class="ibox" width="50%">
+               <Text id="tankDialogDe" class="details_text" text="{fragmentModel>/ExpiryDt}" />
+
+                 </VBox>
+             </FlexBox>
+             <FlexBox id="tankDialogDetailsTabFlexBox7" class="fbox">
+             <HBox class="tankNo_box">
+               <Text id="tankDialogDeocqesexpp" text="QR Code" />
+               <Text text=":" id="qr_colon"/>
+               </HBox>
+                <VBox id="f8" class="ibox" width="50%">
+               <Link text="{fragmentModel>/OCQRCode}" endIcon="sap-icon://inspect" press="_onOCQrCodeLink" />
+                 </VBox>
+             </FlexBox>
            </VBox>
-      </IconTabFilter>    
+      </IconTabFilter>   
+
+      
 
 
         <!-- Enter IC Code Code -->
@@ -163,13 +202,13 @@
 				icon="sap-icon://create"
 				iconColor="Positive"
 				text="IC Details"
-        count="{path: 'fragmentModel>/internalConfirmations', formatter: '.countFormatter'}"
+        count="{path: 'fragmentModel>/ICs', formatter: '.countFormatter'}"
 				key="Heavy">   
            <SearchField liveChange=".onSearchOCItem"/>
                <Table
                    class="OCborderedTable"
                    id="dashboardOCproduct_ProductTable"
-                   items="{fragmentModel>/internalConfirmations}"
+                   items="{fragmentModel>/ICs}"
                   selectionChange="onSelectionChange">
                    <columns>
                      <Column hAlign="Center">
@@ -206,12 +245,12 @@
                    </columns>
                    <ColumnListItem class="borderedRow" type="Navigation" press="onIcRowSelect">
                      <cells>
-                       <Text text="{fragmentModel>internalConfirmationId}"/>
-                       <Text text="{fragmentModel>batchId}" />
-                       <Text text="{fragmentModel>productOrder}" />
-                       <Text text="" />
-                       <Text text="{fragmentModel>mfgDate}" />
-                       <Text text="{fragmentModel>expiryDate}" />
+                       <Text text="{fragmentModel>ICID}"/>
+                       <Text text="{fragmentModel>BatchID}" />
+                       <Text text="{fragmentModel>ProductionOrder}" />
+                       <Link text="{fragmentModel>ICQRCode}" endIcon="sap-icon://inspect" press="onDashboardICQrCode"/>
+                       <Text text="{fragmentModel>ManufactureDt}" />
+                       <Text text="{fragmentModel>ExpiryDt}" />
                      </cells>
                    </ColumnListItem>
                  </Table>    
@@ -236,16 +275,17 @@
                          <Text text="S No" />
                        </header>
                      </Column>
+                      <Column hAlign="Center">
+                       <header>
+                         <Text text="Batch ID" />
+                       </header>
+                     </Column>
                      <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
                        <header>
                          <Text text="Product Code" />
                        </header>
                      </Column>
-                     <Column hAlign="Center">
-                       <header>
-                         <Text text="Batch ID" />
-                       </header>
-                     </Column>
+                    
                      <Column hAlign="Center">
                        <header>
                          <Text text="Qr Code" />
@@ -265,12 +305,12 @@
                    </columns>
                    <ColumnListItem class="borderedRow">
                      <cells>
-                       <Text text="{boxModelData>sno}"/>
-                       <Text text="{boxModelData>productionOrder}" />
-                       <Text text="{boxModelData>batchId}" />
-                       <Text text="" />
-                       <Text text="{boxModelData>mfgDate}" />
-                       <Text text="{boxModelData>expiryDate}" />
+                       <Text text="{boxModelData>SerialNo}"/>
+                       <Text text="{boxModelData>BatchID}" />
+                       <Text text="{boxModelData>ProductionOrder}" />
+                       <Link text="{boxModelData>BoxQRCode}" endIcon="sap-icon://inspect" press="onDashboardBoxQrCode"/>
+                       <Text text="{boxModelData>ManufactureDt}" />
+                       <Text text="{boxModelData>ExpiryDt}" />
                      </cells>
                    </ColumnListItem>
                  </Table>

@@ -34,7 +34,6 @@ sap.ui.define([
                 const oMaterialModel = new sap.ui.model.json.JSONModel({ value: aMaterials });
                 this.getView().setModel(oMaterialModel, "materialModel");
                 
-                // Open the dialog
                 this._oMaterialDialog.open();
             }).catch(() => {
                 sap.m.MessageBox.error("Failed to fetch material data.");
