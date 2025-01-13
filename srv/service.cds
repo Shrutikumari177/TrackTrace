@@ -10,22 +10,44 @@ using ZAPI_PROD_ORDER_CONFIRMATION_2_SRV from './external/ZAPI_PROD_ORDER_CONFIR
 
 service trackservice {
 
-     function getBatchIDRelevantData(BatchNo : String,filterNonEmptyBoxQRCode:Boolean,filterNoEmptyICID:Boolean ) returns array of {
-        BatchNo : String;
-        SerialNo:String;
-        Material:String;
-        ManufactureDt:DateTime;
-        ExpiryDt:DateTime;
-        ProductionOrder:Int64;
-        BoxQRCodeURL      : String;
-        BoxQRCode: String;
-        ICID:String;
-        ICQRCode         : String;
-        ICQRCodeURL      : String; 
-        OCID:String;
-        OCQRCode:String;
-        OCQRCodeURL        : String; 
+    //  function getBatchIDRelevantData(BatchNo : String,filterNonEmptyBoxQRCode:Boolean,filterNoEmptyICID:Boolean ) returns array of {
+    //     BatchNo : String;
+    //     SerialNo:String;
+    //     Material:String;
+    //     ManufactureDt:DateTime;
+    //     ExpiryDt:DateTime;
+    //     ProductionOrder:Int64;
+    //     BoxQRCodeURL      : String;
+    //     BoxQRCode: String;
+    //     ICID:String;
+    //     ICQRCode         : String;
+    //     ICQRCodeURL      : String; 
+    //     OCID:String;
+    //     OCQRCode:String;
+    //     OCQRCodeURL        : String; 
         
+    // };
+    function getBatchIDRelevantData(
+        BatchNo: String, 
+        ManufactureDt: DateTime, 
+        ProductionOrder: Integer, 
+        filterNonEmptyBoxQRCode: Boolean, 
+        filterNoEmptyICID: Boolean
+    ) returns array of {
+        BatchNo: String;
+        SerialNo: String;
+        Material: String;
+        ManufactureDt: DateTime;
+        ExpiryDt: DateTime;
+        ProductionOrder: Integer;
+        BoxQRCode: String;
+        BoxQRCodeURL: String;
+        ICID: String;
+        ICQRCode: String;
+        ICQRCodeURL: String;
+        OCID: String;
+        OCQRCode: String;
+        OCQRCodeURL: String;
     };
 
     function getBatchOCValueHelp(BatchID : String, ) returns array of {

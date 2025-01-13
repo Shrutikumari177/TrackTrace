@@ -51,7 +51,7 @@ GET http://localhost:4004/odata/v4/trackservice/InnerContainer?BatchID='10000000
 
 ###
 
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ManufactureDt=2025-01-06
 
 
 
@@ -60,7 +60,12 @@ GET http://localhost:4004/odata/v4/trackservice/getBatchOCValueHelp?BatchID='100
 
 
 ####
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNoEmptyICID=true
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNonEmptyBoxQRCode=true
+
+####
+
+
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ProductionOrder='1000270'&filterNonEmptyBoxQRCode=true
 
 
 ###

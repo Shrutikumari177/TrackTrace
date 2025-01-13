@@ -9,11 +9,9 @@ sap.ui.define([
            
         },
 
-
-
         onScanSuccess: function (oEvent) {
 
-            // debugger
+            
 
             if (oEvent.getParameter("cancelled")) {
 
