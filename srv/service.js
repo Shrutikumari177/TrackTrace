@@ -26,39 +26,56 @@ module.exports = async (srv) => {
     srv.on('READ', 'zbatchno_track', req => ZTRACK_TRACE_SRV.run(req.query));
     srv.on('READ', 'ztrack_material', req => ZTRACK_TRACE_SRV.run(req.query));
     srv.on('READ', 'zorderType_Track', req => ZTRACK_TRACE_SRV.run(req.query));
+    srv.on('READ', 'ZProductionOrder_track', req => ZTRACK_TRACE_SRV.run(req.query));
+
 
 
 
     // srv.on('getBatchIDRelevantData', async (req) => {
     //     try {
-    //         const { BatchNo, filterNonEmptyBoxQRCode ,filterNoEmptyICID} = req.data;
+    //         const { BatchNo, ManufactureDt, ProductionOrder, filterNonEmptyBoxQRCode, filterNoEmptyICID } = req.data;
+    //         console.log("dfgh", typeof ManufactureDt );
+            
 
-    //         if (!BatchNo) {
-    //             req.reject(400, "The parameter 'BatchNo' is required.");
+    //         if (!BatchNo && !ManufactureDt && !ProductionOrder) {
+    //             req.reject(400, "At least one of 'BatchNo', 'ManufactureDt', or 'ProductionOrder' is required.");
     //         }
 
-    //         const query = SELECT.from('zbatchdetails_Track')
-    //             .columns(['BatchNo', 'SerialNo', 'Material', 'ManufactureDt', 'ExpiryDt', 'ProductionOrder'])
-    //             .where({ BatchNo });
+    //         let batchQuery = SELECT.from('zbatchdetails_Track')
+    //             .columns(['BatchNo', 'SerialNo', 'Material', 'ManufactureDt', 'ExpiryDt', 'ProductionOrder']);
 
-    //         const result = await ZTRACK_TRACE_SRV.run(query);
-
-    //         if (!result || result.length === 0) {
-    //             req.reject(404, "No records found for the provided Batch ID.");
+    //         if (BatchNo) {
+    //             batchQuery.where({ BatchNo });
+    //         } else if (ManufactureDt) {
+    //             batchQuery.where({ ManufactureDt });
+    //         } else if (ProductionOrder) {
+    //             batchQuery.where({ ProductionOrder });
     //         }
 
-    //         const SerialNos = result.map(item => item.SerialNo);
+    //         const batchDetails = await ZTRACK_TRACE_SRV.run(batchQuery);
+
+    //         if (!batchDetails || batchDetails.length === 0) {
+    //             req.reject(404, "No records found for the provided filters.");
+    //         }
+
+
+
+    //         const uniqueBatchIDs = BatchNo ? [BatchNo] : [...new Set(batchDetails.map(item => item.BatchNo))];
+    //         const serialNos = batchDetails.map(item => item.SerialNo);
 
     //         const resultData = await SELECT.from('track.MaterialBox')
-    //             .columns(['BoxQRCode', 'BoxQRCodeURL', 'SerialNo', 'IC_ICQRCode', 'IC_ICQRCodeURL', 'IC_ICID',
-    //                 'IC.OC_OCID', 'IC.OC_OCQRCode', 'IC.OC_OCQRCodeURL']).where({
-    //                     BatchID: BatchNo,
-    //                     SerialNo: { in: SerialNos }
-    //                 });
+    //             .columns([
+    //                 'BoxQRCode', 'BoxQRCodeURL', 'SerialNo',
+    //                 'IC_ICQRCode', 'IC_ICQRCodeURL', 'IC_ICID',
+    //                 'IC.OC_OCID', 'IC.OC_OCQRCode', 'IC.OC_OCQRCodeURL'
+    //             ])
+    //             .where({
+    //                 BatchID: { in: uniqueBatchIDs },
+    //                 SerialNo: { in: serialNos }
+    //             });
 
-
-
-    //         let combinedResult = result.map(batchItem => {
+           
+    //         let combinedResult = batchDetails.map(batchItem => {
     //             const matchedBoxData = resultData.filter(box => box.SerialNo === batchItem.SerialNo);
 
     //             if (matchedBoxData.length === 0) {
@@ -94,7 +111,7 @@ module.exports = async (srv) => {
     //                 ICQRCodeURL: box.IC_ICQRCodeURL,
     //                 OCID: box.IC_OC_OCID,
     //                 OCQRCode: box.IC_OC_OCQRCode,
-    //                 OCQRCodeURL:box.IC_OC_OCQRCodeURL
+    //                 OCQRCodeURL: box.IC_OC_OCQRCodeURL
     //             }));
     //         }).flat();
 
@@ -123,51 +140,75 @@ module.exports = async (srv) => {
     //                         if (a.ICID > b.ICID) return -1;
     //                         if (a.ICID < b.ICID) return 1;
     //                     }
-    //                     return 0; 
+    //                     return 0;
     //                 });
     //         }
-
 
     //         return combinedResult;
 
     //     } catch (error) {
-    //         console.error("Error", error);
+    //         console.error("Error:", error);
     //         req.reject(500, error.message || error);
     //     }
     // });
 
-
-
     srv.on('getBatchIDRelevantData', async (req) => {
         try {
             const { BatchNo, ManufactureDt, ProductionOrder, filterNonEmptyBoxQRCode, filterNoEmptyICID } = req.data;
-
+    
+            // Validate required input
             if (!BatchNo && !ManufactureDt && !ProductionOrder) {
                 req.reject(400, "At least one of 'BatchNo', 'ManufactureDt', or 'ProductionOrder' is required.");
             }
-
+    
+            // Query for batch details
             let batchQuery = SELECT.from('zbatchdetails_Track')
                 .columns(['BatchNo', 'SerialNo', 'Material', 'ManufactureDt', 'ExpiryDt', 'ProductionOrder']);
-
+    
             if (BatchNo) {
                 batchQuery.where({ BatchNo });
-            } else if (ManufactureDt) {
+            }
+    
+            const batchDetails = await ZTRACK_TRACE_SRV.run(batchQuery);
+    
+            if (!batchDetails || batchDetails.length === 0) {
+                req.reject(404, "No records found for the provided BatchNo.");
+            }
+    
+            if (ManufactureDt && BatchNo) {
+                const batchWithManufactureDt = batchDetails.find(item => item.BatchNo === BatchNo);
+                if (batchWithManufactureDt) {
+                    if (!batchWithManufactureDt.ManufactureDt) {
+                        req.reject(
+                            400,
+                            `"No records found for the provided filters."`
+                        );
+                    } else if (batchWithManufactureDt.ManufactureDt !== ManufactureDt) {
+                        req.reject(
+                            404,
+                            `No records found for the provided BatchNo and ManufactureDt.`
+                        );
+                    }
+                }
+            }
+    
+            if (ManufactureDt && !BatchNo) {
                 batchQuery.where({ ManufactureDt });
             } else if (ProductionOrder) {
                 batchQuery.where({ ProductionOrder });
             }
-
-            const batchDetails = await ZTRACK_TRACE_SRV.run(batchQuery);
-
-            if (!batchDetails || batchDetails.length === 0) {
+    
+            // Run query for updated batch details
+            const updatedBatchDetails = await ZTRACK_TRACE_SRV.run(batchQuery);
+    
+            if (!updatedBatchDetails || updatedBatchDetails.length === 0) {
                 req.reject(404, "No records found for the provided filters.");
             }
-
-
-
-            const uniqueBatchIDs = BatchNo ? [BatchNo] : [...new Set(batchDetails.map(item => item.BatchNo))];
-            const serialNos = batchDetails.map(item => item.SerialNo);
-
+    
+            const uniqueBatchIDs = BatchNo ? [BatchNo] : [...new Set(updatedBatchDetails.map(item => item.BatchNo))];
+            const serialNos = updatedBatchDetails.map(item => item.SerialNo);
+    
+            // Query for material box data
             const resultData = await SELECT.from('track.MaterialBox')
                 .columns([
                     'BoxQRCode', 'BoxQRCodeURL', 'SerialNo',
@@ -178,12 +219,11 @@ module.exports = async (srv) => {
                     BatchID: { in: uniqueBatchIDs },
                     SerialNo: { in: serialNos }
                 });
-
-            console.log("Material Box Data:", resultData);
-
-            let combinedResult = batchDetails.map(batchItem => {
+    
+            // Combine and map results
+            let combinedResult = updatedBatchDetails.map(batchItem => {
                 const matchedBoxData = resultData.filter(box => box.SerialNo === batchItem.SerialNo);
-
+    
                 if (matchedBoxData.length === 0) {
                     return {
                         BatchNo: batchItem.BatchNo,
@@ -202,7 +242,7 @@ module.exports = async (srv) => {
                         OCQRCodeURL: ""
                     };
                 }
-
+    
                 return matchedBoxData.map(box => ({
                     BatchNo: batchItem.BatchNo,
                     SerialNo: batchItem.SerialNo,
@@ -220,7 +260,8 @@ module.exports = async (srv) => {
                     OCQRCodeURL: box.IC_OC_OCQRCodeURL
                 }));
             }).flat();
-
+    
+            // Apply filters for non-empty BoxQRCode
             if (filterNonEmptyBoxQRCode) {
                 combinedResult = combinedResult
                     .filter(item => item.BoxQRCode && item.BoxQRCode.trim() !== "")
@@ -230,10 +271,11 @@ module.exports = async (srv) => {
                         return 0;
                     });
             }
-
+    
+            // Apply filters for non-empty ICID
             if (filterNoEmptyICID) {
                 combinedResult = combinedResult
-                    .filter(item => item.ICID && item.ICID.trim() !== "") // Ensure ICID is non-empty
+                    .filter(item => item.ICID && item.ICID.trim() !== "")
                     .sort((a, b) => {
                         if (a.OCID && b.OCID) {
                             if (a.OCID > b.OCID) return -1;
@@ -249,14 +291,15 @@ module.exports = async (srv) => {
                         return 0;
                     });
             }
-
+    
             return combinedResult;
-
+    
         } catch (error) {
             console.error("Error:", error);
             req.reject(500, error.message || error);
         }
     });
+    
 
 
 

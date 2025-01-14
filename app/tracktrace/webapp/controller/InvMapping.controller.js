@@ -94,6 +94,7 @@ sap.ui.define([
         onVendorValueConfirmItem :function(oEvent){
             let vendorId = HelperFunction._valueHelpSelectedValue(oEvent,this,"mapping_vendorValueHelpInput")
             let vendorNameInput = this.byId("mapping_vendorNameInput")
+            let vendorLocationName = this.byId("dealerLocationField")
             if(vendorId){
                 let oModel = this.getView().getModel("vendorDataModel")
                 let modelData = oModel.getData()
@@ -101,6 +102,7 @@ sap.ui.define([
                     let filterData = modelData.vendors.find(item=>item.vendorId===vendorId)
                     if(filterData.vendorName){
                         vendorNameInput.setValue(filterData.vendorName)
+                        vendorLocationName.setValue(filterData.location)
                     } 
                 }
             }
@@ -114,7 +116,7 @@ sap.ui.define([
                   if(ocValue && batchValue){
                     this.getOcDataWithBatchIdAndOCID(ocValue,batchValue).then(oData=>{
                        console.log("get Data:",oData)
-                       
+                       debugger
                        if(oData[0].VendorId){
                             oModel.setProperty("/vendorIdDisplay",true)
                             oModel.setProperty("/vendorIdEdit",false)
@@ -126,6 +128,11 @@ sap.ui.define([
                                     oData[0].location = filterData.location
                                 }
                             }
+                        }
+                        else{
+                            oModel.setProperty("/vendorIdDisplay",false)
+                            oModel.setProperty("/vendorIdEdit",true)
+                            oModel.setProperty("/submitBtnEnabled",true)
                         }
                         let filterModel = new JSONModel(oData[0])
                       this.getView().setModel(filterModel,"filterOcModelData")
@@ -165,12 +172,18 @@ sap.ui.define([
 
         onSubmitMappingData: async function () {
             let oModel = this.getOwnerComponent().getModel(); 
+            let OCIdValue = this.byId("mapping_ocCodeInput").getValue()
+            let vendorName = this.byId("mapping_vendorNameInput").getValue()
+            let vendorNo = this.byId("mapping_vendorValueHelpInput").getValue()
+            if(!vendorNo){
+                 return sap.m.MessageToast("Please Select a Vendor!")
+            }
         
             let oBindList = oModel.bindList("/OuterContainer");
             let aFilter = new sap.ui.model.Filter({
                 path: "OCID",
                 operator: sap.ui.model.FilterOperator.EQ,
-                value1: "00000001"
+                value1: OCIdValue
             });
         
             oBindList.filter(aFilter).requestContexts().then((aContexts) => {
@@ -178,15 +191,15 @@ sap.ui.define([
                     sap.m.MessageBox.error("No matching entity found for the given filter.");
                     return;
                 }
-        
                 let oContext = aContexts[0];
-                oContext.setProperty("VendorId", "21000000");
-                oContext.setProperty("VendorName", "La Belle Perfumes");
-                oContext.setProperty("status", "completed");
+                oContext.setProperty("VendorId", vendorNo);
+                oContext.setProperty("VendorName", vendorName);
+                oContext.setProperty("status", "dealer mapped");
         
                 oModel.submitBatch("updateGroup").then(
                     () => {
-                        sap.m.MessageToast.show("Data updated successfully!");
+                        sap.m.MessageToast.show("Data Updated Successfully!");
+                        this.refreshUiFields()
                     },
                     (oError) => {
                         console.error("Error updating data:", oError);
@@ -197,6 +210,16 @@ sap.ui.define([
                 console.error("Error requesting contexts:", error);
                 sap.m.MessageBox.error("Failed to retrieve data: " + error.message);
             });
+        },
+
+        refreshUiFields: function(){
+            this.byId("mapping_vendorNameInput").setValue("")
+            this.byId("mapping_vendorValueHelpInput").setValue("")
+            this.byId("dealerLocationField").setValue("")
+            this.byId("mapping_batchValueHelpInput").setValue("")
+            this.byId("mapping_ocValueHelpInput").setValue("")
+            let oModel = this.getView().getModel("filterOcModelData")
+            oModel.setData("/",{})
         }
         
         

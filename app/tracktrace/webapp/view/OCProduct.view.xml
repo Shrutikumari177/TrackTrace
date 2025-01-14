@@ -56,7 +56,7 @@
                      
                      <Column hAlign="Center">
                        <header>
-                         <Text text="Seq No" />
+                         <Text text="Serial No" />
                        </header>
                      </Column>
                      <Column hAlign="Center">
@@ -93,7 +93,7 @@
                      
                      <Column hAlign="Center" mergeDuplicates="true">
                        <header>
-                         <Text text="QR Code" />
+                         <Text text=" OC QR Code" />
                        </header>
                      </Column>
                      

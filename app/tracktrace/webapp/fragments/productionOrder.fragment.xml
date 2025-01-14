@@ -1,0 +1,25 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">  
+    <SelectDialog
+        id="_productionOrderDialog"
+        noDataText="Loading..."
+        title="Select Material"
+        liveChange=".onproductionOrderFilterSearch"
+        search=".onproductionOrderFilterSearch"
+        confirm="onproductionOrderValueHelpConfirm"
+        items="{/A_ProductionOrder}"
+        initialFocus="SearchField"
+        multiSelect="false"
+        
+    >
+        
+        <StandardListItem id="_IDGenStandardLis" 
+            
+            title="{ProductionOrder}"
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+            
+    </SelectDialog>
+</core:FragmentDefinition>

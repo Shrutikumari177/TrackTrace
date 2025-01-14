@@ -175,11 +175,11 @@
              </FlexBox>
              <FlexBox id="tankDialogDetailsTabFlexBox7" class="fbox">
              <HBox class="tankNo_box">
-               <Text id="tankDialogDeocqesexpp" text="QR Code" />
+               <Text id="tankDialogDeocqesexpp" text=" OC QR Code" />
                <Text text=":" id="qr_colon"/>
                </HBox>
                 <VBox id="f8" class="ibox" width="50%">
-               <Link text="{fragmentModel>/OCQRCode}" endIcon="sap-icon://inspect" press="_onOCQrCodeLink" />
+               <Link text="{fragmentModel>/OCQRCode}" press="_onOCQrCodeLink" />
                  </VBox>
              </FlexBox>
            </VBox>
@@ -204,7 +204,7 @@
                    <columns>
                      <Column hAlign="Center">
                        <header>
-                         <Text text="Packaging" />
+                         <Text text="IC Code" />
                        </header>
                      </Column>
                      <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
@@ -217,16 +217,22 @@
                          <Text text="Product Code" />
                        </header>
                      </Column>
-                     <Column hAlign="Center">
-                       <header>
-                         <Text text="Qr Code" />
-                       </header>
-                     </Column>
                      <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
                        <header>
                          <Text text="Manufacturing Date" />
                        </header>
                      </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="Production ID" />
+                       </header>
+                     </Column>
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text="IC Qr Code" />
+                       </header>
+                     </Column>
+                     
                      
                      <Column hAlign="Center" visible="false">
                        <header>
@@ -238,9 +244,11 @@
                      <cells>
                        <Text text="{fragmentModel>ICID}"/>
                        <Text text="{fragmentModel>BatchID}" />
+                        <Text text="{fragmentModel>BatchID}" />
+                        <Text text="{fragmentModel>ManufactureDt}" />
                        <Text text="{fragmentModel>ProductionOrder}" />
-                       <Link text="{fragmentModel>ICQRCode}" endIcon="sap-icon://inspect" press="onDashboardICQrCode"/>
-                       <Text text="{fragmentModel>ManufactureDt}" />
+                       <Link text="{fragmentModel>ICQRCode}" press="onDashboardICQrCode"/>
+                       
                        <Text text="{fragmentModel>ExpiryDt}" />
                      </cells>
                    </ColumnListItem>
@@ -263,7 +271,7 @@
                    <columns>
                      <Column hAlign="Center">
                        <header>
-                         <Text text="S No" />
+                         <Text text="Serial No" />
                        </header>
                      </Column>
                       <Column hAlign="Center">
@@ -276,17 +284,23 @@
                          <Text text="Product Code" />
                        </header>
                      </Column>
-                    
-                     <Column hAlign="Center">
-                       <header>
-                         <Text text="Qr Code" />
-                       </header>
-                     </Column>
                      <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
                        <header>
                          <Text text="Manufacturing Date" />
                        </header>
                      </Column>
+                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                       <header>
+                         <Text text="Production ID" />
+                       </header>
+                     </Column>
+                    
+                     <Column hAlign="Center">
+                       <header>
+                         <Text text=" Box Qr Code" />
+                       </header>
+                     </Column>
+                     
                      
                      <Column hAlign="Center" visible="false">
                        <header>
@@ -298,9 +312,11 @@
                      <cells>
                        <Text text="{boxModelData>SerialNo}"/>
                        <Text text="{boxModelData>BatchID}" />
+                        <Text text="{boxModelData>BatchID}" />
+                      <Text text="{boxModelData>ManufactureDt}" />
                        <Text text="{boxModelData>ProductionOrder}" />
-                       <Link text="{boxModelData>BoxQRCode}" endIcon="sap-icon://inspect" press="onDashboardBoxQrCode"/>
-                       <Text text="{boxModelData>ManufactureDt}" />
+                       <Link text="{boxModelData>BoxQRCode}" press="onDashboardBoxQrCode"/>
+                     
                        <Text text="{boxModelData>ExpiryDt}" />
                      </cells>
                    </ColumnListItem>

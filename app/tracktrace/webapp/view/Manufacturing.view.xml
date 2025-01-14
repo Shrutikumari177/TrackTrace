@@ -22,14 +22,24 @@
             <l:VerticalLayout id="boxProduct_VerticalLayout" width="100%">
                 <l:BlockLayout id="boxProduct_BlockLayout" background="Dashboard">
                     <l:BlockLayoutRow id="boxProduct_BlockLayoutRow">
-                        <l:BlockLayoutCell id="boxProduct_BlockLayoutCell" width="90%">
+                    <l:BlockLayoutCell id="boxProduct_BlockLayoutCell" width="90%">
                       
-                            <HBox id="boxProduct_headerPage">
+                    <Label text="Batch ID" class="sapUiTinyMargin" design="Bold"/>
+                    <Input id="boxProduct_batchId" width="15%" showValueHelp="true" valueHelpRequest="onValueHelpBatch"/>
+                    <Label text="Production ID" class="sapUiTinyMargin sapUiLargeMarginBegin" design="Bold" visible="false"/>
+                    <Input id="productionDashbard_ocID" width="15%" showValueHelp="true" valueHelpRequest="_onDashboardOCValueHelp" visible="false"/>
+                    <Label text="Manufacturing Date" class="sapUiTinyMargin sapUiLargeMarginBegin" design="Bold" />
+                    <DatePicker width="15%" id="DatePicker" placeholder="Enter Date" change="handleChange" class="sapUiSmallMarginBottom" displayFormat="YYYY-MM-dd" valueFormat="YYYY-MM-dd" />
+                    <Button text="GO" type="Emphasized" class="sapUiSmallMarginBegin" press="_onGoButtonPress"/>
+                    </l:BlockLayoutCell>
+
+                      
+                            <!-- <HBox id="boxProduct_headerPage">
                                 <Label id="boxProduct_prodcutionOrderLabel" class="sapUiTinyMarginTop" design="Bold" text="Batch ID"/>
                                 <Input id="boxProduct_prodcutionOrderInput" class="sapUiTinyMarginBegin" width="200px" showValueHelp="true" valueHelpRequest="onValueHelpBatch" />
-                           </HBox>
+                           </HBox> -->
                             
-                        </l:BlockLayoutCell>
+                    
                     </l:BlockLayoutRow>
 
 
@@ -45,7 +55,7 @@
                   <columns>
                  
                   <Column id="BoxProduct_SeqCol" hAlign="Center">
-                      <Label id="BoxProduct_SeqLabel" text="Seq No"/>
+                      <Label id="BoxProduct_SeqLabel" text="Serial No"/>
                   </Column>
                   <Column id="BoxProduct_BatchIdCol" hAlign="Center">
                       <Label id="BoxProduct_BatchIdLabel" text="Batch ID"/>
@@ -65,10 +75,10 @@
                       <Label id="_IDGenLabe6" text="Production ID" textAlign="Center"/>
                   </Column>
                     <Column  hAlign="Center">
-                      <Label text="Generate QR" textAlign="Center"/>
+                      <Label text="Generate Box QR" textAlign="Center"/>
                   </Column>
                     <Column id="_IDGenColum2" hAlign="Center">
-                      <Label id="_IDGenLabe5" text="QR Code" textAlign="Center"/>
+                      <Label id="_IDGenLabe5" text=" Box QR Code" textAlign="Center"/>
                   </Column>
                   
               </columns>

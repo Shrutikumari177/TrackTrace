@@ -10,13 +10,14 @@
 
     <ScrollContainer id="invMapping_ScrollContainer" vertical="true" height="100%">
         <tnt:ToolHeader id="invMappingshellOnlyMandatoryControls" class="sapUiTinyMargin header_nav">
-            <Title id="invMapping_Title" textAlign="Center" text="Dealer OC Mapping " wrapping="false">
+            <Title id="invMapping_Title" textAlign="Center" text="Dealer OC Mapping Screen" wrapping="false">
                 <layoutData>
                     <OverflowToolbarLayoutData id="invMapping_OverflowToolbarLayoutData" priority="Disappear" />
                 </layoutData>
             </Title>
             <ToolbarSpacer id="invMapping_ToolbarSpacer" />
-                    </tnt:ToolHeader>
+           
+        </tnt:ToolHeader>
 
         <l:VerticalLayout id="invMapping_VerticalLayout" width="100%">
             <l:BlockLayout id="invMapping_BlockLayout" background="Dashboard">
@@ -64,12 +65,15 @@
 
 
                                 <core:Title id="_IenTitle2"/>
-                                <!-- valuehelp -->
+                                <!--edit  valuehelp -->
                                 <Label id="_IDnLabel3" text="Dealer ID" design="Bold" required="true" class="sapUiTinyMarginTop" visible="{displayOrNotModel>/vendorIdEdit}"/>
                                 <HBox id="_IDGenHBox5" visible="{displayOrNotModel>/vendorIdEdit}">
                                     <Input id="mapping_vendorValueHelpInput" width="178px" showValueHelp="true" valueHelpRequest="_onOpenVendorValueHelp" required="true"/>
                                 </HBox>
                                 <Input id="mapping_vendorNameInput" value="" width="180px" visible="{displayOrNotModel>/vendorIdEdit}" editable="false"/>
+                                <Label id="_IDGenLab8" text="Dealer Location" design="Bold" visible="{displayOrNotModel>/vendorIdEdit}" class="sapUiTinyMarginTop"/>
+                                <Input id="dealerLocationField" width="180px" visible="{displayOrNotModel>/vendorIdEdit}" value="{filterOcModelData>/location}" editable="false"/>
+                                
 
                                 <!-- display fields -->
                                 <Label id="_nLabel3" text="Dealer ID" design="Bold" class="sapUiTinyMarginTop" visible="{displayOrNotModel>/vendorIdDisplay}"/>
@@ -78,12 +82,12 @@
                                 </HBox>
                                 <Input id="mapping_vendorNameInputq" value="{filterOcModelData>/VendorName}" width="180px" editable="false" visible="{displayOrNotModel>/vendorIdDisplay}"/>
 
-                                <Label id="_IDGenLab7" text="Dealer Location" design="Bold" class="sapUiTinyMarginTop"/>
-                                <Input id="mapping_startloc" width="180px" value="{filterOcModelData>/location}" editable="false"/>    
+                                <Label id="_IDGenLab7" text="Dealer Location" design="Bold" class="sapUiTinyMarginTop" visible="{displayOrNotModel>/vendorIdDisplay}"/>
+                                <Input id="mapping_startloc" width="180px" value="{filterOcModelData>/location}" editable="false" visible="{displayOrNotModel>/vendorIdDisplay}"/>    
                                 <Label id="_IDGenLabel7" text="Manufacturing Date" design="Bold" class="sapUiTinyMarginTop"/>
                                 <Input id="mapping_startDateInput" width="180px" value="{filterOcModelData>/ManufactureDt}" editable="false"/>                                
-                                <Label id="_IDGenLabel8" text="Expiry Date" design="Bold" class="sapUiTinyMarginTop" visible="false"/>
-                                <Input id="mapping_endDateInput" width="180px" value="{filterOcModelData>/ExpiryDt}" editable="false"  visible="false"/>
+                                <Label id="_IDGenLabel8" text="Expiry Date" design="Bold" class="sapUiTinyMarginTop"/>
+                                <Input id="mapping_endDateInput" width="180px" value="{filterOcModelData>/ExpiryDt}" editable="false" />
                               
                                
                             </form:content>

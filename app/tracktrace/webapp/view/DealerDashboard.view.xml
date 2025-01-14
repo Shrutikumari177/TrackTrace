@@ -62,41 +62,8 @@
                         inputLiveUpdate="onScanLiveupdate"
                         class="sapUiSmallMarginBottom"
                     />
-                    <!-- <VBox id="_IDGenVBox" >
-                    <Label id="_IDGenLabel9" 
                     
-                    text="Start Date"
-                    
-                    
-                    />
-                    <DatePicker id="_IDGenDatePicker1" 
-                    
-                    class="sapUiSmallMarginBottom"
-                    />
-                    <Label id="_IDGenLabel15" 
-                    
-                    text="End Date"
-                    
-                    
-                    />
-                    <DatePicker id="_IDGenDatePicker2" 
-                    
-                    
-                    />
-                    
-                    </VBox>
-                     -->
-
-                    <!-- <Input
-                        id="stp_Input"
-                        width="100%"
-                        showValueHelp="true"
-                        valueHelpRequest="outerCompartment"
-                        value=""
-                        placeholder="Outer Compartment"
-                    /> -->
-
-                    <List                    
+                    <!-- <List                    
                         id="idlst"
                         growing="true"
                         growingScrollToLoad="true"
@@ -114,7 +81,23 @@
                                 text="Material: {OCID}"
                             />
                         </ObjectListItem>
-                    </List>
+                    </List> -->
+                    <List  id="idlst"  growing="true"  growingScrollToLoad="true"  growingThreshold="5"
+                     items="{     path: 'OCModel>/OCData' }">
+
+                    <ObjectListItem
+                        id="_IDGenObjectListItem1"
+                        title="Outer Compartment Number"
+                        type="Navigation"
+                        press="onSelectContract">
+
+                        <ObjectAttribute
+                            id="matnr"
+                            text="{OCModel>OCID}" />
+                        
+                    </ObjectListItem>
+               </List>
+
                 </Panel>
             </l:SplitPane>
             <!--  Middle Pane: Auto Height  -->

@@ -51,7 +51,7 @@ GET http://localhost:4004/odata/v4/trackservice/InnerContainer?BatchID='10000000
 
 ###
 
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ManufactureDt=2025-01-06
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ManufactureDt=2025-01-06&BatchNo='1000000070'
 
 
 
@@ -60,12 +60,12 @@ GET http://localhost:4004/odata/v4/trackservice/getBatchOCValueHelp?BatchID='100
 
 
 ####
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000080'&filterNonEmptyBoxQRCode=true
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?BatchNo='1000000003'
 
 ####
 
 
-GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ProductionOrder='1000270'&filterNonEmptyBoxQRCode=true
+GET http://localhost:4004/odata/v4/trackservice/getBatchIDRelevantData?ProductionOrder='1000270'
 
 
 ###
@@ -133,12 +133,12 @@ Content-Type: application/json
 
 
 ###
-PATCH http://localhost:4004/odata/v4/trackservice/OuterContainer(OCID='00000001',OCQRCodeURL='',OCQRCode='')
+PATCH http://localhost:4004/odata/v4/trackservice/OuterContainer(OCID='00000002',OCQRCodeURL='',OCQRCode='')
 Content-Type: application/json
 
 {
-  "VendorId": "21000000",
-  "VendorName": "Blues Perfume",
+  "VendorId": "21000001",
+  "VendorName": "Fragrance Outlet",
   "status": "Dealer Assigned"
 }
 

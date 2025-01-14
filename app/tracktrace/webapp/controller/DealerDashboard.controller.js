@@ -3,11 +3,130 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller"
 ], (Controller) => {
     "use strict";
+    let Dealer;
+    let  userEmail;
 
     return Controller.extend("tracktrace.controller.DealerDashboard", {
-        onInit() {
-           
+        onInit: async function () {
+            await  this.getLoggedInUserInfo(); 
+            Dealer = await  this.checkforValidUser();
+            this.getDealerOc(Dealer);
+            
+            
         },
+        getLoggedInUserInfo : async function(){
+            try {
+              let User = await sap.ushell.Container.getService("UserInfo");
+              let userID = User.getId();
+              userEmail = User.getEmail();
+              let userFullName = User.getFullName();
+              console.log("userEmail", userEmail);
+              console.log("userFullName", userFullName);
+              console.log("userID", userID);
+            } catch (error) {
+              userEmail ="shruti.kumari@ingenxtec.com";
+              console.log("hiii",userEmail);
+            }
+          },
+        checkforValidUser: async function() {
+            let loggedinUser = userEmail; 
+        
+            if (loggedinUser === "shruti.kumari@ingenxtec.com") {
+                let DealerFound = "21000000";
+              
+                return DealerFound;
+            } else if (loggedinUser === "ashwani.sharma@ingenxtec.com") {
+                let DealerFound = "21000001";
+              
+                return DealerFound;
+            } else {
+                console.log("No vendor found for the logged-in user");
+                return null; 
+            }
+        },
+        getDealerOc: async function() {
+            const oModel = this.getOwnerComponent().getModel();
+            const oBindList = oModel.bindList(`/getDealerDashOCValueHelp(VendorId='${Dealer}')`);
+            const aBatchIdData = [];
+        
+            try {
+                const aContexts = await oBindList.requestContexts();
+        
+                aContexts.forEach((oContext) => {
+                    aBatchIdData.push(oContext.getObject());
+                });
+            } catch (error) {
+                throw new Error("Error fetching batch details: " + error.message);
+            }
+        
+            console.log("Fetched Data:", aBatchIdData);
+        
+            const oDataModel = new sap.ui.model.json.JSONModel();
+            oDataModel.setData({ OCData: aBatchIdData });
+        
+            this.getOwnerComponent().setModel(oDataModel, "OCModel");
+        
+            return aBatchIdData;
+        },
+        onSelectContract: async function (oEvent) {
+            try {
+                var oSelectedItem = oEvent.getSource();
+                var oBindingContext = oSelectedItem.getBindingContext("OCModel"); // Ensure you are passing the correct model name
+                
+                if (!oBindingContext) {
+                    console.error("Binding context is undefined");
+                    return;
+                }
+                
+                var sOCID = oBindingContext.getProperty("OCID");
+                console.log("Selected OCID:", sOCID);
+        
+                let oModel = this.getOwnerComponent().getModel();
+                let sPath = `/getProductionTrackingDashboardData(OCID='${sOCID}')`;
+        
+                const oBindinggetCust = oModel.bindContext(sPath, null, {});
+                const oData = await oBindinggetCust.requestObject();
+        
+                let allOCIDData = oData.value[0];
+                let pOrder = allOCIDData.ProductionOrder;
+                let mfgDate = allOCIDData.ManufactureDt;
+                let expDate = allOCIDData.ExpiryDt;
+                let BatchID = allOCIDData.BatchID;
+        
+                console.table("oNewModel", allOCIDData);
+        
+                const result = allOCIDData.ICs.flatMap(ic => {
+                    return ic.Boxes.map(box => ({
+                        ICID: ic.ICID,
+                        ICQRCode: ic.ICQRCode,
+                        ICQRCodeUrl: ic.ICQRCodeURL,
+                        BoxSerialNo: box.SerialNo,
+                        BoxQRCode: box.BoxQRCode,
+                        BoxQRCodeUrl: box.BoxQRCodeURL,
+                        pOrder,
+                        mfgDate,
+                        expDate,
+                        BatchID,
+                    }));
+                });
+        
+                var oNewModel1 = new sap.ui.model.json.JSONModel();
+                oNewModel1.setData(result);
+                this.getView().setModel(oNewModel1, "newArrayModel");
+        
+                var oNewModel = new sap.ui.model.json.JSONModel();
+                oNewModel.setData(allOCIDData);
+                this.getView().setModel(oNewModel, "newModel");
+        
+               
+            } catch (oError) {
+                console.error("Error fetching data:", oError);
+            }
+        },
+        
+        
+         
+
 
         onScanSuccess: function (oEvent) {
 
@@ -93,22 +212,20 @@ sap.ui.define([
 
         },
 
-        onSelectContract: async function (oEvent) {
+
+        onSelectContract1: async function (oEvent) {
             try {
                 var oSelectedItem = oEvent.getSource();
                 var oBindingContext = oSelectedItem.getBindingContext();
         
-                // Retrieve OCID from the selected item
+                
                 var sOCID = oBindingContext.getProperty("OCID");
                 console.log("Selected OCID:", sOCID);
         
-                // Get the model from the component
                 let oModel = this.getOwnerComponent().getModel();
         
-                // Build the path for the OData function
                 let sPath = `/getProductionTrackingDashboardData(OCID='${sOCID}')`;
         
-                // Use bindContext to call the OData function
                 const oBindinggetCust = oModel.bindContext(sPath, null, {});
                 const oData = await oBindinggetCust.requestObject();
 

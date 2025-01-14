@@ -13,8 +13,6 @@ sap.ui.define([
         },
 
         onMaterialValuehelpClick: function (oEvent) {
-
-            
             this._oInputField = oEvent.getSource().getBindingContext();
             
             // Check if the dialog is already created
@@ -45,7 +43,6 @@ sap.ui.define([
                 // sap.ui.core.BusyIndicator.hide();
             });
         },
-        
         
 
         onMaterialFilterSearch: function (oEvent) {
@@ -229,9 +226,99 @@ sap.ui.define([
             // Clear filters after selection or cancel
             oEvent.getSource().getBinding("items").filter([]);
         },
+        onProducOrderValueHelp :function(){
+            if (!this._productionOrderDialog) {
+                this._productionOrderDialog = sap.ui.xmlfragment("tracktrace.fragments.productionOrder", this);
+                this.getView().addDependent(this._productionOrderDialog);
+            }
+            // Open the dialog
+            this._productionOrderDialog.open();
 
+        },
+        onproductionOrderValueHelpConfirm: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+            if (oSelectedItem) {
+                // Retrieve the selected manufacturing order
+                var sSelectedOrderType = oSelectedItem.getTitle();
+                // Set the value in the input field
+                this.getView().byId("workCenterInput_createProducte").setValue(sSelectedOrderType);
+        
+                // Filter data from A_ProductionOrderComponent OData model
+                var oModel = this.getView().getModel(); // Assuming the OData V4 model is the default model
+                var sFilterPath = "/A_ProductionOrderComponent"; // Path to the entity set
+                var oFilter = new sap.ui.model.Filter("ManufacturingOrder", sap.ui.model.FilterOperator.EQ, sSelectedOrderType);
+        
+                // Perform the read operation using bindList with filters
+                oModel.bindList(sFilterPath, undefined, undefined, [oFilter]).requestContexts()
+                    .then(function (aContexts) {
+                        // Extract data from the returned contexts
+                        var aData = aContexts.map(function (oContext) {
+                            return oContext.getObject();
+                        });
+        
+                        // Bind the filtered data to a JSON model
+                        var oJSONModel = new sap.ui.model.json.JSONModel(aData);
+                        this.getView().setModel(oJSONModel, "filteredComponents");
+        
+                        // Optional: Log or handle the data as needed
+                        console.log("Filtered Data:", aData);
+                    }.bind(this))
+                    .catch(function (oError) {
+                        console.error("Error fetching data:", oError);
+                    });
+            }
+            // Clear filters after selection or cancel
+            oEvent.getSource().getBinding("items").filter([]);
+        },
+        
 
+        onProductionOrderValueHelp : function(){
 
+            if (!this._productionDialog) {
+                this._productionDialog = sap.ui.xmlfragment("tracktrace.fragments.productionFragment", this);
+                this.getView().addDependent(this._productionDialog);
+            }
+            // Open the dialog
+            this._productionDialog.open();
+        },
+
+        onproductionValueHelpConfirm:function(oEvent){
+        
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+            if (oSelectedItem) {
+                // Retrieve the selected order type value
+                var sSelectedOrderType = oSelectedItem.getTitle();
+                // Set the value in the input field
+                this.getView().byId("workCenterInput_createProduedcte").setValue(sSelectedOrderType);
+                var oModel = this.getView().getModel(); // Assuming the default OData model is used
+
+        // Create a new filter for OrderID
+        var oFilter = new sap.ui.model.Filter("OrderID", sap.ui.model.FilterOperator.EQ, sSelectedOrderType);
+
+        // Bind the filtered data to a new model
+        var oListBinding = oModel.bindList("/ProdnOrdConf2", undefined, undefined, [oFilter]);
+        var that = this;
+        oListBinding.requestContexts().then(function (aContexts) {
+            // Extract data from the contexts
+            var aFilteredData = aContexts.map(function (oContext) {
+                return oContext.getObject();
+            });
+
+            // Create a JSONModel with the filtered data and set it to the view
+            var oConfirmationModel = new sap.ui.model.json.JSONModel({ value: aFilteredData });
+            that.getView().setModel(oConfirmationModel, "confirmationModel");
+            console.log("oConfirmationModel",oConfirmationModel);
+            
+        }).catch(function (oError) {
+            // Handle any errors during the data fetch
+            sap.m.MessageToast.show("Failed to fetch filtered data.");
+            console.error(oError);
+        });
+    }
+
+    // Clear filters after selection or cancel
+    oEvent.getSource().getBinding("items").filter([]);
+}
        
         
 

@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <SelectDialog
+        id="BoxCodeProductionValuehelp"
+        noDataText="Loading..."
+        title="Select Batch Id"
+        search="onBatcIdValueHelpSearch"
+        liveChange="onBatchIdValueHelpSearch"
+        confirm="onValueHelpBatchIdSelection"
+        cancel="onValueHelpBatchIdSelection"
+        items="{/ZProductionOrder_track}"
+        initialFocus="SearchField">
+        <StandardListItem 
+            id="BoxCodeGenStandardListItem"
+            title="{ProductionOrder}"
+            description=""
+            iconDensityAware="false"
+            iconInset="false"
+            type="Active" />
+    </SelectDialog>
+</core:FragmentDefinition>

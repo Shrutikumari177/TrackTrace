@@ -1,4 +1,4 @@
-/* checksum : e47865c5d45d506e5bcc6b7d0dcffa52 */
+/* checksum : c8cfcb490dbf60d0846013a6415e17f7 */
 @cds.external : true
 @m.IsDefaultEntityContainer : 'true'
 @sap.message.scope.supported : 'true'
@@ -72,6 +72,20 @@ entity ZTRACK_TRACE_SRV.zorderType_Track {
   @sap.display.format : 'UpperCase'
   @sap.label : 'Order Type'
   OrderType : String(4);
+};
+
+@cds.external : true
+@cds.persistence.skip : true
+@sap.creatable : 'false'
+@sap.updatable : 'false'
+@sap.deletable : 'false'
+@sap.content.version : '1'
+@sap.label : 'production order in Track and Trace'
+entity ZTRACK_TRACE_SRV.ZProductionOrder_track {
+  @sap.display.format : 'UpperCase'
+  @sap.label : 'Order'
+  @sap.quickinfo : 'Order Number'
+  key ProductionOrder : String(12) not null;
 };
 
 @cds.external : true

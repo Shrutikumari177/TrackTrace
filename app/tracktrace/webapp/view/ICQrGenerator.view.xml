@@ -100,7 +100,7 @@
                                 >
                                     <Label
                                         id="_IDGenLabel0"
-                                        text="Seq No"
+                                        text="Serial No"
                                     />
                                 </Column>
                                 <Column
@@ -176,7 +176,7 @@
                                 >
                                     <Label
                                         id="_IDGenLabe5"
-                                        text="QR Code"
+                                        text=" IC QR Code"
                                         textAlign="Center"
                                     />
                                 </Column>
